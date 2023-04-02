@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import com.stylist.app.ui.auth.isValidEmailAddress
 import ir.digiapp.flashcardstoreapp.ui.components.CustomButton
 import ir.digiapp.flashcardstoreapp.ui.components.CustomOutlinedButton
 import ir.digiapp.flashcardstoreapp.ui.components.HintText

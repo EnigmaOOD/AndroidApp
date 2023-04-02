@@ -1,0 +1,178 @@
+package com.stylist.app.ui.component
+
+
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import android.content.Context
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import com.stylist.app.ui.theme.*
+import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.stylist.app.ui.Message
+import com.stylist.app.ui.MessageType
+
+object SweetToastUtil {
+
+    @Composable
+    fun MessageToast(
+        message: Message,
+        duration: Int = Toast.LENGTH_LONG,
+        padding: PaddingValues = PaddingValues(vertical = SpaceThin),
+        contentAlignment: Alignment = Alignment.TopStart,
+        isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+    ) {
+        CustomToast(
+            message = stringResource(message.textId),
+            duration = duration,
+            padding = padding,
+            contentAlignment = contentAlignment,
+            type = messageTypeTpToastType(message.type),
+            isRtl = isRtl
+        )
+    }
+
+
+    @Composable
+    fun CustomToast(
+        message: String,
+        duration: Int = Toast.LENGTH_LONG,
+        padding: PaddingValues,
+        contentAlignment: Alignment,
+        type: ToastType,
+        isRtl: Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+    ) {
+        val sweetToast = SweetToast(LocalContext.current)
+        sweetToast.MakeTest(
+            message = message,
+            duration = duration,
+            type = type,
+            padding = padding,
+            contentAlignment = contentAlignment,
+            isRtl = isRtl
+        )
+        sweetToast.show()
+    }
+
+    @Composable
+    fun SetView(
+        messageTxt: String,
+        backgroundColor: Color,
+        padding: PaddingValues,
+        contentAlignment: Alignment,
+        isRtl: Boolean
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = contentAlignment
+        ) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                color = Color.Transparent
+            ) {
+                Row(
+                    modifier = Modifier
+                        .background(
+                            color = backgroundColor,
+                            shape = RoundedCornerShape(5.dp)
+                        )
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = messageTxt,
+                        style = TextStyle(
+                            textAlign = if (isRtl) TextAlign.End else TextAlign.Start,
+                            fontFamily = Vazir,
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 10.dp, vertical = 10.dp)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun messageTypeTpToastType(type: MessageType): ToastType {
+        return when (type) {
+            MessageType.Success -> ToastType.Success
+            MessageType.Error -> ToastType.Error
+            MessageType.Warning -> ToastType.Warning
+            MessageType.Info -> ToastType.Info
+        }
+    }
+}
+
+
+class SweetToast(context: Context) : Toast(context) {
+
+    @Composable
+    fun MakeTest(
+        message: String,
+        duration: Int,
+        type: ToastType,
+        padding: PaddingValues,
+        contentAlignment: Alignment,
+        isRtl: Boolean
+    ) {
+        val context = LocalContext.current
+
+        val views = ComposeView(context)
+
+        val backgroundColor = when (type) {
+            ToastType.Error -> MaterialTheme.colors.error
+            ToastType.Success -> MaterialTheme.colors.success
+            ToastType.Warning -> MaterialTheme.colors.warning
+            ToastType.Info -> MaterialTheme.colors.onBackground
+        }
+
+        views.setContent {
+            SweetToastUtil.SetView(
+                messageTxt = message,
+                backgroundColor = backgroundColor,
+                padding = padding,
+                contentAlignment = contentAlignment,
+                isRtl
+            )
+        }
+
+        ViewTreeLifecycleOwner.set(views, LocalLifecycleOwner.current)
+        ViewTreeViewModelStoreOwner.set(views, LocalViewModelStoreOwner.current)
+
+        views.setViewTreeSavedStateRegistryOwner(LocalSavedStateRegistryOwner.current)
+
+        this.duration = duration
+        this.view = views
+    }
+
+
+}
+
+enum class ToastType {
+    Error, Success, Warning, Info
+}
