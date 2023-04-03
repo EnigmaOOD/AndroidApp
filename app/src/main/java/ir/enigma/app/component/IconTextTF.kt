@@ -35,7 +35,7 @@ fun IconText(
                 contentDescription = contentDescription,
                 tint = MaterialTheme.colors.secondary
             )
-            TextSubtitle2(
+            TextSubtitle1(
                 modifier = Modifier.padding(start = 6.dp),
                 text = "$text تومان",
                 color = MaterialTheme.colors.secondary
@@ -51,7 +51,7 @@ fun IconText(
                 contentDescription = contentDescription,
                 tint = MaterialTheme.colors.error
             )
-            TextSubtitle2(
+            TextSubtitle1(
                 modifier = Modifier.padding(start = 6.dp),
                 text = "$text تومان",
                 color = MaterialTheme.colors.error

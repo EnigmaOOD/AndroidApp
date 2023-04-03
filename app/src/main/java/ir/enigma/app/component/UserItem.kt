@@ -72,7 +72,7 @@ fun UserItem(
     }
 }
 
-@Preview()
+@Preview(showBackground = true)
 @Composable
 fun Previ() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {

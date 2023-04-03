@@ -77,20 +77,23 @@ fun GroupItem(
     }
 }
 
-@Preview()
+@Preview(showBackground = true)
 @Composable
 fun Previe() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         EnigmaAppTheme {
             GroupItem(
-                Cicon = false,
-                Cresource = R.drawable.ic_fill_birthday_cake,
+                Cicon = true,
+                Cresource = R.drawable.ic_airplane,
                 Csize = 50.dp,
                 CcontentPadding = 12.dp,
-                Ttext1 = "علی علوی",
+                CbackgroundColor = Color.LightGray,
+                Ctint = MaterialTheme.colors.primary,
+                Ttext1 = "سفر شمال",
                 Ttext2 = "10 نفر",
                 ItrueVar = false,
-                Itext = "16000"
+                Itext = "16000",
+
             )
         }
     }
