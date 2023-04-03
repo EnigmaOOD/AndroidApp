@@ -1,4 +1,4 @@
-package com.stylist.app.ui.component
+package ir.enigma.app.component
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.unit.dp
-
 
 
 @Composable

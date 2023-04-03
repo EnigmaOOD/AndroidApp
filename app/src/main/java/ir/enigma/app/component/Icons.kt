@@ -1,4 +1,4 @@
-package com.stylist.app.ui.component
+package ir.enigma.app.component
 
 
 import androidx.compose.foundation.background
@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -14,9 +16,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import com.stylist.app.R
-import com.stylist.app.ui.theme.IconMedium
-import com.stylist.app.ui.theme.IconSmall
+import ir.enigma.app.ui.theme.IconMedium
+import ir.enigma.app.ui.theme.IconSmall
+import ir.enigma.app.R
 
 @Composable
 fun MyIconButton(
@@ -53,7 +55,7 @@ fun BackIconButton(
         onClick = onClick
     ) {
         Icon(
-            painterResource(R.drawable.ic_arrow_left),
+            imageVector = Icons.Filled.ArrowBack,
             contentDescription = "back",
             tint = tint,
             modifier = Modifier.rotate(rotation).size(size)

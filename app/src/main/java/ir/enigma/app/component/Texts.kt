@@ -1,4 +1,4 @@
-package com.stylist.app.ui.component
+package ir.enigma.app.component
 
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
@@ -15,7 +15,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import com.stylist.app.ui.theme.onBackgroundAlpha7
+import ir.enigma.app.ui.theme.onBackgroundAlpha7
+
 
 @Composable
 fun ErrorText(

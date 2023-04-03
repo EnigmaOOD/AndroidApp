@@ -1,4 +1,4 @@
-package com.stylist.app.ui.theme
+package ir.enigma.app.ui.theme
 
 import androidx.compose.ui.unit.dp
 

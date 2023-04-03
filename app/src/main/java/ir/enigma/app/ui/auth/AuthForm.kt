@@ -1,5 +1,6 @@
 package ir.digiapp.flashcardstoreapp.ui.screens.auth
 
+import InputTextField
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -15,18 +17,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import com.stylist.app.ui.auth.isValidEmailAddress
-import ir.digiapp.flashcardstoreapp.ui.components.CustomButton
-import ir.digiapp.flashcardstoreapp.ui.components.CustomOutlinedButton
-import ir.digiapp.flashcardstoreapp.ui.components.HintText
-import ir.digiapp.flashcardstoreapp.ui.components.input.INPUT_TYPE_EMAIL
-import ir.digiapp.flashcardstoreapp.ui.components.input.INPUT_TYPE_PASSWORD
-import ir.digiapp.flashcardstoreapp.ui.components.input.InputTextField
-import ir.digiapp.flashcardstoreapp.ui.theme.ColorGoogle
-import ir.digiapp.flashcardstoreapp.ui.theme.Dimen
-import ir.digiapp.flashcardstoreapp.ui.theme.Strings
-import ir.digiapp.flashcardstoreapp.util.isValidEmailAddress
+import ir.enigma.app.ui.auth.isValidEmailAddress
+import ir.enigma.app.component.EasyButton
+import ir.enigma.app.component.HintText
+import ir.enigma.app.component.MVSpacer
+import ir.enigma.app.ui.theme.SpaceSmall
+import ir.enigma.app.ui.theme.SpaceThin
 
 @Composable
 fun AuthForm(
@@ -50,60 +48,56 @@ fun AuthForm(
 
 
     InputTextField(
-        inputType = INPUT_TYPE_EMAIL,
+        keyboardType = KeyboardType.Email,
         text = email,
-        showError = showErrors.value, hasError = errors[0]
+        showError = showErrors.value, hasError = errors[0],
     )
 
     val submit = {
         showErrors.value = true
         //if (valid && !loading) { todo
-            onSubmit(forLogin.value)
+        onSubmit(forLogin.value)
 
         //}
     }
 
 
     InputTextField(
-        inputType = INPUT_TYPE_PASSWORD,
+        keyboardType = KeyboardType.Password,
         text = password,
         showError = showErrors.value, hasError = errors[1], imeAction = ImeAction.Done,
-        keyboardActions = KeyboardActions(onDone = { submit() })
+        onAction = { submit() },
     )
 
-    Spacer(modifier = Modifier.height(Dimen.smallSpace))
+    MVSpacer()
 
-    CustomButton(
+    EasyButton(
         modifier = Modifier.fillMaxWidth(),
         onClick = submit,
-//        enabled = valid && !loading  todo
+
     ) {
 
         Text(
-            text = if (forLogin.value) Strings.LOGIN else Strings.REGISTER,
+            text = if (forLogin.value) "ورود" else "نام\u200Cثبت",
         )
     }
     HintText(
-        text = Strings.OR,
+        text = "یا",
         style = MaterialTheme.typography.caption,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = Dimen.thinSpace),
+            .padding(vertical = SpaceThin),
         textAlign = TextAlign.Center
     )
 
-    CustomOutlinedButton(
+
+    Spacer(modifier = Modifier.height(SpaceSmall))
+
+    OutlinedButton(
         modifier = Modifier.fillMaxWidth(),
-        onClick = { forLogin.value = !forLogin.value }) {
-        Text(text = if (forLogin.value) Strings.REGISTER else Strings.LOGIN)
-    }
-    Spacer(modifier = Modifier.height(Dimen.smallSpace))
-    CustomOutlinedButton(
-        modifier = Modifier.fillMaxWidth(),
-        border = BorderStroke(ButtonDefaults.outlinedBorder.width, ColorGoogle),
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = ColorGoogle),
-        onClick = onClickGoogle) {
-        Text(text = Strings.LOG_IN_WITH_GOOGLE)
+        onClick = onClickGoogle
+    ) {
+        Text(text = "ورود با گوگل")
     }
 
 

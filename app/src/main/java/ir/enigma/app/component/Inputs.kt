@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -16,69 +14,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.stylist.app.R
-import com.stylist.app.ui.auth.MyInputType
-import com.stylist.app.ui.theme.IconSmall
-import com.stylist.app.ui.theme.Shapes
-import com.stylist.app.ui.theme.SpaceMedium
+import ir.enigma.app.ui.theme.IconSmall
+import ir.enigma.app.R;
+import ir.enigma.app.ui.theme.SpaceMedium
+
 
 @Composable
-fun getLableByInputType(inputType: MyInputType): String {
-    return when (inputType) {
-        MyInputType.EmailOrPhone -> stringResource(R.string.emailOrPhone)
-        MyInputType.Password -> stringResource(R.string.password)
+fun getLableByInputType(keyboardType: KeyboardType): String {
+    return when (keyboardType) {
+        KeyboardType.Email -> "ایمیل"
+        KeyboardType.Password, KeyboardType.NumberPassword -> "رمز عبور"
+        else -> ""
     }
 }
 
 @Composable
-fun getErrorByInputType(inputType: MyInputType): String {
-    return when (inputType) {
-        MyInputType.EmailOrPhone -> stringResource(R.string.errorEmailPhone)
-        MyInputType.Password -> stringResource(R.string.errorPasswordAtLeast8)
+fun getErrorByInputType(keyboardType: KeyboardType): String {
+    return when (keyboardType) {
+        KeyboardType.Email -> "فرمت ایمیل صحیح نیست"
+        KeyboardType.Password, KeyboardType.NumberPassword -> "رمز عبور باید بیشتر از 8 کاراکتر داشته باشد"
+        else -> ""
     }
 }
 
 @Composable
 fun InputTextField(
-    inputType: MyInputType,
+    keyboardType: KeyboardType = KeyboardType.Text,
     text: MutableState<String>,
     onValueChange: (String) -> Unit = { text.value = it },
     leadingIcon: ImageVector? = null,
-    label: String = getLableByInputType(inputType),
-    error: String = getErrorByInputType(inputType),
+    label: String = getLableByInputType(keyboardType),
+    error: String = getErrorByInputType(keyboardType),
     showError: Boolean = false,
     hasError: Boolean = false,
     imeAction: ImeAction = ImeAction.Done,
-    onAction: () -> Unit,
+    onAction: (() -> Unit)? = null,
 ) {
 
-    val keyboardActions = KeyboardActions(onAny = { onAction() })
-    when (inputType) {
-        MyInputType.EmailOrPhone -> {
+    val keyboardActions = KeyboardActions(onAny = { onAction?.invoke() })
+    when (keyboardType) {
 
-            GeneralTextField(
-                text = text,
-                onValueChange = onValueChange,
-                isError = hasError,
-                label = label,
-                error = error,
-                showError = showError,
-                leadingIcon = leadingIcon,
-                keyboardAction = keyboardActions,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = imeAction
-                )
-            )
-        }
-        MyInputType.Password ->
+        KeyboardType.Password ->
             PasswordTextField(
                 password = text,
                 leadingIcon = leadingIcon,
@@ -90,6 +72,21 @@ fun InputTextField(
                 imeAction = imeAction,
                 showError = showError
             )
+
+        else -> GeneralTextField(
+            text = text,
+            onValueChange = onValueChange,
+            isError = hasError,
+            label = label,
+            error = error,
+            showError = showError,
+            leadingIcon = leadingIcon,
+            keyboardAction = keyboardActions,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = imeAction
+            )
+        )
     }
 }
 
@@ -207,7 +204,7 @@ fun OutlinedTextFieldValidation(
     singleLine: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = Shapes.medium,
+    shape: Shape = MaterialTheme.shapes.medium,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors()
 
 ) {
@@ -224,6 +221,7 @@ fun OutlinedTextFieldValidation(
             enabled = enabled,
             readOnly = readOnly,
             value = value,
+
             onValueChange = {
                 changeText.value = true
                 onValueChange(it)

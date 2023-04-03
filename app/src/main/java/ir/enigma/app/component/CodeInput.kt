@@ -1,10 +1,9 @@
-package com.stylist.app.ui.component
+package ir.enigma.app.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -20,7 +19,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.stylist.app.ui.theme.onBackgroundAlpha3
+import ir.enigma.app.ui.theme.onBackgroundAlpha3
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

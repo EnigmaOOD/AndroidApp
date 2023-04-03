@@ -1,4 +1,4 @@
-package com.stylist.app.ui.component
+package ir.enigma.app.component
 
 
 import android.widget.Toast
@@ -21,14 +21,17 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import com.stylist.app.ui.theme.*
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
-import com.stylist.app.ui.Message
-import com.stylist.app.ui.MessageType
+import ir.enigma.app.model.Message
+import ir.enigma.app.model.MessageType
+
+import ir.enigma.app.ui.theme.SpaceThin
+import ir.enigma.app.ui.theme.Typography
 
 object SweetToastUtil {
 
@@ -105,7 +108,7 @@ object SweetToastUtil {
                         text = messageTxt,
                         style = TextStyle(
                             textAlign = if (isRtl) TextAlign.End else TextAlign.Start,
-                            fontFamily = Vazir,
+                            fontFamily = FontFamily.Default, //TODO set to vazir matn
                             color = Color.White,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
@@ -146,8 +149,8 @@ class SweetToast(context: Context) : Toast(context) {
 
         val backgroundColor = when (type) {
             ToastType.Error -> MaterialTheme.colors.error
-            ToastType.Success -> MaterialTheme.colors.success
-            ToastType.Warning -> MaterialTheme.colors.warning
+            ToastType.Success -> MaterialTheme.colors.secondary
+            ToastType.Warning -> MaterialTheme.colors.primary
             ToastType.Info -> MaterialTheme.colors.onBackground
         }
 

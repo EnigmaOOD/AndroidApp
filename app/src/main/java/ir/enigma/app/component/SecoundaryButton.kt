@@ -1,4 +1,4 @@
-package com.stylist.app.ui.component
+package ir.enigma.app.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
