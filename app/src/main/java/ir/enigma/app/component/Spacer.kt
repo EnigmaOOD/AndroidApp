@@ -51,13 +51,5 @@ fun LHSpacer(space: Dp = SpaceLarge) {
 }
 
 
-@Composable
-fun VLVSpacer(space: Dp = SpaceVeryLarge) {
-    Spacer(modifier = Modifier.height(space))
-}
 
-@Composable
-fun VLHSpacer(space: Dp = SpaceVeryLarge) {
-    Spacer(modifier = Modifier.width(space))
-}
 

@@ -1,33 +1,27 @@
-package ir.digiapp.flashcardstoreapp.ui.screens.auth
+package ir.enigma.app.ui.auth
 
 import InputTextField
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import ir.enigma.app.ui.auth.isValidEmailAddress
-import ir.enigma.app.component.EasyButton
-import ir.enigma.app.component.HintText
-import ir.enigma.app.component.MVSpacer
-import ir.enigma.app.ui.theme.SpaceSmall
+import ir.enigma.app.component.*
 import ir.enigma.app.ui.theme.SpaceThin
+import ir.enigma.app.R
 
 @Composable
 fun AuthForm(
+    name: MutableState<String>,
     email: MutableState<String>,
     password: MutableState<String>,
     loading: Boolean,
@@ -43,44 +37,78 @@ fun AuthForm(
         mutableStateOf(false)
     }
 
-    val errors = listOf(!isValidEmailAddress(email.value), password.value.length < 8)
-    val valid = !errors.contains(true)
 
+    val errors: List<Boolean>;
+
+    val title: String;
+    val changeScreenText: String;
+    val titleInvert: String;
+    val appName = stringResource(R.string.app_name)
+    if (forLogin.value) {
+        title = "ورود"
+        changeScreenText = "حسابی در " + appName + " ندارید؟"
+        titleInvert = "ثبت‌نام"
+        errors = listOf(
+            false,
+            !isValidEmailAddress(email.value),
+            false
+        )
+    } else {
+        title = "ثبت‌نام"
+        changeScreenText = "قبلا در ${stringResource(R.string.app_name)} حساب ساخته\u200Cاید؟"
+        titleInvert = "ورود"
+        errors = listOf(
+            name.value.isEmpty(),
+            !isValidEmailAddress(email.value),
+            password.value.length < 8
+        )
+    }
+    val valid: Boolean = !errors.contains(true)
+
+    val submit = {
+        showErrors.value = true
+        if (valid && !loading)
+            onSubmit(forLogin.value)
+
+    }
+
+    TextH5(title);
+
+    LVSpacer()
+
+    if (!forLogin.value)
+        InputTextField(
+            label = "نام و نام خانوادگی",
+            text = name,
+            imeAction = ImeAction.Next,
+            showError = showErrors.value, hasError = errors[0],
+        )
 
     InputTextField(
         keyboardType = KeyboardType.Email,
         text = email,
-        showError = showErrors.value, hasError = errors[0],
+        imeAction = ImeAction.Next,
+        showError = showErrors.value, hasError = errors[1],
     )
-
-    val submit = {
-        showErrors.value = true
-        //if (valid && !loading) { todo
-        onSubmit(forLogin.value)
-
-        //}
-    }
-
 
     InputTextField(
         keyboardType = KeyboardType.Password,
         text = password,
-        showError = showErrors.value, hasError = errors[1], imeAction = ImeAction.Done,
+        showError = showErrors.value, hasError = errors[2], imeAction = ImeAction.Done,
         onAction = { submit() },
     )
 
     MVSpacer()
 
-    EasyButton(
+    LoadingButton(
         modifier = Modifier.fillMaxWidth(),
         onClick = submit,
+        actionText = title,
+        loading = loading
+    )
 
-    ) {
+    SVSpacer()
 
-        Text(
-            text = if (forLogin.value) "ورود" else "نام\u200Cثبت",
-        )
-    }
     HintText(
         text = "یا",
         style = MaterialTheme.typography.caption,
@@ -90,16 +118,33 @@ fun AuthForm(
         textAlign = TextAlign.Center
     )
 
+    SVSpacer()
 
-    Spacer(modifier = Modifier.height(SpaceSmall))
-
-    OutlinedButton(
+    BackgroundOutlinedButton(
         modifier = Modifier.fillMaxWidth(),
         onClick = onClickGoogle
     ) {
+
         Text(text = "ورود با گوگل")
     }
 
 
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        HintText(changeScreenText)
+        EasyButton(
+            buttonTheme = ButtonTheme.PrimaryText,
+            onClick = {
+                showErrors.value = false
+                forLogin.value = !forLogin.value
+            },
+            text = titleInvert
+        )
+    }
+
 }
+
 

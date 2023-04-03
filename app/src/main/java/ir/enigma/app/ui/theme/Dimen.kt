@@ -10,17 +10,16 @@ val IconVeryLarge = 48.dp
 
 val IconLargePadding = 4.dp
 
-val CornerSmall = 2.dp
-val CornerMedium = 3.dp
-val CornerLarge = 5.dp
-val CornerButton = 3.dp
+val CornerSmall = 4.dp
+val CornerMedium = 7.dp
+val CornerLarge = 15.dp
+val CornerButton = 10.dp
 
 val SpaceThin = 5.dp
 val SpaceSmall = 10.dp
 val SpaceMedium = 15.dp
-val SpaceLarge = 20.dp
-val SpaceVeryLarge = 35.dp
-val SpaceExtraLarge = 48.dp
+val SpaceLarge = 30.dp
+
 
 val ElevationSmall = 5.dp
 val ElevationMedium = 12.dp

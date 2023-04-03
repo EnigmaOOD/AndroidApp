@@ -7,6 +7,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColorPalette = lightColors(
     primary = blue,
@@ -46,11 +47,15 @@ val Colors.onBackgroundAlpha1: Color
     get() = onBackground.copy(alpha = .1f)
 
 
-
 @Composable
 fun EnigmaAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = LightColorPalette
 
+    val systemUiController = rememberSystemUiController()
+
+    systemUiController.setSystemBarsColor(
+        color = colors.background
+    )
 
     MaterialTheme(
         colors = colors,
