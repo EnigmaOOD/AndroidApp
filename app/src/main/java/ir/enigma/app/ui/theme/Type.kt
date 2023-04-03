@@ -5,24 +5,77 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.Font
+import ir.enigma.app.R
 
-// Set of Material typography styles to start with
+
+val Vazirmatn = FontFamily(
+    Font(R.font.vazirmatn_bold, FontWeight.Bold),
+    Font(R.font.vazirmatn_medium, FontWeight.Medium),
+    Font(R.font.vazirmatn_regular, FontWeight.Normal),
+    Font(R.font.vazirmatn_light, FontWeight.Light),
+    Font(R.font.vazirmatn_thin, FontWeight.Thin),
+)
+
 val Typography = Typography(
-    body1 = TextStyle(
-        fontFamily = FontFamily.Default,
+    caption = TextStyle(
+        fontFamily = Vazirmatn,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-    /* Other default text styles to override
+        fontSize = 13.sp
+    ),
+    body1 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Normal,
+        fontSize = 15.sp
+    ),
+    body2 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Medium,
+        fontSize = 15.sp
+    ),
     button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp
+    ),
+    subtitle1 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
+    subtitle2 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Light,
+        fontSize = 14.sp
+    ),
+    h6 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp
+    ),
+    h5 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp
+    ),
+    h4 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp
+    ),
+    h3 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Bold,
+        fontSize = 36.sp
+    ),
+    h2 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Bold,
+        fontSize = 48.sp
+    ),
+    h1 = TextStyle(
+        fontFamily = Vazirmatn,
+        fontWeight = FontWeight.Bold,
+        fontSize = 64.sp
+    ),
 )
