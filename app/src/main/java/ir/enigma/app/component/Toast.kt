@@ -32,6 +32,7 @@ import ir.enigma.app.model.MessageType
 
 import ir.enigma.app.ui.theme.SpaceThin
 import ir.enigma.app.ui.theme.Typography
+import ir.enigma.app.ui.theme.Vazirmatn
 
 object SweetToastUtil {
 
@@ -108,7 +109,7 @@ object SweetToastUtil {
                         text = messageTxt,
                         style = TextStyle(
                             textAlign = if (isRtl) TextAlign.End else TextAlign.Start,
-                            fontFamily = FontFamily.Default, //TODO set to vazir matn
+                            fontFamily = Vazirmatn,
                             color = Color.White,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
