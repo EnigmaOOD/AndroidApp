@@ -1,15 +1,16 @@
 package ir.enigma.app.component
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,7 @@ import ir.enigma.app.ui.theme.IconDefaultPadding
 import ir.enigma.app.ui.theme.IconMedium
 
 @Composable
-fun UserItem(
+fun GroupItem(
     modifier: Modifier = Modifier,
 
     CModifier: Modifier = Modifier,
@@ -33,8 +34,12 @@ fun UserItem(
     CcontentDescription: String? = null,
 
     Tmodifier: Modifier = Modifier,
-    Ttext: String,
-    Tcolor: Color = MaterialTheme.colors.onBackground,
+
+    Ttext1: String,
+    Tcolor1: Color = MaterialTheme.colors.onBackground,
+
+    Ttext2: String,
+    Tcolor2: Color = MaterialTheme.colors.onBackground,
 
     Imodifier: Modifier = Modifier,
     ItrueVar: Boolean,
@@ -54,14 +59,14 @@ fun UserItem(
             contentDescription = CcontentDescription
         )
 
-        TextH6(
-            text = Ttext,
+        Column(
             modifier = Tmodifier
                 .padding(start = 12.dp)
                 .weight(1f)
-                .align(alignment = Alignment.CenterVertically),
-            color = Tcolor
-        )
+        ) {
+            TextH6(text = Ttext1, color = Tcolor1)
+            TextSubtitle2(text = Ttext2, color = Tcolor2)
+        }
 
         IconText(
             modifier = Imodifier.align(alignment = Alignment.CenterVertically),
@@ -74,15 +79,16 @@ fun UserItem(
 
 @Preview()
 @Composable
-fun Previ() {
+fun Previe() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         EnigmaAppTheme {
-            UserItem(
+            GroupItem(
                 Cicon = false,
                 Cresource = R.drawable.ic_fill_birthday_cake,
                 Csize = 50.dp,
                 CcontentPadding = 12.dp,
-                Ttext = "علی علوی",
+                Ttext1 = "علی علوی",
+                Ttext2 = "10 نفر",
                 ItrueVar = false,
                 Itext = "16000"
             )
