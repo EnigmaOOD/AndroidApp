@@ -4,18 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.R
-import ir.enigma.app.ui.theme.EnigmaAppTheme
-import ir.enigma.app.ui.theme.IconMedium
 import ir.enigma.app.ui.theme.IconVerySmall
 
 @Composable
@@ -23,6 +17,7 @@ fun IconText(
     modifier: Modifier = Modifier,
     trueVar: Boolean,
     text: String,
+    currency: String,
     contentDescription: String? = null
 ) {
     if (trueVar) {
@@ -37,7 +32,7 @@ fun IconText(
             )
             TextSubtitle1(
                 modifier = Modifier.padding(start = 6.dp),
-                text = "$text تومان",
+                text = "$text $currency",
                 color = MaterialTheme.colors.secondary
             )
         }
@@ -53,7 +48,7 @@ fun IconText(
             )
             TextSubtitle1(
                 modifier = Modifier.padding(start = 6.dp),
-                text = "$text تومان",
+                text = "$text $currency",
                 color = MaterialTheme.colors.error
             )
         }
@@ -63,9 +58,7 @@ fun IconText(
 @Preview
 @Composable
 fun prev() {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        EnigmaAppTheme {
-            IconText(trueVar = true, text = "16000")
-        }
+    RtlThemePreview {
+        IconText(trueVar = false, text = "16000", currency = "تومان")
     }
 }

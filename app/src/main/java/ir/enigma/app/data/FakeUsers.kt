@@ -3,17 +3,17 @@ package ir.enigma.app.data
 import ir.enigma.app.model.User
 
 
-val me = User(-1, "me@me.com", "احمد احمدی")
+val me = User(-1, "me@me.com", "احمد احمدی", iconId = 2)
 
-val userA = User(0, "a@a.com", "علی علوی")
+val userA = User(0, "a@a.com", "علی علوی", iconId = 8)
 
-val userB = User(1, "b@b.com", "محمد محمدی")
+val userB = User(1, "b@b.com", "محمد محمدی", iconId = 4)
 
-val userC = User(2, "c@c.com", "مهدی مهدوی")
+val userC = User(2, "c@c.com", "مهدی مهدوی", iconId = 15)
 
-val userD = User(3, "d@d.com", "محمود محمودی")
+val userD = User(3, "d@d.com", "محمود محمودی", iconId = 5)
 
-val userE = User(4, "e@e.com", "حسین حسینی")
+val userE = User(4, "e@e.com", "حسین حسینی", iconId = 20)
 
 val fakeUsers = listOf(
     me, userA, userB, userC, userD, userE
