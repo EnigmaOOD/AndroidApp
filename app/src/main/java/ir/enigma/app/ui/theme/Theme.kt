@@ -48,14 +48,20 @@ val Colors.onBackgroundAlpha1: Color
 
 
 @Composable
-fun EnigmaAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun EnigmaAppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    isPreview: Boolean = false,
+    content: @Composable () -> Unit
+) {
     val colors = LightColorPalette
 
-    val systemUiController = rememberSystemUiController()
 
-    systemUiController.setSystemBarsColor(
-        color = colors.background
-    )
+    if (!isPreview) {
+        val systemUiController = rememberSystemUiController()
+        systemUiController.setSystemBarsColor(
+            color = colors.background
+        )
+    }
 
     MaterialTheme(
         colors = colors,

@@ -4,36 +4,29 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.component.*
 import ir.enigma.app.data.*
-import ir.enigma.app.data.UserRepository.Companion.getMe
-import ir.enigma.app.data.UserRepository.Companion.isMe
 import ir.enigma.app.model.Contribution
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.model.PurchaseCategory
 import ir.enigma.app.model.User
 import ir.enigma.app.ui.group.util.calculateUserContribution
-import ir.enigma.app.ui.theme.EnigmaAppTheme
 import ir.enigma.app.ui.theme.SpaceMedium
-import ir.enigma.app.ui.theme.SpaceSmall
 import ir.enigma.app.ui.theme.SpaceThin
 import ir.enigma.app.util.toPrice
 import java.util.*
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PurchaseCard(
     modifier: Modifier = Modifier,
     purchase: Purchase,
+    me: User,
     currency: String,
     onSenderClick: () -> Unit,
     onClick: () -> Unit,
@@ -42,6 +35,7 @@ fun PurchaseCard(
     Card(
         modifier = modifier,
         elevation = 0.dp,
+        backgroundColor = MaterialTheme.colors.background,
         onClick = onClick
     ) {
         Column(modifier = Modifier.padding(SpaceMedium)) {
@@ -57,7 +51,7 @@ fun PurchaseCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         TextH6(modifier = Modifier.weight(1f), text = purchase.title)
-                        MyContribution(purchase)
+                        MyContribution(me, purchase)
                     }
                     HintText(getPurchaseHint(purchase, currency))
                 }
@@ -88,26 +82,28 @@ fun PurchaseCard(
 }
 
 @Composable
-fun MyContribution(purchase: Purchase) {
-    val contribution = calculateUserContribution(getMe(), purchase)
-    val contributionText: String
-    val color: Color
-    if (contribution > 0) {
-        contributionText = contribution.toInt().toPrice() + "+"
-        color = MaterialTheme.colors.secondary
-    } else {
-        contributionText = contribution.toInt().toPrice()
-        color = MaterialTheme.colors.error
+fun MyContribution(me: User, purchase: Purchase) {
+    val contribution = calculateUserContribution(me, purchase)
+    if (contribution != 0.0) {
+        val contributionText: String
+        val color: Color
+        if (contribution > 0) {
+            contributionText = contribution.toPrice() + "+"
+            color = MaterialTheme.colors.secondary
+        } else {
+            contributionText = contribution.toPrice()
+            color = MaterialTheme.colors.error
+        }
+        TextBody2(
+            text = contributionText,
+            color = color,
+        )
     }
-    TextBody2(
-        text = contributionText,
-        color = color,
-    )
 }
 
 @Composable
 fun getPurchaseHint(purchase: Purchase, currency: String): String {
-    val isMeInBuyers = isMeInContributors(purchase.buyers)
+    val isMeInBuyers = isMeInContributors(me, purchase.buyers)
     val buyersCount = purchase.buyers.size
     val verb: String
     val buyersText: String
@@ -122,7 +118,7 @@ fun getPurchaseHint(purchase: Purchase, currency: String): String {
 
     } else if (buyersCount == 2) {
         if (isMeInBuyers) {
-            buyersText = "شما" + " و " + getOtherUser(purchase.buyers)!!.name
+            buyersText = "شما" + " و " + getOtherUser(me , purchase.buyers)!!.name
             verb = "کردید"
         } else {
             buyersText = purchase.buyers[0].user.name + " و " + purchase.buyers[1].user.name
@@ -137,22 +133,22 @@ fun getPurchaseHint(purchase: Purchase, currency: String): String {
             verb = "کرد"
         }
     }
-    return buyersText + " " + purchase.totalPrice + " " + currency + " پرداخت " + verb
+    return buyersText + " " + purchase.totalPrice.toPrice(currency) + " پرداخت " + verb
 
 }
 
 
-fun isMeInContributors(contributions: List<Contribution>): Boolean {
+fun isMeInContributors(me: User, contributions: List<Contribution>): Boolean {
     contributions.forEach {
-        if (isMe(it.user))
+        if (me == it.user)
             return true
     }
     return false
 }
 
-fun getOtherUser(contribution: List<Contribution>): User? {
+fun getOtherUser(me: User, contribution: List<Contribution>): User? {
     contribution.forEach {
-        if (!isMe(it.user))
+        if (me != it.user)
             return it.user
     }
     return null
@@ -161,25 +157,27 @@ fun getOtherUser(contribution: List<Contribution>): User? {
 @Preview(showBackground = false)
 @Composable
 fun PurchasePreview() {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        EnigmaAppTheme {
-            PurchaseCard(
-                purchase = Purchase(
-                    title = "پیتزا",
-                    date = Date(System.currentTimeMillis()),
-                    totalPrice = 25000,
-                    sender = userE,
-                    purchaseCategory = PurchaseCategory.WarmFood,
-                    buyers = listOf(Contribution(userA, .5), Contribution(me, .5)),
-                    consumers = listOf(
-                        Contribution(me, 1.0 / 3),
-                        Contribution(userC, 1.0 / 3),
-                        Contribution(userD, 1.0 / 3)
-                    )
-                ),
-                currency = "تومان",
-                onClick = {},
-                onSenderClick = {})
-        }
+    RtlThemePreview {
+
+        PurchaseCard(
+            purchase = Purchase(
+                title = "پیتزا",
+                date = Date(System.currentTimeMillis()),
+                totalPrice = 25000.0,
+                sender = userE,
+                purchaseCategory = PurchaseCategory.WarmFood,
+                buyers = listOf(Contribution(userA, .5), Contribution(userC, .5)),
+                consumers = listOf(
+                    Contribution(me, 1.0 / 3),
+                    Contribution(userC, 1.0 / 3),
+                    Contribution(userD, 1.0 / 3)
+                )
+            ),
+            me = me,
+            currency = "تومان",
+            onClick = {},
+            onSenderClick = {})
+
+
     }
 }
