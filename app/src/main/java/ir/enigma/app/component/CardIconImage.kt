@@ -38,7 +38,7 @@ fun CardWithImageOrIcon(
 ) {
     Card(
         modifier = modifier,
-        elevation = elevation, shape = CircleShape, backgroundColor = backgroundColor
+        elevation = elevation, shape = CircleShape, backgroundColor = backgroundColor,
     ) {
         if (icon) {
             Icon(

@@ -3,7 +3,7 @@ package ir.enigma.app.data
 import ir.enigma.app.model.User
 
 
-val me = User(-1, "me@me.com", "احمد احمدی")
+val me = User(-1, "me@me.com", "احمد احمدی" , iconId = 5)
 
 val userA = User(0, "a@a.com", "علی علوی")
 
