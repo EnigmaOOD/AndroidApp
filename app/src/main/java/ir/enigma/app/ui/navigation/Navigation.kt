@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.ui.auth.AuthScreen
+import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.group.BuyScreen
 import ir.enigma.app.ui.group.GroupMembersScreen
 import ir.enigma.app.ui.group.GroupScreen
@@ -14,10 +15,11 @@ import ir.enigma.app.ui.main.MainScreen
 @Composable
 fun Navigation(
 ) {
-    val navController = rememberNavController();
+    val navController = rememberNavController()
+    val authViewModel = AuthViewModel()
     NavHost(
         navController = navController,
-        startDestination = Screen.MainScreen.name
+        startDestination = Screen.AuthScreen.name
     ) {
 
         composable(route = Screen.MainScreen.name) {
@@ -25,7 +27,7 @@ fun Navigation(
         }
 
         composable(route = Screen.AuthScreen.name) {
-            AuthScreen(navController = navController)
+            AuthScreen(navController = navController , authViewModel)
         }
 
         composable(route = Screen.BuyScreen.name) {

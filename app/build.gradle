@@ -92,4 +92,6 @@ dependencies {
 
     // statusBar
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+
+    implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.8.0'
 }

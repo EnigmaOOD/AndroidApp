@@ -35,11 +35,11 @@ fun getLableByInputType(keyboardType: KeyboardType): String {
 }
 
 @Composable
-fun getErrorByInputType(keyboardType: KeyboardType): String {
+fun getErrorByInputType(keyboardType: KeyboardType, label: String): String {
     return when (keyboardType) {
         KeyboardType.Email -> "فرمت ایمیل صحیح نیست"
         KeyboardType.Password, KeyboardType.NumberPassword -> "رمز عبور باید بیشتر از 8 کاراکتر داشته باشد"
-        else -> ""
+        else -> "$label نمی\u200Cتواند خالی باشد"
     }
 }
 
@@ -50,14 +50,17 @@ fun InputTextField(
     onValueChange: (String) -> Unit = { text.value = it },
     leadingIcon: ImageVector? = null,
     label: String = getLableByInputType(keyboardType),
-    error: String = getErrorByInputType(keyboardType),
+    error: String = getErrorByInputType(keyboardType, label),
     showError: Boolean = false,
     hasError: Boolean = false,
     imeAction: ImeAction = ImeAction.Done,
     onAction: (() -> Unit)? = null,
 ) {
-
-    val keyboardActions = KeyboardActions(onAny = { onAction?.invoke() })
+    val keyboardActions =
+        if (onAction != null)
+            KeyboardActions(onAny = { onAction?.invoke() })
+        else
+            KeyboardActions.Default
     when (keyboardType) {
 
         KeyboardType.Password ->
