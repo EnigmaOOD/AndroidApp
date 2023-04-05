@@ -46,36 +46,36 @@ val Typography = Typography(
     subtitle2 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Light,
-        fontSize = 14.sp
+        fontSize = 13.sp
     ),
     h6 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp
+        fontSize = 20.sp
     ),
     h5 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 28.sp
+        fontSize = 24.sp
     ),
     h4 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp
+        fontSize = 28.sp
     ),
     h3 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 36.sp
+        fontSize = 32.sp
     ),
     h2 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 48.sp
+        fontSize = 36.sp
     ),
     h1 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 64.sp
+        fontSize = 48.sp
     ),
 )

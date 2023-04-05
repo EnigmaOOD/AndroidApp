@@ -114,7 +114,8 @@ object SweetToastUtil {
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 10.dp, vertical = 10.dp)
                     )
                 }
@@ -167,14 +168,7 @@ class SweetToast(context: Context) : Toast(context) {
 
         ViewTreeLifecycleOwner.set(views, LocalLifecycleOwner.current)
         ViewTreeViewModelStoreOwner.set(views, LocalViewModelStoreOwner.current)
-
-        views.setViewTreeSavedStateRegistryOwner(LocalSavedStateRegistryOwner.current)
-
-        this.duration = duration
-        this.view = views
     }
-
-
 }
 
 enum class ToastType {
