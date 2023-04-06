@@ -21,17 +21,17 @@ val Typography = Typography(
     caption = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Normal,
-        fontSize = 13.sp
+        fontSize = 12.sp
     ),
     body1 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Normal,
-        fontSize = 15.sp
+        fontSize = 14.sp
     ),
     body2 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Medium,
-        fontSize = 15.sp
+        fontSize = 14.sp
     ),
     button = TextStyle(
         fontFamily = Vazirmatn,
@@ -51,17 +51,17 @@ val Typography = Typography(
     h6 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp
+        fontSize = 17.sp
     ),
     h5 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp
+        fontSize = 20.sp
     ),
     h4 = TextStyle(
         fontFamily = Vazirmatn,
         fontWeight = FontWeight.Bold,
-        fontSize = 28.sp
+        fontSize = 24.sp
     ),
     h3 = TextStyle(
         fontFamily = Vazirmatn,

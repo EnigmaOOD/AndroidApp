@@ -7,7 +7,7 @@ fun Double.toPrice(currency: String? = null): String {
     if (this == 0.0)
         return "0"
     val builder = StringBuilder()
-    val negetive = this < 0
+    val negative = this < 0
     var value = abs(this.toInt())
     val floatPart: Double = ((abs(this) - value) * 100.0).roundToInt() / 100.0
     if (floatPart > 0) {
@@ -20,14 +20,15 @@ fun Double.toPrice(currency: String? = null): String {
         val r = value % 10
         builder.append(r)
         value /= 10
-        if (i == 2) {
+        if (i == 2 && value / 10 > 0) {
             builder.append(',')
             i = -1
         }
         i++
+
     }
     val final = builder.reverse().toString()
-    if (negetive)
+    if (negative)
         return "$final-" + if (currency != null) " $currency" else ""
     return final + if (currency != null) " $currency" else ""
 }
