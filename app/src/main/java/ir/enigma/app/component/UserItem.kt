@@ -18,7 +18,7 @@ fun UserItem(
     user: User,
 
     ItrueVar: Boolean,
-    Itext: String,
+    Iamount: Double,
     Icurrency: String
 ) {
     Row(modifier = modifier) {
@@ -26,7 +26,7 @@ fun UserItem(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
             icon = false,
             resource = userAvatars[user.iconId],
-            size = IconVeryLarge,
+            size = IconLarge,
             contentPadding = 0.dp,
             contentDescription = user.name,
         )
@@ -42,7 +42,7 @@ fun UserItem(
         IconText(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
             trueVar = ItrueVar,
-            text = Itext,
+            amount = Iamount,
             currency = Icurrency,
             contentDescription = "Debt or credit"
         )
@@ -56,7 +56,7 @@ fun Previ() {
         UserItem(
             user = userE,
             ItrueVar = false,
-            Itext = "16000",
+            Iamount = 16000.0,
             Icurrency = "تومان"
         )
     }

@@ -11,12 +11,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.R
 import ir.enigma.app.ui.theme.IconVerySmall
+import ir.enigma.app.util.toPrice
 
 @Composable
 fun IconText(
     modifier: Modifier = Modifier,
     trueVar: Boolean,
-    text: String,
+    amount: Double,
     currency: String,
     contentDescription: String? = null
 ) {
@@ -30,9 +31,9 @@ fun IconText(
                 contentDescription = contentDescription,
                 tint = MaterialTheme.colors.secondary
             )
+            THSpacer()
             TextSubtitle1(
-                modifier = Modifier.padding(start = 6.dp),
-                text = "$text $currency",
+                text = "${amount.toPrice()} $currency",
                 color = MaterialTheme.colors.secondary
             )
         }
@@ -46,19 +47,11 @@ fun IconText(
                 contentDescription = contentDescription,
                 tint = MaterialTheme.colors.error
             )
+            THSpacer()
             TextSubtitle1(
-                modifier = Modifier.padding(start = 6.dp),
-                text = "$text $currency",
+                text = "${amount.toPrice()} $currency",
                 color = MaterialTheme.colors.error
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun prev() {
-    RtlThemePreview {
-        IconText(trueVar = false, text = "16000", currency = "تومان")
     }
 }

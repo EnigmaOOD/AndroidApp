@@ -21,7 +21,7 @@ fun GroupItem(
     group: Group,
 
     ItrueVar: Boolean,
-    Itext: String,
+    Iamount: Double,
     Icurrency: String
 ) {
     Row(modifier = modifier) {
@@ -29,7 +29,7 @@ fun GroupItem(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
             icon = true,
             resource = GroupCategory.values()[group.categoryId].iconRes,
-            size = IconVeryLarge,
+            size = IconLarge,
             contentPadding = 10.dp,
             tint = MaterialTheme.colors.primary,
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = .2f),
@@ -41,7 +41,7 @@ fun GroupItem(
                 .padding(start = 12.dp)
                 .weight(1f)
         ) {
-            TextH6(text = group.name)
+            TextBody2(text = group.name)
             TextSubtitle2(
                 text = "${group.users!!.size.toString()} عضو",
                 color = MaterialTheme.colors.primary.copy(alpha = .7f)
@@ -51,22 +51,9 @@ fun GroupItem(
         IconText(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
             trueVar = ItrueVar,
-            text = Itext,
+            amount = Iamount,
             currency = Icurrency,
             contentDescription = "Debt or credit"
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Previe() {
-    RtlThemePreview {
-        GroupItem(
-            group = groupB,
-            ItrueVar = false,
-            Itext = "16000",
-            Icurrency = "تومان"
         )
     }
 }
