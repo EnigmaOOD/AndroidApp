@@ -1,6 +1,7 @@
 package ir.enigma.app.component
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -26,15 +28,15 @@ import ir.enigma.app.ui.theme.*
 
 @Composable
 fun BackIconButton(
-    modifier: Modifier,
-    tint: Color = MaterialTheme.colors.onBackground,
+    modifier: Modifier = Modifier,
+    tint: Color = MaterialTheme.colors.onPrimary,
     size: Dp = IconSmall,
     rotation: Float = if (LocalLayoutDirection.current == LayoutDirection.Rtl) 180f else 0f,
-    backgroundColor: Color = MaterialTheme.colors.background,
+
     onClick: () -> Unit,
 ) {
     IconButton(
-        modifier = modifier.background(backgroundColor),
+
         onClick = onClick
     ) {
         Icon(
@@ -63,11 +65,33 @@ fun SquircleIcon(
             contentDescription = "squircle",
         )
         Icon(
-            modifier = Modifier.fillMaxSize().padding(10.dp),
+            modifier = Modifier.fillMaxSize().padding(10.dp).align(Alignment.Center),
             painter = painterResource(iconId),
             contentDescription = "icon",
-            tint = iconTint
+            tint = iconTint,
         )
     }
 
+}
+
+@Composable
+fun EasyIconButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    iconId: Int,
+    size: Dp = IconMedium,
+    tint: Color = MaterialTheme.colors.onBackgroundAlpha7,
+    padding: Dp = IconDefaultPadding
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Icon(
+            modifier = Modifier.size(size).padding(padding),
+            painter = painterResource(iconId),
+            contentDescription = null,
+            tint = tint
+        )
+    }
 }

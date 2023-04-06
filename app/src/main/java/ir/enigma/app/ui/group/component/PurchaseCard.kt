@@ -15,7 +15,9 @@ import ir.enigma.app.data.*
 import ir.enigma.app.model.*
 import ir.enigma.app.ui.group.util.calculateUserContribution
 import ir.enigma.app.ui.theme.SpaceMedium
+import ir.enigma.app.ui.theme.SpaceSmall
 import ir.enigma.app.ui.theme.SpaceThin
+import ir.enigma.app.ui.theme.onBackgroundAlpha7
 import ir.enigma.app.util.toPrice
 import java.util.*
 
@@ -36,9 +38,11 @@ fun PurchaseCard(
         backgroundColor = MaterialTheme.colors.background,
         onClick = onClick
     ) {
-        Column(modifier = Modifier.padding(SpaceMedium)) {
+        Column(modifier = Modifier.padding(horizontal = SpaceMedium)) {
+            SVSpacer()
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 SquircleIcon(
                     iconId = category.iconRes,
@@ -56,15 +60,15 @@ fun PurchaseCard(
 
 
             }
-            SVSpacer()
+            TVSpacer()
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                HintText("اضافه شده توسط")
+                HintText("اضافه شده توسط ")
 
-                TextBody1(
-                    modifier = Modifier.padding(horizontal = SpaceThin)
+                HintText(
+                    modifier = Modifier
                         .clickable(onClick = onSenderClick),
                     text = purchase.sender.name,
                     color = MaterialTheme.colors.primary
@@ -82,21 +86,24 @@ fun PurchaseCard(
 @Composable
 fun MyContribution(me: User, purchase: Purchase) {
     val contribution = calculateUserContribution(me, purchase)
-    if (contribution != 0.0) {
-        val contributionText: String
-        val color: Color
-        if (contribution > 0) {
-            contributionText = contribution.toPrice() + "+"
-            color = MaterialTheme.colors.secondary
-        } else {
-            contributionText = contribution.toPrice()
-            color = MaterialTheme.colors.error
-        }
-        TextBody2(
-            text = contributionText,
-            color = color,
-        )
+
+    val contributionText: String
+    val color: Color
+    if (contribution > 0) {
+        contributionText = contribution.toPrice() + "+"
+        color = MaterialTheme.colors.secondary
+    } else if (contribution < 0) {
+        contributionText = contribution.toPrice()
+        color = MaterialTheme.colors.error
+    } else {
+        contributionText = "0"
+        color = MaterialTheme.colors.onBackgroundAlpha7
     }
+    TextBody2(
+        text = contributionText,
+        color = color,
+    )
+
 }
 
 @Composable

@@ -97,6 +97,45 @@ fun HintText(
 }
 
 @Composable
+fun OnPrimaryHint(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colors.onPrimary.copy(alpha = .7f),
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontStyle: FontStyle? = null,
+    fontWeight: FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    overflow: TextOverflow = TextOverflow.Clip,
+    softWrap: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+    style: TextStyle = MaterialTheme.typography.caption
+) {
+    Text(
+        text,
+        modifier,
+        color,
+        fontSize,
+        fontStyle,
+        fontWeight,
+        fontFamily,
+        letterSpacing,
+        textDecoration,
+        textAlign,
+        lineHeight,
+        overflow,
+        softWrap,
+        maxLines,
+        onTextLayout,
+        style
+    )
+}
+
+@Composable
 fun TextH4(
     text: String,
     modifier: Modifier = Modifier,
