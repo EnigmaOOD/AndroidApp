@@ -14,6 +14,7 @@ import ir.enigma.app.R
 import ir.enigma.app.component.HintText
 import ir.enigma.app.component.THSpacer
 import ir.enigma.app.component.TextBody2
+import ir.enigma.app.ui.theme.IconMedium
 import ir.enigma.app.ui.theme.IconSmall
 import ir.enigma.app.util.toPrice
 
@@ -21,34 +22,35 @@ import ir.enigma.app.util.toPrice
 fun SettleUpAmount(
     modifier: Modifier = Modifier,
     amount: Double,
-    currency: String
+    currency: String,
+    isCredit: Boolean
 ) {
 
-        val icon: Int
-        val color: Color
-        val hint: String
-        if (amount >= 0) {
-            icon = R.drawable.ic_arrow_square_down
-            color = MaterialTheme.colors.secondary
-            hint = "باید دریافت کنید"
-        } else {
-            icon = R.drawable.ic_arrow_square_up
-            color = MaterialTheme.colors.error
-            hint = "باید پرداخت کنید"
+    val icon: Int
+    val color: Color
+    val hint: String
+    if (isCredit) {
+        icon = R.drawable.ic_arrow_square_down
+        color = MaterialTheme.colors.secondary
+        hint = "باید دریافت کنید"
+    } else {
+        icon = R.drawable.ic_arrow_square_up
+        color = MaterialTheme.colors.error
+        hint = "باید پرداخت کنید"
+    }
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            modifier = Modifier.size(IconMedium),
+            painter = painterResource(icon),
+            tint = color,
+            contentDescription = null
+        )
+        THSpacer()
+        Column {
+            TextBody2(text = amount.toPrice(currency), color = color)
+            HintText(hint)
         }
-        Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                modifier = Modifier.size(IconSmall),
-                painter = painterResource(icon),
-                tint = color,
-                contentDescription = null
-            )
-            Column {
-                TextBody2(text = amount.toPrice(currency), color = color)
-                THSpacer()
-                HintText(hint)
-            }
-        }
+    }
 
 
 }

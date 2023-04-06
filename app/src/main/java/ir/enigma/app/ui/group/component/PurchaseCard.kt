@@ -7,14 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.component.*
 import ir.enigma.app.data.*
-import ir.enigma.app.model.Contribution
-import ir.enigma.app.model.Purchase
-import ir.enigma.app.model.PurchaseCategory
-import ir.enigma.app.model.User
+import ir.enigma.app.model.*
 import ir.enigma.app.ui.group.util.calculateUserContribution
 import ir.enigma.app.ui.theme.SpaceMedium
 import ir.enigma.app.ui.theme.SpaceThin
@@ -118,7 +116,7 @@ fun getPurchaseHint(purchase: Purchase, currency: String): String {
 
     } else if (buyersCount == 2) {
         if (isMeInBuyers) {
-            buyersText = "شما" + " و " + getOtherUser(me , purchase.buyers)!!.name
+            buyersText = "شما" + " و " + getOtherUser(me, purchase.buyers)!!.name
             verb = "کردید"
         } else {
             buyersText = purchase.buyers[0].user.name + " و " + purchase.buyers[1].user.name
