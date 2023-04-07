@@ -15,19 +15,40 @@ import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
 import ir.enigma.app.data.fakeUsers
+import ir.enigma.app.model.GroupCategory
 import ir.enigma.app.ui.theme.*
 
 @Composable
-fun GroupMembersScreen(navController: NavController) {
+fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewModel) {
     Surface(color = MaterialTheme.colors.primary) {
+        val group = groupViewModel.group
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+//            verticalArrangement = Arrangement.Center,
+//            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextH5(text = "fdfd")
-            TextH5(text = "fdfd")
-            TextH5(text = "fdfd")
+            Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 20.dp)) {
+                BackIconButton(onClick = {
+                    navController.popBackStack()
+                })
+
+                CardWithImageOrIcon(
+                    icon = true,
+                    resource = GroupCategory.values()[group.categoryId].iconRes,
+                    contentPadding = 13.dp,
+                    size = IconSemiLarge,
+                    tint = MaterialTheme.colors.onPrimary,
+                    backgroundColor = MaterialTheme.colors.onPrimary.copy(alpha = .2f),
+                    contentDescription = group.name,
+                )
+
+                SHSpacer()
+                Column(modifier = Modifier.weight(1f)) {
+                    TextH6(group.name, color = MaterialTheme.colors.onPrimary)
+                    OnPrimaryHint(group.users.size.toString() + " عضو")
+                    OnPrimaryHint("واحد پولی: " + group.currency)
+                }
+            }
 
             Card(
                 modifier = Modifier
@@ -66,6 +87,6 @@ fun GroupMembersScreen(navController: NavController) {
 @Composable
 fun p() {
     RtlThemePreview {
-        GroupMembersScreen(rememberNavController())
+        GroupMembersScreen(rememberNavController(), GroupViewModel())
     }
 }

@@ -40,7 +40,7 @@ fun Navigation(
         }
 
         composable(route = Screen.GroupMembersScreen.name) {
-            GroupMembersScreen(navController = navController)
+            GroupMembersScreen(navController = navController, groupViewModel)
         }
 
         composable(route = Screen.GroupScreen.name) {
