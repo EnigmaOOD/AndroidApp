@@ -17,9 +17,9 @@ fun UserItem(
     modifier: Modifier = Modifier,
     user: User,
 
-    ItrueVar: Boolean,
-    Iamount: Double,
-    Icurrency: String
+    trueVar: Boolean,
+    amount: Double,
+    currency: String
 ) {
     Row(modifier = modifier) {
         CardWithImageOrIcon(
@@ -41,9 +41,9 @@ fun UserItem(
 
         IconText(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-            trueVar = ItrueVar,
-            amount = Iamount,
-            currency = Icurrency,
+            trueVar = trueVar,
+            amount = amount,
+            currency = currency,
             contentDescription = "Debt or credit"
         )
     }
@@ -55,9 +55,9 @@ fun Previ() {
     RtlThemePreview {
         UserItem(
             user = userE,
-            ItrueVar = false,
-            Iamount = 16000.0,
-            Icurrency = "تومان"
+            trueVar = false,
+            amount = 16000.0,
+            currency = "تومان"
         )
     }
 }

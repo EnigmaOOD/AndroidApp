@@ -88,7 +88,7 @@ fun EasyIconButton(
         modifier = modifier
     ) {
         Icon(
-            modifier = Modifier.size(size).padding(padding),
+            modifier = Modifier.size(size),
             painter = painterResource(iconId),
             contentDescription = null,
             tint = tint

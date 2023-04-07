@@ -32,7 +32,7 @@ fun IconText(
                 tint = MaterialTheme.colors.secondary
             )
             THSpacer()
-            TextSubtitle1(
+            HintText(
                 text = "${amount.toPrice()} $currency",
                 color = MaterialTheme.colors.secondary
             )
@@ -48,7 +48,7 @@ fun IconText(
                 tint = MaterialTheme.colors.error
             )
             THSpacer()
-            TextSubtitle1(
+            HintText(
                 text = "${amount.toPrice()} $currency",
                 color = MaterialTheme.colors.error
             )
