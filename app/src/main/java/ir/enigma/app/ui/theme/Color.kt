@@ -13,3 +13,5 @@ val category_color_2 = Color(0xFFF7C8F5)
 val category_color_3 = Color(0xFFB9F3E4)
 val category_color_4 = Color(0xFFFFE289)
 val category_color_5 = Color(0xFFB4FFB7)
+
+val UserProfileBackground = Color(0xFFF8F2DA)
