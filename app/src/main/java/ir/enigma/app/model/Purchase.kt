@@ -7,7 +7,7 @@ import java.util.Date
 data class Purchase(
     val title: String,
     val date: Date,
-    val totalPrice: Int,
+    val totalPrice: Double,
     val sender: User,
     val purchaseCategory: PurchaseCategory,
     val buyers: List<Contribution>,
@@ -21,4 +21,4 @@ data class Purchase(
     }
 }
 
-data class Contribution(val user: User, val percentOfTotal: Double)
+data class Contribution(val user: User, val price: Double)

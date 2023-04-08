@@ -9,6 +9,8 @@ import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.group.BuyScreen
 import ir.enigma.app.ui.group.GroupMembersScreen
 import ir.enigma.app.ui.group.GroupScreen
+import ir.enigma.app.ui.group.GroupViewModel
+import ir.enigma.app.ui.main.AddGroupScreen
 import ir.enigma.app.ui.main.MainScreen
 
 
@@ -17,17 +19,20 @@ fun Navigation(
 ) {
     val navController = rememberNavController()
     val authViewModel = AuthViewModel()
+    val groupViewModel = GroupViewModel()
     NavHost(
         navController = navController,
         startDestination = Screen.AuthScreen.name
     ) {
 
         composable(route = Screen.MainScreen.name) {
-            MainScreen(navController = navController)
+            MainScreen(
+                navController = navController
+            )
         }
 
         composable(route = Screen.AuthScreen.name) {
-            AuthScreen(navController = navController , authViewModel)
+            AuthScreen(navController = navController, authViewModel)
         }
 
         composable(route = Screen.BuyScreen.name) {
@@ -35,15 +40,15 @@ fun Navigation(
         }
 
         composable(route = Screen.GroupMembersScreen.name) {
-            GroupMembersScreen(navController = navController)
+            GroupMembersScreen(navController = navController, groupViewModel)
         }
 
         composable(route = Screen.GroupScreen.name) {
-            GroupScreen(navController = navController)
+            GroupScreen(navController = navController, groupViewModel)
         }
 
         composable(route = Screen.AddGroupScreen.name) {
-            GroupScreen(navController = navController)
+            AddGroupScreen(navController = navController)
         }
 
     }
