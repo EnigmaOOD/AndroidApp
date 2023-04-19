@@ -1,13 +1,8 @@
 package ir.enigma.app.ui.auth
 
 import android.content.Context
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ir.enigma.app.data.ApiResult
 import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
@@ -25,18 +20,19 @@ class AuthViewModel @Inject constructor(
     companion object {
         const val TAG = "AuthViewModel"
         var me: User? = null
+        var token: String? = null
     }
 
     fun checkForToken(context: Context) {
         viewModelScope.launch {
-            val token = SharedPrefManager(context).getString(SharedPrefManager.KEY_TOKEN)
-            if (token != null) {
-                //todo: set me
-                if (state.value.status == ApiStatus.SUCCESS) {
-
-                    me!!.token = token
-                }
-            }
+            startLading()
+            val loadedToken = SharedPrefManager(context).getString(SharedPrefManager.KEY_TOKEN)
+            if (loadedToken != null) {
+                //todo: get me
+                token = loadedToken
+                success(Token(loadedToken))
+            } else
+                empty()
         }
     }
 
@@ -74,7 +70,7 @@ class AuthViewModel @Inject constructor(
                 state.value = userRepository.login(email, password)
                 if (state.value.status == ApiStatus.SUCCESS) {
                     me = user
-                    me!!.token = state.value.data!!.token
+                    token = state.value.data!!.token
                     saveToken(context, state.value.data!!.token)
                 }
             } else

@@ -2,11 +2,7 @@ package ir.enigma.app.model
 
 import com.google.gson.annotations.SerializedName
 
-/*
-{
-user_id: 2
-}
- */
+
 data class User(
     @SerializedName("user_id") val id: Int,
     val email: String,

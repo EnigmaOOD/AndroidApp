@@ -18,6 +18,9 @@ open class ApiViewModel<T> : ViewModel() {
         state.value = ApiResult.Loading()
     }
 
+    fun empty() {
+        state.value = ApiResult.Empty()
+    }
 
     fun error(message: String) {
         state.value = ApiResult.Error(message)

@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.component.*
@@ -22,6 +23,7 @@ import ir.enigma.app.ui.theme.IconSemiLarge
 @Composable
 fun MainScreen(
     navController: NavController,
+    mainViewModel: MainViewModel
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Card(elevation = 2.dp) {
@@ -76,7 +78,7 @@ fun MainScreen(
 @Composable
 fun pr() {
     RtlThemePreview {
-        MainScreen(rememberNavController())
+            MainScreen(rememberNavController() , hiltViewModel())
     }
 
 }
