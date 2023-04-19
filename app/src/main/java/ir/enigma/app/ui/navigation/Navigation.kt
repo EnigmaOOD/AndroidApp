@@ -1,6 +1,7 @@
 package ir.enigma.app.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,14 +13,16 @@ import ir.enigma.app.ui.group.GroupScreen
 import ir.enigma.app.ui.group.GroupViewModel
 import ir.enigma.app.ui.main.AddGroupScreen
 import ir.enigma.app.ui.main.MainScreen
+import ir.enigma.app.ui.main.MainViewModel
 
 
 @Composable
 fun Navigation(
 ) {
     val navController = rememberNavController()
-    val authViewModel = AuthViewModel()
     val groupViewModel = GroupViewModel()
+    val authViewModel = hiltViewModel<AuthViewModel>()
+    val mainViewModel = hiltViewModel<MainViewModel>()
     NavHost(
         navController = navController,
         startDestination = Screen.AuthScreen.name
@@ -27,7 +30,8 @@ fun Navigation(
 
         composable(route = Screen.MainScreen.name) {
             MainScreen(
-                navController = navController
+                navController = navController,
+                mainViewModel
             )
         }
 

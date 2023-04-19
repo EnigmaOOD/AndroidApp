@@ -33,11 +33,14 @@ fun CardWithImageOrIcon(
     elevation: Dp = 0.dp,
     backgroundColor: Color = MaterialTheme.colors.background,
     contentDescription: String? = null,
-) {
+
+    ) {
+
     Card(
         modifier = modifier,
         elevation = elevation, shape = CircleShape, backgroundColor = backgroundColor,
-    ) {
+
+        ) {
         if (icon) {
             Icon(
                 modifier = Modifier

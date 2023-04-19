@@ -4,11 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.component.*
@@ -21,13 +22,21 @@ import ir.enigma.app.ui.theme.IconLarge
 
 @Composable
 fun MainScreen(
-    navController: NavController
+    navController: NavController,
+    mainViewModel: MainViewModel
 ) {
+    var loading by remember { mutableStateOf(false) }
+
+
     Column(
         modifier = Modifier.fillMaxSize(),
 //        verticalArrangement = Arrangement.Center,
 //        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (loading)
+            CircularProgressIndicator()
+
+
         Card(elevation = 2.dp) {
             MainTopBar(
                 Modifier
@@ -78,10 +87,12 @@ fun MainScreen(
     }
 }
 
+
+
 @Preview
 @Composable
 fun pr() {
     RtlThemePreview {
-        MainScreen(rememberNavController())
+        MainScreen(rememberNavController() , hiltViewModel());
     }
 }
