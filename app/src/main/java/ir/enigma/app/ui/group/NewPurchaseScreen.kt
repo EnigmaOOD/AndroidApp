@@ -1,6 +1,7 @@
 package ir.enigma.app.ui.group
 
 import InputTextField
+import OutlinedTextFieldValidation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,13 +17,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.component.*
 import ir.enigma.app.data.me
+import ir.enigma.app.model.PurchaseCategory
 import ir.enigma.app.ui.theme.SpaceThin
 
 @Composable
 fun NewPurchaseScreen(navController: NavController) {
+    val purchaseCategories= PurchaseCategory.values()
+
     val description = remember { mutableStateOf("") }
-    //جنسش چی باید باشه؟
-    val for_ = remember { mutableStateOf("") }
+    val for_ = remember { mutableStateOf(purchaseCategories.size-1) }
     val price = remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
@@ -55,10 +58,12 @@ fun NewPurchaseScreen(navController: NavController) {
                         text = description,
                         label = "توضیحات",
                     )
-                    InputTextField(
-                        text = for_,
+                    OutlinedTextFieldValidation(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = purchaseCategories[for_.value].text,
                         label = "بابت",
-                        onValueChange = { for_.value = it })
+                        onValueChange = {},
+                    )
                     InputTextField(
                         text = price,
                         label = "قیمت",

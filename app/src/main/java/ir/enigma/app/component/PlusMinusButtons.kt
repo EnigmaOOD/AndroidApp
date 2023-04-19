@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextFieldDefaults
@@ -14,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +49,7 @@ fun PlusMinusButtons(displayNumber: MutableState<String>) {
                 .width(45.dp),
             value = displayNumber.value,
             onValueChange = { displayNumber.value = it },
-
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center)
         ) {
             TextFieldDefaults.TextFieldDecorationBox(
@@ -68,8 +70,13 @@ fun PlusMinusButtons(displayNumber: MutableState<String>) {
 
         EasyIconButton(
             onClick = {
-                displayNumber.value = minus(displayNumber.value.toDouble()).toString()
-                Log.d("PlusMinus", "PlusMinusButtons: ")
+                try {
+                    displayNumber.value = minus(displayNumber.value.toDouble()).toString()
+                    Log.d("PlusMinus", "PlusMinusButtons: ")
+                }
+                catch (e:java.lang.NumberFormatException){
+                    Log.e("PlusMinus", "PlusMinusButtons: ", e)
+                }
             },
             iconId = R.drawable.ic_minus_cirlce,
             tint = MaterialTheme.colors.onBackground,
@@ -90,7 +97,9 @@ fun plus(number: Double): Double {
 
 fun minus(number: Double): Double {
     val decimal = number - number.toInt()
-    if (decimal <= 0.5)
+    if (decimal == 0.0)
+        return number.toInt() - 0.5
+    else if (decimal <= 0.5)
         return number.toInt().toDouble()
     else
         return number.toInt() + 0.5

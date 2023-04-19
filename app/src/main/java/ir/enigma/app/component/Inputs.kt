@@ -205,7 +205,7 @@ fun OutlinedTextFieldValidation(
     errorIcon: @Composable (() -> Unit)? = {
         DefaultErrorIcon()
     },
-    trailingIcon: @Composable (() -> Unit)?,
+    trailingIcon: @Composable (() -> Unit)?=null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
