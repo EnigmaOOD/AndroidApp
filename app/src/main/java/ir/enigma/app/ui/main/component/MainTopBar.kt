@@ -66,13 +66,13 @@ fun MainTopBar(
 fun LogoAndAppName() {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            painter = painterResource(R.drawable.ic_launcher_foreground),
+            painter = painterResource(R.drawable.logo_jiringi),
             tint = MaterialTheme.colors.primary,
             contentDescription = "App Icon",
             modifier = Modifier.size(IconLarge)
         )
         SHSpacer()
-        TextH6(stringResource(R.string.app_name))
+        TextH6(stringResource(R.string.app_name), color = MaterialTheme.colors.primary)
     }
 }
 
