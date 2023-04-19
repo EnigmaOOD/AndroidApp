@@ -106,7 +106,8 @@ fun CodeInput(
                     .background(
                         color = MaterialTheme.colors.background,
                         shape = shape
-                    ).border(
+                    )
+                    .border(
                         color = MaterialTheme.colors.onBackgroundAlpha3,
                         width = 1.dp,
                         shape = shape

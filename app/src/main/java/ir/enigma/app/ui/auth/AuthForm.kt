@@ -95,8 +95,7 @@ fun AuthForm(
         keyboardType = KeyboardType.Password,
         text = password,
         showError = showErrors.value, hasError = errors[2], imeAction = ImeAction.Done,
-        onAction = { submit() },
-    )
+    ) { submit() }
 
     MVSpacer()
 

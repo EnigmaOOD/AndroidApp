@@ -6,7 +6,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import ir.enigma.app.ui.theme.BorderMedium
 import ir.enigma.app.ui.theme.SpaceThin
@@ -19,7 +18,10 @@ fun HorizontalDivider(
     color: Color = MaterialTheme.colors.onBackgroundAlpha1
 ) {
     Box(
-        modifier = Modifier.fillMaxHeight().padding(vertical = verticalPadding).width(width)
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(vertical = verticalPadding)
+            .width(width)
             .background(color = color)
     )
 }

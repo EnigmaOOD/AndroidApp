@@ -7,8 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import ir.enigma.app.R
 import ir.enigma.app.ui.theme.IconVerySmall
 import ir.enigma.app.util.toPrice
@@ -33,8 +31,7 @@ fun IconText(
             )
             THSpacer()
             HintText(
-                text = "${amount.toPrice()} $currency",
-                color = MaterialTheme.colors.secondary
+                text = "${amount.toPrice()} $currency", color = MaterialTheme.colors.secondary
             )
         }
     } else {
@@ -49,8 +46,7 @@ fun IconText(
             )
             THSpacer()
             HintText(
-                text = "${amount.toPrice()} $currency",
-                color = MaterialTheme.colors.error
+                text = "${amount.toPrice()} $currency", color = MaterialTheme.colors.error
             )
         }
     }

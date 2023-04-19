@@ -24,7 +24,6 @@ import ir.enigma.app.ui.theme.IconSmall
 import ir.enigma.app.R;
 import ir.enigma.app.ui.theme.SpaceMedium
 
-
 @Composable
 fun getLableByInputType(keyboardType: KeyboardType): String {
     return when (keyboardType) {
@@ -45,6 +44,7 @@ fun getErrorByInputType(keyboardType: KeyboardType, label: String): String {
 
 @Composable
 fun InputTextField(
+    modifier: Modifier = Modifier,
     keyboardType: KeyboardType = KeyboardType.Text,
     text: MutableState<String>,
     onValueChange: (String) -> Unit = { text.value = it },
@@ -55,6 +55,7 @@ fun InputTextField(
     hasError: Boolean = false,
     imeAction: ImeAction = ImeAction.Done,
     onAction: (() -> Unit)? = null,
+    trailingIcon: @Composable() (() -> Unit)? = null,
 ) {
     val keyboardActions =
         if (onAction != null)
@@ -77,6 +78,7 @@ fun InputTextField(
             )
 
         else -> GeneralTextField(
+            modifier = modifier,
             text = text,
             onValueChange = onValueChange,
             isError = hasError,
@@ -88,13 +90,15 @@ fun InputTextField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
                 imeAction = imeAction
-            )
+            ),
+            trailingIcon = trailingIcon,
         )
     }
 }
 
 @Composable
 fun GeneralTextField(
+    modifier: Modifier = Modifier,
     text: MutableState<String>,
     onValueChange: (String) -> Unit = { text.value = it },
     label: String,
@@ -106,11 +110,12 @@ fun GeneralTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: ImageVector? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    keyboardAction: KeyboardActions = KeyboardActions.Default
+    keyboardAction: KeyboardActions = KeyboardActions.Default,
 ) {
 
 
     OutlinedTextFieldValidation(
+        modifier = modifier,
         value = text.value,
         onValueChange = onValueChange,
         keyboardOptions = keyboardOptions,
@@ -130,7 +135,7 @@ fun GeneralTextField(
                 )
             }
         } else null,
-        trailingIcon = trailingIcon
+        trailingIcon = trailingIcon,
     )
 }
 
@@ -200,7 +205,7 @@ fun OutlinedTextFieldValidation(
     errorIcon: @Composable (() -> Unit)? = {
         DefaultErrorIcon()
     },
-    trailingIcon: @Composable (() -> Unit)?,
+    trailingIcon: @Composable (() -> Unit)?=null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,

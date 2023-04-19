@@ -7,11 +7,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.component.*
-import ir.enigma.app.data.*
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.GroupCategory
 import ir.enigma.app.ui.theme.*
@@ -21,9 +18,9 @@ fun GroupItem(
     modifier: Modifier = Modifier,
     group: Group,
 
-    ItrueVar: Boolean,
-    Iamount: Double,
-    Icurrency: String
+    trueVar: Boolean,
+    amount: Double,
+    currency: String
 ) {
     Row(modifier = modifier) {
         CardWithImageOrIcon(
@@ -51,9 +48,9 @@ fun GroupItem(
 
         IconText(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-            trueVar = ItrueVar,
-            amount = Iamount,
-            currency = Icurrency,
+            trueVar = trueVar,
+            amount = amount,
+            currency = currency,
             contentDescription = "Debt or credit"
         )
     }

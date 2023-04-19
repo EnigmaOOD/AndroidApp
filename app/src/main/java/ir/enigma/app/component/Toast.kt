@@ -1,6 +1,5 @@
 package ir.enigma.app.component
 
-
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,17 +20,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import ir.enigma.app.model.Message
 import ir.enigma.app.model.MessageType
 
 import ir.enigma.app.ui.theme.SpaceThin
-import ir.enigma.app.ui.theme.Typography
 import ir.enigma.app.ui.theme.Vazirmatn
 
 object SweetToastUtil {

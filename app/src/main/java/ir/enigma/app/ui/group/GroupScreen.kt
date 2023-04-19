@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
-import ir.enigma.app.data.fakePurchases
 import ir.enigma.app.data.me
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.GroupCategory
@@ -58,7 +57,9 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel) {
             items(groupViewModel.purchases) { thisPurchase ->
                 SVSpacer()
                 PurchaseCard(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = SpaceMedium),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SpaceMedium),
                     thisPurchase,
                     me,
                     group.currency,
@@ -70,7 +71,6 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel) {
                 SVSpacer()
             }
         }
-
     }
 }
 

@@ -3,13 +3,13 @@ package ir.enigma.app.data
 import ir.enigma.app.model.Group
 
 
-val groupA = Group(0, "گروه اول", categoryId = 0, listOf(userD, userE, userB), currency = "تومان")
+val groupA = Group(0, "گروه اول", categoryId = 0, listOf(me, userD, userE, userB), currency = "تومان")
 
-val groupB = Group(1, "گروه دوم", categoryId = 1, listOf(userD, userE, userB), currency = "تومان")
+val groupB = Group(1, "گروه دوم", categoryId = 1, listOf(me, userD, userE, userB), currency = "تومان")
 
-val groupC = Group(2, "گروه سوم", categoryId = 2, listOf(userD, userE, userB), currency = "تومان")
+val groupC = Group(2, "گروه سوم", categoryId = 2, listOf(me, userD, userE, userB), currency = "تومان")
 
-val groupD = Group(3, "گروه چهارم", categoryId = 3, listOf(userD, userE, userB), currency = "تومان")
+val groupD = Group(3, "گروه چهارم", categoryId = 3, listOf(me, userD, userE, userB), currency = "تومان")
 
 val fakeGroups = listOf(
     groupA, groupB, groupC, groupD

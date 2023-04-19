@@ -17,26 +17,20 @@ import ir.enigma.app.ui.group.component.GroupItem
 import ir.enigma.app.ui.main.component.MainTopBar
 import ir.enigma.app.ui.theme.SpaceMedium
 import ir.enigma.app.R
-import ir.enigma.app.ui.theme.IconLarge
+import ir.enigma.app.ui.theme.IconSemiLarge
 
 @Composable
 fun MainScreen(
-    navController: NavController
+    navController: NavController,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Card(elevation = 2.dp) {
             MainTopBar(
                 Modifier
                     .fillMaxWidth()
                     .padding(SpaceMedium),
-                me,
-                32000.0,
-                12000.0,
-                "تومان"
+                me = me,
+                credit = 32000.0, dept = 16000.0, currency = "تومان"
             )
         }
         LVSpacer()
@@ -51,9 +45,9 @@ fun MainScreen(
                     itemsIndexed(fakeGroups) { index, item ->
                         GroupItem(
                             group = item,
-                            ItrueVar = true,
-                            Iamount = 16000.0,
-                            Icurrency = "تومان"
+                            trueVar = true,
+                            amount = 16000.0,
+                            currency = "تومان"
                         )
                         SVSpacer()
                         if (index != fakeGroups.size - 1) {
@@ -67,7 +61,7 @@ fun MainScreen(
                         modifier = Modifier.align(Alignment.BottomStart),
                         icon = true,
                         resource = R.drawable.ic_fill_add,
-                        size = IconLarge,
+                        size = IconSemiLarge,
                         tint = MaterialTheme.colors.onPrimary,
                         backgroundColor = MaterialTheme.colors.primary,
                         elevation = 4.dp
@@ -84,4 +78,5 @@ fun pr() {
     RtlThemePreview {
         MainScreen(rememberNavController())
     }
+
 }
