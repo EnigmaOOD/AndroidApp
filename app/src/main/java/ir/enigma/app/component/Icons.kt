@@ -9,6 +9,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,8 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import ir.enigma.app.R
 import ir.enigma.app.ui.theme.*
+import ir.enigma.app.R
 
 @Composable
 fun BackIconButton(
@@ -39,6 +40,26 @@ fun BackIconButton(
             tint = tint,
             modifier = Modifier
                 .rotate(rotation)
+                .size(size)
+        )
+    }
+}
+
+@Composable
+fun ExitIconButton(
+    modifier: Modifier = Modifier,
+    tint: Color = MaterialTheme.colors.onBackground,
+    size: Dp = IconMedium,
+    onClick: () -> Unit,
+) {
+    IconButton(
+        onClick = onClick
+    ) {
+        Icon(
+            painter =painterResource(R.drawable.ic_exit),
+            contentDescription = "exit",
+            tint = tint,
+            modifier = Modifier
                 .size(size)
         )
     }

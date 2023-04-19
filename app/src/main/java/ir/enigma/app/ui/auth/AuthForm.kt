@@ -111,26 +111,26 @@ fun AuthForm(
         loading = loading
     )
 
-    SVSpacer()
-
-    HintText(
-        text = "یا",
-        style = MaterialTheme.typography.caption,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = SpaceThin),
-        textAlign = TextAlign.Center
-    )
-
-    SVSpacer()
-
-    BackgroundOutlinedButton(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onClickGoogle
-    ) {
-
-        Text(text = "ورود با گوگل")
-    }
+//    SVSpacer()
+//
+//    HintText(
+//        text = "یا",
+//        style = MaterialTheme.typography.caption,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(vertical = SpaceThin),
+//        textAlign = TextAlign.Center
+//    )
+//
+//    SVSpacer()
+//
+//    BackgroundOutlinedButton(
+//        modifier = Modifier.fillMaxWidth(),
+//        onClick = onClickGoogle
+//    ) {
+//
+//        Text(text = "ورود با گوگل")
+//    }
 
 
     Row(
