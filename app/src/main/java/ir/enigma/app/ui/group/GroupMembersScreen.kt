@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,7 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
-import ir.enigma.app.data.fakeUsers
+import ir.enigma.app.data.me
 import ir.enigma.app.model.GroupCategory
 import ir.enigma.app.ui.theme.*
 
@@ -24,8 +23,6 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
         val group = groupViewModel.group
         Column(
             modifier = Modifier.fillMaxSize(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 20.dp)) {
                 BackIconButton(onClick = {
@@ -55,24 +52,55 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                     .fillMaxWidth()
                     .fillMaxHeight()
             ) {
-                Column(modifier = Modifier.padding(horizontal = SpaceMedium, vertical = SpaceSmall)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = SpaceMedium,
+                        vertical = SpaceSmall
+                    )
+                ) {
                     TextButton(onClick = { /*TODO*/ }) {
-                        Icon(modifier = Modifier.size(IconSmall),painter = painterResource(id = R.drawable.ic_profile_add), contentDescription = null)
+                        Icon(
+                            modifier = Modifier.size(IconSmall),
+                            painter = painterResource(id = R.drawable.ic_profile_add),
+                            contentDescription = null
+                        )
                         THSpacer()
-                        TextSubtitle1(text = "افزودن عضو جدید", color = MaterialTheme.colors.primary)
+                        TextSubtitle1(
+                            text = "افزودن عضو جدید",
+                            color = MaterialTheme.colors.primary
+                        )
                     }
+
+
+//                    Divider(startIndent = 55.dp)
                     LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
-                        itemsIndexed(fakeUsers) { index, item ->
+                        item {
                             UserItem(
-                                user = item,
+                                user = me,
                                 trueVar = true,
+                                isMe = true,
                                 amount = 16000.0,
                                 currency = "تومان"
                             )
                             SVSpacer()
-                            if (index != fakeUsers.size - 1) {
+                            if (group.users.size > 1) {
                                 Divider(startIndent = 55.dp)
                                 SVSpacer()
+                            }
+                        }
+                        itemsIndexed(group.users) { index, item ->
+                            if (item != me) {
+                                UserItem(
+                                    user = item,
+                                    trueVar = true,
+                                    amount = 16000.0,
+                                    currency = "تومان"
+                                )
+                                SVSpacer()
+                                if (index != group.users.size - 1) {
+                                    Divider(startIndent = 55.dp)
+                                    SVSpacer()
+                                }
                             }
                         }
                     }

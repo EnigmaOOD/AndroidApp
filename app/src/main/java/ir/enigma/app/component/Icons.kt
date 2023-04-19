@@ -1,8 +1,5 @@
 package ir.enigma.app.component
 
-
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,25 +22,24 @@ import androidx.compose.ui.unit.dp
 import ir.enigma.app.R
 import ir.enigma.app.ui.theme.*
 
-
 @Composable
 fun BackIconButton(
     modifier: Modifier = Modifier,
     tint: Color = MaterialTheme.colors.onPrimary,
     size: Dp = IconSmall,
     rotation: Float = if (LocalLayoutDirection.current == LayoutDirection.Rtl) 180f else 0f,
-
     onClick: () -> Unit,
 ) {
     IconButton(
-
         onClick = onClick
     ) {
         Icon(
             imageVector = Icons.Filled.ArrowBack, //TODO back icon drawable
             contentDescription = "back",
             tint = tint,
-            modifier = Modifier.rotate(rotation).size(size)
+            modifier = Modifier
+                .rotate(rotation)
+                .size(size)
         )
     }
 }
@@ -65,7 +61,10 @@ fun SquircleIcon(
             contentDescription = "squircle",
         )
         Icon(
-            modifier = Modifier.fillMaxSize().padding(10.dp).align(Alignment.Center),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+                .align(Alignment.Center),
             painter = painterResource(iconId),
             contentDescription = "icon",
             tint = iconTint,
@@ -81,11 +80,13 @@ fun EasyIconButton(
     iconId: Int,
     size: Dp = IconMedium,
     tint: Color = MaterialTheme.colors.onBackgroundAlpha7,
+    enabled: Boolean = true,
     padding: Dp = IconDefaultPadding
 ) {
     IconButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     ) {
         Icon(
             modifier = Modifier.size(size),

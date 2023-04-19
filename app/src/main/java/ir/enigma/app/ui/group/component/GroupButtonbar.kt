@@ -1,22 +1,21 @@
 package ir.enigma.app.ui.group.component
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import ir.enigma.app.R
 import ir.enigma.app.component.*
 import ir.enigma.app.ui.main.component.SettleUpAmount
+import ir.enigma.app.ui.theme.BorderThin
 import ir.enigma.app.ui.theme.IconLarge
+import ir.enigma.app.ui.theme.onBackgroundAlpha3
 
 @Composable
 fun GroupButtonbar(amount: Double, currency: String, isCredit: Boolean) {
@@ -44,7 +43,8 @@ fun GroupButtonbar(amount: Double, currency: String, isCredit: Boolean) {
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth().padding(horizontal = 5.dp, vertical = 2.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 5.dp, vertical = 2.dp),
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -57,16 +57,14 @@ fun GroupButtonbar(amount: Double, currency: String, isCredit: Boolean) {
                 OutlinedButton(
                     onClick = { /*TODO*/ },
                     border = BorderStroke(
-                        1.dp,
-                        MaterialTheme.colors.onBackground.copy(alpha = .3f)
+                        color = MaterialTheme.colors.onBackgroundAlpha3,
+                        width = BorderThin
                     ),
                 ) {
                     TextBody2(text = "تسویه حساب")
                 }
             }
         }
-
-
     }
 }
 

@@ -6,13 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.ui.auth.AuthScreen
 import ir.enigma.app.ui.auth.AuthViewModel
-import ir.enigma.app.ui.group.BuyScreen
-import ir.enigma.app.ui.group.GroupMembersScreen
-import ir.enigma.app.ui.group.GroupScreen
-import ir.enigma.app.ui.group.GroupViewModel
+import ir.enigma.app.ui.group.*
 import ir.enigma.app.ui.main.AddGroupScreen
 import ir.enigma.app.ui.main.MainScreen
-
 
 @Composable
 fun Navigation(
@@ -49,6 +45,10 @@ fun Navigation(
 
         composable(route = Screen.AddGroupScreen.name) {
             AddGroupScreen(navController = navController)
+        }
+
+        composable(route = Screen.NewPurchaseScreen.name) {
+            NewPurchaseScreen(navController = navController)
         }
 
     }

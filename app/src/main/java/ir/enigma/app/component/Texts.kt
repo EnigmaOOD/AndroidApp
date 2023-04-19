@@ -1,6 +1,5 @@
 package ir.enigma.app.component
 
-import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +15,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import ir.enigma.app.ui.theme.onBackgroundAlpha7
-
 
 @Composable
 fun ErrorText(

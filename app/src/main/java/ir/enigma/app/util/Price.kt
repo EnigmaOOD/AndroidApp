@@ -32,3 +32,4 @@ fun Double.toPrice(currency: String? = null): String {
         return "$final-" + if (currency != null) " $currency" else ""
     return final + if (currency != null) " $currency" else ""
 }
+
