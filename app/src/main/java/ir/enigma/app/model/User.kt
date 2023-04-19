@@ -1,6 +1,20 @@
 package ir.enigma.app.model
 
-data class User(val id: Int, val email: String, val name: String, val iconId: Int = 0) {
+import com.google.gson.annotations.SerializedName
+
+/*
+{
+user_id: 2
+}
+ */
+data class User(
+    @SerializedName("user_id") val id: Int,
+    val email: String,
+    @SerializedName("username") val name: String,
+    @SerializedName("picture_id") val iconId: Int = 0,
+    val password: String? = null,
+) {
+    var token: String? = null
 
     override fun equals(other: Any?): Boolean {
         if (other is User)

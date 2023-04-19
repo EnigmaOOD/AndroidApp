@@ -17,5 +17,7 @@ fun BuyScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         TextH5("BuyScreen")
+
+
     }
 }

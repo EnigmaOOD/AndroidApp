@@ -38,30 +38,33 @@ fun AuthForm(
     }
 
 
-    val errors: List<Boolean>;
-
-    val title: String;
-    val changeScreenText: String;
-    val titleInvert: String;
+    val errors: List<Boolean>
+    val title: String
+    val changeScreenText: String
+    val titleInvert: String
     val appName = stringResource(R.string.app_name)
+    val passwordError: String
     if (forLogin.value) {
         title = "ورود"
-        changeScreenText = "حسابی در " + appName + " ندارید؟"
+        changeScreenText = "حسابی در $appName ندارید؟"
         titleInvert = "ثبت‌نام"
         errors = listOf(
             false,
             !isValidEmailAddress(email.value),
-            false
+            password.value.isEmpty()
         )
+        passwordError = "رمز عبور نمی\u200Cتواند خالی باشد"
+
     } else {
         title = "ثبت‌نام"
-        changeScreenText = "قبلا در ${stringResource(R.string.app_name)} حساب ساخته\u200Cاید؟"
+        changeScreenText = "قبلا در $appName حساب ساخته\u200Cاید؟"
         titleInvert = "ورود"
         errors = listOf(
             name.value.isEmpty(),
             !isValidEmailAddress(email.value),
             password.value.length < 8
         )
+        passwordError = "رمز عبور باید حداقل ۸ کاراکتر باشد"
     }
     val valid: Boolean = !errors.contains(true)
 
@@ -95,7 +98,9 @@ fun AuthForm(
         keyboardType = KeyboardType.Password,
         text = password,
         showError = showErrors.value, hasError = errors[2], imeAction = ImeAction.Done,
-    ) { submit() }
+        error = passwordError,
+        onAction = { submit() },
+    )
 
     MVSpacer()
 
