@@ -29,7 +29,7 @@ fun CardWithImageOrIcon(
     contentPadding: Dp = IconDefaultPadding,
     tint: Color = MaterialTheme.colors.onBackground,
     elevation: Dp = 0.dp,
-    backgroundColor: Color = MaterialTheme.colors.background,
+    backgroundColor: Color = MaterialTheme.colors.surface,
     contentDescription: String? = null,
     border: Boolean = false,
     onClick: () -> Unit = {},
@@ -47,7 +47,9 @@ fun CardWithImageOrIcon(
 
     Card(
         modifier = _modifier,
-        elevation = elevation, shape = CircleShape, backgroundColor = backgroundColor,
+        elevation = elevation,
+        shape = CircleShape,
+        backgroundColor = backgroundColor,
         onClick = onClick
     ) {
         if (icon) {

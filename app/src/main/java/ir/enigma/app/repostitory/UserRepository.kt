@@ -3,12 +3,14 @@ package ir.enigma.app.repostitory
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
+import ir.enigma.app.model.UserInfo
 import ir.enigma.app.network.Api
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val api: Api) {
 
     suspend fun login(email: String, password: String): ApiResult<Token> {
+
         return handleException({
             api.login(email, password)
         }) {
@@ -30,4 +32,16 @@ class UserRepository @Inject constructor(private val api: Api) {
                 null
         }
     }
+
+    suspend fun getUserInfo(token: String): ApiResult<UserInfo> {
+        return handleException({
+            api.userInfo(token)
+        }) {
+            if (it == 401)
+                "برای ادامه باید دوباره وارد شوید"
+            else
+                null
+        }
+    }
+
 }

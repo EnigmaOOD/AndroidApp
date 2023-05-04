@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import ir.enigma.app.data.userE
 import ir.enigma.app.model.User
 
 @Composable
@@ -25,7 +24,7 @@ fun NewPurchase(user: User) {
 @Composable
 fun previ() {
     RtlThemePreview {
-        NewPurchase(userE)
+//        NewPurchase(userE)
     }
 }
 

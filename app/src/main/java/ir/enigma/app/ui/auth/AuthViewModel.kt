@@ -1,6 +1,7 @@
 package ir.enigma.app.ui.auth
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.enigma.app.data.ApiStatus
@@ -19,8 +20,8 @@ class AuthViewModel @Inject constructor(
 
     companion object {
         const val TAG = "AuthViewModel"
-        var me: User? = null
-        var token: String? = null
+        lateinit var me: User
+        lateinit var token: String
     }
 
     fun checkForToken(context: Context) {
@@ -28,24 +29,44 @@ class AuthViewModel @Inject constructor(
             startLading()
             val loadedToken = SharedPrefManager(context).getString(SharedPrefManager.KEY_TOKEN)
             if (loadedToken != null) {
-                //todo: get me
                 token = loadedToken
+                setMe()
                 success(Token(loadedToken))
             } else
                 empty()
         }
     }
 
+    private fun setMe() {
+        viewModelScope.launch {
+            startLading()
+            val result = userRepository.getUserInfo(token)
+            if (result.status == ApiStatus.SUCCESS) {
+                me = result.data!!.user
+                Log.d(TAG, "setMe: $me")
+                success(Token(token))
+            } else
+                error(result.message!!)
+        }
+    }
 
     fun login(
+        context: Context,
         email: String,
         password: String
     ) {
 
-        callApi {
-            userRepository.login(email, password)
-        }
+        viewModelScope.launch {
+            startLading()
+            val result = userRepository.login(email, password)
 
+            if (result.status == ApiStatus.SUCCESS) {
+                token = "Token " + result.data!!.token
+                saveToken(context, token)
+                setMe()
+            }else
+                error(result.message!!)
+        }
     }
 
     fun register(

@@ -14,12 +14,11 @@ import ir.enigma.app.util.toPrice
 @Composable
 fun IconText(
     modifier: Modifier = Modifier,
-    trueVar: Boolean,
     amount: Double,
     currency: String,
     contentDescription: String? = null
 ) {
-    if (trueVar) {
+    if (amount > 0) {
         Row(modifier = modifier) {
             Icon(
                 modifier = Modifier
@@ -34,7 +33,7 @@ fun IconText(
                 text = "${amount.toPrice()} $currency", color = MaterialTheme.colors.secondary
             )
         }
-    } else {
+    } else if (amount < 0) {
         Row(modifier = modifier) {
             Icon(
                 modifier = Modifier
@@ -49,5 +48,7 @@ fun IconText(
                 text = "${amount.toPrice()} $currency", color = MaterialTheme.colors.error
             )
         }
+    } else {
+        HintText(modifier = modifier, text = "0 $currency")
     }
 }

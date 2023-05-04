@@ -152,7 +152,7 @@ enum class PurchaseCategory(
     ),
 
     Other(
-        "سایر", PurchaseCategoryGroup.Other, R.drawable.ic_fill_gamepad,
+        "سایر", PurchaseCategoryGroup.Other, R.drawable.ic_fill_invoice,
     ),
 
 

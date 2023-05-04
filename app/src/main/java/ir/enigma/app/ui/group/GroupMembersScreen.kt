@@ -13,14 +13,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
-import ir.enigma.app.data.me
 import ir.enigma.app.model.GroupCategory
+import ir.enigma.app.ui.ApiScreen
+import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.theme.*
 
 @Composable
 fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewModel) {
-    Surface(color = MaterialTheme.colors.primary) {
-        val group = groupViewModel.group
+    ApiScreen(backgroundColor = MaterialTheme.colors.primary, apiResult = groupViewModel.state) {
+        val group = groupViewModel.state.value.data!!
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -42,7 +43,7 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                 SHSpacer()
                 Column(modifier = Modifier.weight(1f)) {
                     TextH6(group.name, color = MaterialTheme.colors.onPrimary)
-                    OnPrimaryHint(group.users.size.toString() + " عضو")
+                    OnPrimaryHint(group.members.size.toString() + " عضو")
                     OnPrimaryHint("واحد پولی: " + group.currency)
                 }
             }
@@ -71,33 +72,35 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                         )
                     }
 
-
+                    val meItem = group.members.find { it.user == me }
 //                    Divider(startIndent = 55.dp)
                     LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
-                        item {
-                            UserItem(
-                                user = me,
-                                trueVar = true,
-                                isMe = true,
-                                amount = 16000.0,
-                                currency = "تومان"
-                            )
-                            SVSpacer()
-                            if (group.users.size > 1) {
-                                Divider(startIndent = 55.dp)
-                                SVSpacer()
-                            }
-                        }
-                        itemsIndexed(group.users) { index, item ->
-                            if (item != me) {
+                        if (meItem != null) {
+                            item {
                                 UserItem(
-                                    user = item,
+                                    user = me,
                                     trueVar = true,
-                                    amount = 16000.0,
-                                    currency = "تومان"
+                                    isMe = true,
+                                    amount = meItem.cost,
+                                    currency = group.currency
                                 )
                                 SVSpacer()
-                                if (index != group.users.size - 1) {
+                                if (group.members.size > 1) {
+                                    Divider(startIndent = 55.dp)
+                                    SVSpacer()
+                                }
+                            }
+                        }
+                        itemsIndexed(group.members) { index, item ->
+                            if (item.user != me) {
+                                UserItem(
+                                    user = item.user,
+                                    trueVar = true,
+                                    amount = item.cost,
+                                    currency = group.currency
+                                )
+                                SVSpacer()
+                                if (index != group.members.size - 1) {
                                     Divider(startIndent = 55.dp)
                                     SVSpacer()
                                 }
@@ -115,6 +118,6 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
 @Composable
 fun p() {
     RtlThemePreview {
-        GroupMembersScreen(rememberNavController(), GroupViewModel())
+//        GroupMembersScreen(rememberNavController(), GroupViewModel())
     }
 }
