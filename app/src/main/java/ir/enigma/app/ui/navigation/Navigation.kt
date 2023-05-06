@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.ui.auth.AuthScreen
 import ir.enigma.app.ui.auth.AuthViewModel
+import ir.enigma.app.ui.auth.EditProfileScreen
 import ir.enigma.app.ui.group.*
 import ir.enigma.app.ui.main.AddGroupScreen
 import ir.enigma.app.ui.main.MainScreen
@@ -35,8 +36,12 @@ fun Navigation(
             AuthScreen(navController = navController, authViewModel)
         }
 
-        composable(route = Screen.BuyScreen.name) {
-            BuyScreen(navController = navController)
+        composable(route = Screen.AuthScreen.name) {
+            AuthScreen(navController = navController, authViewModel)
+        }
+
+        composable(route = Screen.EditProfileScreen.name) {
+            EditProfileScreen(navController = navController)
         }
 
         composable(route = Screen.GroupMembersScreen.name) {
