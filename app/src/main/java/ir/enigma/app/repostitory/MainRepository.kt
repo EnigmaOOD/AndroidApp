@@ -1,10 +1,16 @@
 package ir.enigma.app.repostitory
 
+import android.util.Log
+import com.google.gson.Gson
 import ir.enigma.app.data.ApiResult
+import ir.enigma.app.model.Contribution
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.network.Api
 import kotlinx.coroutines.flow.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 
@@ -15,13 +21,9 @@ class MainRepository @Inject constructor(private val api: Api) {
         val result = handleException({ api.getAGroup(token, groupId) }) {
             null
         }
-        handleException({ api.getGroupMembers(token, groupId) }) {
+        result.data?.members = handleException({ api.getGroupMembers(token, groupId) }) {
             null
-        }.let {
-            if (it is ApiResult.Success) {
-                result.data!!.members = it.data!!
-            }
-        }
+        }.data
         return result
     }
 
@@ -57,5 +59,47 @@ class MainRepository @Inject constructor(private val api: Api) {
         }
     }
 
+    suspend fun createPurchase(
+        token: String,
+        groupId: Int,
+        purchase: Purchase
+    ): ApiResult<Any> {
+        val obj = CreatePurchaseRequest(
+            groupID = groupId,
+            cost = purchase.totalPrice,
+            description = purchase.title,
+            date = purchase.date,
+            picture_id = purchase.purchaseCategoryIndex,
+            added_by = purchase.sender.id,
+            buyers = purchase.buyers.map { ContributionRequest(it.user.id, it.price) },
+            consumers = purchase.consumers.map { ContributionRequest(it.user.id, it.price) }
+        )
+        Log.d("ExceptionHandler", "createPurchase: " + Gson().toJson(obj))
+        return handleException({
+            api.createPurchase(
+                token,
+                obj
+            )
+        }) {
+            null
+        }
+    }
+
 }
 
+
+data class CreatePurchaseRequest(
+    val groupID: Int,
+    val cost: Double,
+    val description: String?,
+    val date: String,
+    val picture_id: Int,
+    val added_by: Int,
+    val buyers: List<ContributionRequest>,
+    val consumers: List<ContributionRequest>
+)
+
+data class ContributionRequest(
+    val userID: Int,
+    val percent: Double
+)

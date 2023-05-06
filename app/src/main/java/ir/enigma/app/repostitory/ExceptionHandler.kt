@@ -16,9 +16,10 @@ suspend fun <T> handleException(
     call: suspend () -> Response<T>,
     errorCodeHande: (code: Int) -> String?
 ): ApiResult<T> {
+    Log.d("ExceptionHandler", "handleException: $call")
     val result = try {
         val data = call()
-        Log.d("ExceptionHandler", "handleException: " + data)
+        Log.d("ExceptionHandler", "handleException: $data")
         Log.d("ExceptionHandler", "handleExceptionErrorBody: ${data.errorBody()}")
         if (data.isSuccessful)
             ApiResult.Success(data.body())

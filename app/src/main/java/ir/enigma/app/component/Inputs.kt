@@ -11,6 +11,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import ir.enigma.app.ui.theme.IconSmall
 import ir.enigma.app.R;
 import ir.enigma.app.ui.theme.SpaceMedium
+import ir.enigma.app.ui.theme.onBackgroundAlpha7
 
 @Composable
 fun getLableByInputType(keyboardType: KeyboardType): String {
@@ -52,7 +54,10 @@ fun InputTextField(
     label: String = getLableByInputType(keyboardType),
     error: String = getErrorByInputType(keyboardType, label),
     showError: Boolean = false,
+    hint: String? = null,
     hasError: Boolean = false,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
     imeAction: ImeAction = ImeAction.Done,
     onAction: (() -> Unit)? = null,
     trailingIcon: @Composable() (() -> Unit)? = null,
@@ -72,6 +77,8 @@ fun InputTextField(
                 label = label,
                 isError = hasError,
                 error = error,
+                enabled = enabled,
+                readOnly = readOnly,
                 keyboardActions = keyboardActions,
                 imeAction = imeAction,
                 showError = showError
@@ -84,6 +91,9 @@ fun InputTextField(
             isError = hasError,
             label = label,
             error = error,
+            enabled = enabled,
+            readOnly = readOnly,
+            hint = hint,
             showError = showError,
             leadingIcon = leadingIcon,
             keyboardAction = keyboardActions,
@@ -104,6 +114,9 @@ fun GeneralTextField(
     label: String,
     error: String,
     singleLine: Boolean = true,
+    hint: String? = null,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
     keyboardOptions: KeyboardOptions,
     isError: Boolean = text.value.isEmpty(),
     showError: Boolean = false,
@@ -122,6 +135,9 @@ fun GeneralTextField(
         singleLine = singleLine,
         isError = isError,
         error = error,
+        hint = hint,
+        enabled = enabled,
+        readOnly = readOnly,
         keyboardActions = keyboardAction,
         label = label, showError = showError,
         visualTransformation = visualTransformation,
@@ -145,6 +161,8 @@ fun PasswordTextField(
     password: MutableState<String>,
     label: String,
     error: String,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
     onValueChange: (String) -> Unit = { password.value = it },
     leadingIcon: ImageVector?,
     imeAction: ImeAction,
@@ -159,6 +177,8 @@ fun PasswordTextField(
         onValueChange = onValueChange,
         label = label,
         error = error,
+        enabled = enabled,
+        readOnly = readOnly,
         leadingIcon = leadingIcon,
         isError = isError, showError = showError,
         keyboardAction = keyboardActions,
@@ -198,6 +218,7 @@ fun OutlinedTextFieldValidation(
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
     label: String,
+    hint: String? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     error: String = "",
@@ -205,7 +226,7 @@ fun OutlinedTextFieldValidation(
     errorIcon: @Composable (() -> Unit)? = {
         DefaultErrorIcon()
     },
-    trailingIcon: @Composable (() -> Unit)?=null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -258,10 +279,21 @@ fun OutlinedTextFieldValidation(
             shape = shape,
             colors = colors
         )
-        if (displayError) {
+
+        if (displayError || hint != null) {
+            val text: String
+            val color: Color
+            if (displayError) {
+                text = error
+                color = MaterialTheme.colors.error
+            } else {
+                text = hint ?: ""
+                color = MaterialTheme.colors.onBackgroundAlpha7
+            }
+
             Text(
-                text = error,
-                color = MaterialTheme.colors.error,
+                text = text,
+                color = color,
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = SpaceMedium, top = 0.dp)
             )

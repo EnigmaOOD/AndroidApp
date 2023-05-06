@@ -1,6 +1,7 @@
 package ir.enigma.app.ui.main.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
@@ -62,7 +63,12 @@ fun MainTopBar(
 
             SettleUpAmount(amount = credit, currency = currency, isCredit = true)
             SHSpacer()
-            HorizontalDivider(verticalPadding = IconVeryLarge / 4)
+            Box(
+                modifier = Modifier
+                    .height(IconMedium)
+                    .width(1.dp)
+                    .background(color = MaterialTheme.colors.onBackgroundAlpha3)
+            )
             SHSpacer()
             SettleUpAmount(amount = dept, currency = currency, isCredit = false)
 

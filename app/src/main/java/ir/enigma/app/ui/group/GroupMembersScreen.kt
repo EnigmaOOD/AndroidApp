@@ -22,6 +22,7 @@ import ir.enigma.app.ui.theme.*
 fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewModel) {
     ApiScreen(backgroundColor = MaterialTheme.colors.primary, apiResult = groupViewModel.state) {
         val group = groupViewModel.state.value.data!!
+        val members = group.members!!
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -43,7 +44,8 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                 SHSpacer()
                 Column(modifier = Modifier.weight(1f)) {
                     TextH6(group.name, color = MaterialTheme.colors.onPrimary)
-                    OnPrimaryHint(group.members.size.toString() + " عضو")
+                    if (group.members != null)
+                        OnPrimaryHint(group.members!!.size.toString() + " عضو")
                     OnPrimaryHint("واحد پولی: " + group.currency)
                 }
             }
@@ -72,7 +74,7 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                         )
                     }
 
-                    val meItem = group.members.find { it.user == me }
+                    val meItem = groupViewModel.meMember
 //                    Divider(startIndent = 55.dp)
                     LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
                         if (meItem != null) {
@@ -85,13 +87,13 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                                     currency = group.currency
                                 )
                                 SVSpacer()
-                                if (group.members.size > 1) {
+                                if (members.size > 1) {
                                     Divider(startIndent = 55.dp)
                                     SVSpacer()
                                 }
                             }
                         }
-                        itemsIndexed(group.members) { index, item ->
+                        itemsIndexed(members) { index, item ->
                             if (item.user != me) {
                                 UserItem(
                                     user = item.user,
@@ -100,7 +102,7 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                                     currency = group.currency
                                 )
                                 SVSpacer()
-                                if (index != group.members.size - 1) {
+                                if (index != members.size - 1) {
                                     Divider(startIndent = 55.dp)
                                     SVSpacer()
                                 }

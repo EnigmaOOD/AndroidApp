@@ -13,6 +13,8 @@ private fun calculateUserContribution(
     user: User,
     contributions: List<Contribution>
 ): Double {
+    if (contributions == null)
+        return 0.0
     contributions.forEach {
         if (it.user == user) {
             return it.price

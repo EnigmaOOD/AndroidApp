@@ -20,7 +20,7 @@ fun Double.toPrice(currency: String? = null): String {
         val r = value % 10
         builder.append(r)
         value /= 10
-        if (i == 2 && value / 10 > 0) {
+        if (i == 2 && value > 0) {
             builder.append(',')
             i = -1
         }
@@ -33,3 +33,6 @@ fun Double.toPrice(currency: String? = null): String {
     return final + if (currency != null) " $currency" else ""
 }
 
+fun String.zeroIfEmpty(): String {
+    return if (this.isEmpty()) "0" else this
+}

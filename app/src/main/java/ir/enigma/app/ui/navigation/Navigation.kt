@@ -35,10 +35,6 @@ fun Navigation(
             AuthScreen(navController = navController, authViewModel)
         }
 
-        composable(route = Screen.BuyScreen.name) {
-            BuyScreen(navController = navController)
-        }
-
         composable(route = Screen.GroupMembersScreen.name) {
             GroupMembersScreen(navController = navController, groupViewModel)
         }
@@ -55,8 +51,11 @@ fun Navigation(
             AddGroupScreen(navController = navController)
         }
 
-        composable(route = Screen.NewPurchaseScreen.name) {
-            NewPurchaseScreen(navController = navController)
+        composable(route = Screen.NewPurchaseScreen.name + "/{amount}") {
+            NewPurchaseScreen(
+                navController = navController, groupViewModel,
+                it.arguments?.getString("amount")?.toDoubleOrNull()
+            )
         }
 
     }

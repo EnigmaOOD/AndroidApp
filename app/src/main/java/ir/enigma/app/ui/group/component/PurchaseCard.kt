@@ -44,11 +44,7 @@ fun PurchaseCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SquircleIcon(
-                    iconId = category.iconRes,
-                    backgroundColor = category.categoryGroup.color,
-                    iconTint = Color.Black.copy(alpha = .9f)
-                )
+                CategoryIcon(category)
                 SHSpacer()
                 Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -162,6 +158,15 @@ fun getOtherUser(me: User, contribution: List<Contribution>): User? {
             return it.user
     }
     return null
+}
+
+@Composable
+fun CategoryIcon(category: PurchaseCategory) {
+    SquircleIcon(
+        iconId = category.iconRes,
+        backgroundColor = category.categoryGroup.color,
+        iconTint = Color.Black.copy(alpha = .9f)
+    )
 }
 
 @Preview(showBackground = false)

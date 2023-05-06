@@ -38,7 +38,7 @@ fun <T : ApiResult<*>> ApiScreen(
     drawerBackgroundColor: Color = MaterialTheme.colors.surface,
     drawerContentColor: Color = contentColorFor(drawerBackgroundColor),
     drawerScrimColor: Color = DrawerDefaults.scrimColor,
-    backgroundColor: Color = MaterialTheme.colors.background,
+    backgroundColor: Color = MaterialTheme.colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
     apiResult: MutableState<T>,
     snackbarDuration: SnackbarDuration = SnackbarDuration.Short,

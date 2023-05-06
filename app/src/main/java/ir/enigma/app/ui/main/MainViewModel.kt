@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                     }
                 }
                 else -> {
-                    state.value = result as ApiResult<Unit>
+                    fetchGroups()
                 }
             }
 

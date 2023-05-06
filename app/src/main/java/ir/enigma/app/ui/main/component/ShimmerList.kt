@@ -67,3 +67,15 @@ fun ShimmerText(shimmer: Shimmer, width: Dp = 70.dp) {
             .background(MaterialTheme.colors.onBackgroundAlpha3)
     )
 }
+
+@Composable
+fun ShimmerRectangle(
+    shimmer: Shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.Window),
+    width: Dp = 100.dp,
+    height: Dp = 35.dp
+) {
+    Box(
+        modifier = Modifier.width(width).height(height).shimmer(shimmer)
+            .background(MaterialTheme.colors.onBackgroundAlpha3)
+    )
+}

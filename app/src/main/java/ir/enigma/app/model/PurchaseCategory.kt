@@ -11,38 +11,6 @@ enum class PurchaseCategory(
     @DrawableRes val iconRes: Int,
 ) {
 
-    Rent(
-        "اجاره خانه", PurchaseCategoryGroup.Home, R.drawable.ic_fill_home,
-    ),
-
-    Cleaning(
-        "شستشو", PurchaseCategoryGroup.Home, R.drawable.ic_fill_cleaning,
-    ),
-
-    Phone(
-        "تلفن", PurchaseCategoryGroup.Home, R.drawable.ic_fill_phone,
-    ),
-
-    Internet(
-        "اینترنت", PurchaseCategoryGroup.Home, R.drawable.ic_fill_wifi,
-    ),
-
-    Repairs(
-        "تعمیرات", PurchaseCategoryGroup.Home, R.drawable.ic_fill_support,
-    ),
-
-    ElectricBill(
-        "قبض برق", PurchaseCategoryGroup.Home, R.drawable.ic_fill_electricity,
-    ),
-
-    GasBill(
-        "قبض گاز", PurchaseCategoryGroup.Home, R.drawable.ic_fill_gas_stove,
-    ),
-
-    WaterBill(
-        "قبض آب", PurchaseCategoryGroup.Home, R.drawable.ic_fill_faucet,
-    ),
-
     FastFood(
         "فست\u200Cفود", PurchaseCategoryGroup.Food, R.drawable.ic_fill_snack,
     ),
@@ -76,7 +44,7 @@ enum class PurchaseCategory(
     ),
 
     Spice(
-        "ادویه", PurchaseCategoryGroup.Food, R.drawable.ic_fill_ice_cream,
+        "ادویه", PurchaseCategoryGroup.Food, R.drawable.ic_fill_ice_cream, //todo fix this
     ),
 
     Diary(
@@ -90,6 +58,7 @@ enum class PurchaseCategory(
     JunkFood(
         "تنقلات", PurchaseCategoryGroup.Food, R.drawable.ic_snack_chips,
     ),
+
 
     BusTicket(
         "بلیط اتوبوس", PurchaseCategoryGroup.Transportation, R.drawable.ic_fill_bus,
@@ -118,6 +87,39 @@ enum class PurchaseCategory(
     Hotel(
         "هتل", PurchaseCategoryGroup.Transportation, R.drawable.ic_fill_hotel,
     ),
+
+    Rent(
+        "اجاره خانه", PurchaseCategoryGroup.Home, R.drawable.ic_fill_home,
+    ),
+
+    Cleaning(
+        "شستشو", PurchaseCategoryGroup.Home, R.drawable.ic_fill_cleaning,
+    ),
+
+    Phone(
+        "تلفن", PurchaseCategoryGroup.Home, R.drawable.ic_fill_phone,
+    ),
+
+    Internet(
+        "اینترنت", PurchaseCategoryGroup.Home, R.drawable.ic_fill_wifi,
+    ),
+
+    Repairs(
+        "تعمیرات", PurchaseCategoryGroup.Home, R.drawable.ic_fill_support,
+    ),
+
+    ElectricBill(
+        "قبض برق", PurchaseCategoryGroup.Home, R.drawable.ic_fill_electricity,
+    ),
+
+    GasBill(
+        "قبض گاز", PurchaseCategoryGroup.Home, R.drawable.ic_fill_gas_stove,
+    ),
+
+    WaterBill(
+        "قبض آب", PurchaseCategoryGroup.Home, R.drawable.ic_fill_faucet,
+    ),
+
 
     MovieTicket(
         "بلیط سینما", PurchaseCategoryGroup.Entertainment, R.drawable.ic_fill_ticket,

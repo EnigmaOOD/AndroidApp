@@ -13,12 +13,19 @@ import androidx.compose.ui.zIndex
 import ir.enigma.app.R
 import ir.enigma.app.component.*
 import ir.enigma.app.ui.main.component.SettleUpAmount
-import ir.enigma.app.ui.theme.BorderThin
-import ir.enigma.app.ui.theme.IconLarge
-import ir.enigma.app.ui.theme.onBackgroundAlpha3
+import ir.enigma.app.ui.main.component.ShimmerItem
+import ir.enigma.app.ui.main.component.ShimmerRectangle
+import ir.enigma.app.ui.theme.*
+import kotlin.math.abs
 
 @Composable
-fun GroupButtonbar(amount: Double, currency: String, isCredit: Boolean) {
+fun GroupButtonbar(
+    amount: Double,
+    currency: String,
+    shimmer: Boolean = false,
+    onSettleUp: (Double) -> Unit = {},
+    onAddPurchase: () -> Unit
+) {
     Box() {
         Box(
             modifier = Modifier
@@ -29,10 +36,10 @@ fun GroupButtonbar(amount: Double, currency: String, isCredit: Boolean) {
             CardWithImageOrIcon(
                 icon = true,
                 resource = R.drawable.ic_fill_add,
-                size = IconLarge,
+                size = IconSemiLarge,
                 tint = MaterialTheme.colors.onPrimary,
                 backgroundColor = MaterialTheme.colors.primary,
-                elevation = 4.dp
+                elevation = 4.dp, onClick = onAddPurchase
             )
         }
 
@@ -48,20 +55,25 @@ fun GroupButtonbar(amount: Double, currency: String, isCredit: Boolean) {
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                SettleUpAmount(
-                    amount = amount,
-                    currency = currency,
-                    isCredit = isCredit
-                )
+                if (shimmer) {
+                    ShimmerRectangle()
+                    ShimmerRectangle()
+                } else {
+                    SettleUpAmount(
+                        amount = abs(amount),
+                        currency = currency,
+                        isCredit = amount > 0
+                    )
 
-                OutlinedButton(
-                    onClick = { /*TODO*/ },
-                    border = BorderStroke(
-                        color = MaterialTheme.colors.onBackgroundAlpha3,
-                        width = BorderThin
-                    ),
-                ) {
-                    TextBody2(text = "تسویه حساب")
+                    OutlinedButton(
+                        onClick = { onSettleUp(amount) },
+                        border = BorderStroke(
+                            color = MaterialTheme.colors.onBackgroundAlpha3,
+                            width = BorderThin
+                        ),
+                    ) {
+                        TextBody2(text = "تسویه حساب")
+                    }
                 }
             }
         }
@@ -72,6 +84,6 @@ fun GroupButtonbar(amount: Double, currency: String, isCredit: Boolean) {
 @Composable
 fun p() {
     RtlThemePreview {
-        GroupButtonbar(amount = 13000.0, currency = "تومان", isCredit = false)
+        GroupButtonbar(amount = 13000.0, currency = "تومان", true, onAddPurchase = {})
     }
 }

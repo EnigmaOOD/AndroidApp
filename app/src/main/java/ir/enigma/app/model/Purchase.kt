@@ -2,13 +2,16 @@ package ir.enigma.app.model
 
 import com.google.gson.annotations.SerializedName
 import ir.hamsaa.persiandatepicker.date.PersianDateImpl
-import java.util.Date
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
 
 
 data class Purchase(
     @SerializedName("description")
     val title: String?,
-    val date: Date,
+    val date: String,
     @SerializedName("cost")
     val totalPrice: Double,
     @SerializedName("added_by")
@@ -17,7 +20,6 @@ data class Purchase(
     val purchaseCategoryIndex: Int,
     @SerializedName("Buyers")
     val buyers: List<Contribution>,
-
     val consumers: List<Contribution>,
 ) {
 
@@ -32,7 +34,12 @@ data class Purchase(
 
     fun getPersianDate(): PersianDateImpl {
         val persianDateImpl = PersianDateImpl()
-        persianDateImpl.setDate(date)
+
+        persianDateImpl.setDate(
+            LocalDate.parse(
+                date
+            ).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
+        )
         return persianDateImpl
     }
 }
@@ -48,4 +55,13 @@ data class Member(
     @SerializedName("userID")
     val user: User,
     val cost: Double
-)
+) {
+
+    override fun equals(other: Any?): Boolean {
+        return user == other
+    }
+
+    override fun hashCode(): Int {
+        return user.hashCode()
+    }
+}

@@ -1,5 +1,6 @@
 package ir.enigma.app.repostitory
 
+import android.util.Log
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
@@ -34,6 +35,7 @@ class UserRepository @Inject constructor(private val api: Api) {
     }
 
     suspend fun getUserInfo(token: String): ApiResult<UserInfo> {
+        Log.d("ExceptionHandler", "getUserInfo: $token")
         return handleException({
             api.userInfo(token)
         }) {

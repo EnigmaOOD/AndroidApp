@@ -1,6 +1,7 @@
 package ir.enigma.app.network
 
 import ir.enigma.app.model.*
+import ir.enigma.app.repostitory.CreatePurchaseRequest
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.Body
@@ -58,4 +59,11 @@ interface Api {
         @Header("Authorization") token: String,
         @Field("groupID") groupId: Int
     ): Response<List<Member>>
+
+
+    @POST("/buy/CreateBuyView/")
+    suspend fun createPurchase(
+        @Header("Authorization") token: String,
+        @Body purchase: CreatePurchaseRequest
+    ): Response<Any>
 }

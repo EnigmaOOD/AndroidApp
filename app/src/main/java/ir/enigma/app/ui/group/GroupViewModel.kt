@@ -7,9 +7,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.model.Group
+import ir.enigma.app.model.Member
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.ui.ApiViewModel
+import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,12 +29,23 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
     private val _purchaseList = MutableStateFlow<List<Purchase>>(emptyList())
     val purchaseList = _purchaseList.asStateFlow()
 
+    var meMember: Member? = null
+
+    val newPurchaseState = mutableStateOf<ApiResult<Any>>(
+        ApiResult.Empty()
+    )
+
     fun fetchGroupData(groupId: Int) {
         viewModelScope.launch {
-            state.value = mainRepository.getGroupWithMembers(token = token, groupId = groupId)
-            if (state.value.status == ApiStatus.SUCCESS) {
+            val result = mainRepository.getGroupWithMembers(token = token, groupId = groupId)
+            if (result is ApiResult.Success && result.data?.members != null) {
+                meMember = result.data.members!!.find { it.user.id == me.id }
+                state.value = result
                 fetchPurchases(groupId)
+            } else {
+                fetchGroupData(groupId)
             }
+
         }
 
     }
@@ -54,11 +67,22 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
                     }
                 }
                 else -> {
-                    state.value = result as ApiResult<Group>
+                    fetchPurchases(groupId)
                 }
             }
 
         }
     }
 
+    fun createPurchase(purchase: Purchase) {
+        viewModelScope.launch(Dispatchers.IO) {
+            newPurchaseState.value = ApiResult.Loading()
+            val group = state.value.data
+            newPurchaseState.value = mainRepository.createPurchase(
+                token = token,
+                groupId = group!!.id,
+                purchase = purchase
+            )
+        }
+    }
 }

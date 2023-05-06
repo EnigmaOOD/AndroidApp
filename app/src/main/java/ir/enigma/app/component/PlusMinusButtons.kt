@@ -24,6 +24,7 @@ import ir.enigma.app.R
 import ir.enigma.app.ui.theme.BorderThin
 import ir.enigma.app.ui.theme.IconSmall
 import ir.enigma.app.ui.theme.onBackgroundAlpha3
+import ir.enigma.app.util.zeroIfEmpty
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -48,12 +49,12 @@ fun PlusMinusButtons(displayNumber: MutableState<String>) {
                 )
                 .width(45.dp),
             value = displayNumber.value,
-            onValueChange = { displayNumber.value = it },
+            onValueChange = { displayNumber.value = it.zeroIfEmpty() },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center)
         ) {
             TextFieldDefaults.TextFieldDecorationBox(
-                value = displayNumber.value.toString(),
+                value = displayNumber.value,
                 innerTextField = it,
                 singleLine = true,
                 enabled = true,

@@ -46,7 +46,7 @@ class AuthViewModel @Inject constructor(
                 Log.d(TAG, "setMe: $me")
                 success(Token(token))
             } else
-                error(result.message!!)
+                setMe()
         }
     }
 
