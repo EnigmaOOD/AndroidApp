@@ -1,8 +1,7 @@
 package ir.enigma.app.network
 
-import ir.enigma.app.model.Group
-import ir.enigma.app.model.Token
-import ir.enigma.app.model.User
+import ir.enigma.app.model.*
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -21,9 +20,42 @@ interface Api {
         @Field("password") password: String
     ): Response<Token>
 
-    //register
+
     @POST("/auth/register/")
     suspend fun register(
         @Body user: User
     ): Response<User>
+
+    @POST("/auth/UserInfo/")
+    suspend fun userInfo(
+        @Header("Authorization") token: String
+    ): Response<UserInfo>
+
+
+    @POST("/group/ShowGroups/")
+    suspend fun getGroups(
+        @Header("Authorization") token: String,
+    ): Response<GroupList>
+
+
+    @POST("/buy/GetGroupBuys/")
+    @FormUrlEncoded
+    suspend fun getGroupPurchases(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupId: Int
+    ): Response<List<Purchase>>
+
+    @POST("/group/GroupInfo/")
+    @FormUrlEncoded
+    suspend fun getAGroup(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupId: Int
+    ): Response<Group>
+
+    @POST("/group/ShowMembers/")
+    @FormUrlEncoded
+    suspend fun getGroupMembers(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupId: Int
+    ): Response<List<Member>>
 }

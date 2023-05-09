@@ -17,8 +17,6 @@ import ir.enigma.app.ui.theme.*
 fun GroupItem(
     modifier: Modifier = Modifier,
     group: Group,
-
-    trueVar: Boolean,
     amount: Double,
     currency: String
 ) {
@@ -30,7 +28,7 @@ fun GroupItem(
             size = IconLarge,
             contentPadding = 10.dp,
             tint = MaterialTheme.colors.primary,
-            backgroundColor = MaterialTheme.colors.primary.copy(alpha = .2f),
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = .1f),
             contentDescription = group.name,
         )
 
@@ -40,15 +38,12 @@ fun GroupItem(
                 .weight(1f)
         ) {
             TextBody2(text = group.name)
-            TextSubtitle2(
-                text = "${group.users!!.size.toString()} عضو",
-                color = MaterialTheme.colors.primary.copy(alpha = .7f)
-            ) //need to check for null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            HintText(text = "واحد: ${group.currency}")
+//TODO : Show Something!!!
         }
 
         IconText(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-            trueVar = trueVar,
             amount = amount,
             currency = currency,
             contentDescription = "Debt or credit"

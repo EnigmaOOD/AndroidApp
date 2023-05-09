@@ -65,17 +65,17 @@ val Typography = Typography(
     ),
     h3 = TextStyle(
         fontFamily = Vazirmatn,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Black,
         fontSize = 32.sp
     ),
     h2 = TextStyle(
         fontFamily = Vazirmatn,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Black,
         fontSize = 36.sp
     ),
     h1 = TextStyle(
         fontFamily = Vazirmatn,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Black,
         fontSize = 48.sp
     ),
 )

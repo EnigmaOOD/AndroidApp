@@ -16,7 +16,7 @@ import ir.enigma.app.ui.main.MainViewModel
 fun Navigation(
 ) {
     val navController = rememberNavController()
-    val groupViewModel = GroupViewModel()
+    val groupViewModel = hiltViewModel<GroupViewModel>()
     val authViewModel = hiltViewModel<AuthViewModel>()
     val mainViewModel = hiltViewModel<MainViewModel>()
     NavHost(
@@ -43,8 +43,12 @@ fun Navigation(
             GroupMembersScreen(navController = navController, groupViewModel)
         }
 
-        composable(route = Screen.GroupScreen.name) {
-            GroupScreen(navController = navController, groupViewModel)
+        composable(route = Screen.GroupScreen.name + "/{groupId}") { backStackEntry ->
+            GroupScreen(
+                navController = navController,
+                groupViewModel,
+                backStackEntry.arguments?.getString("groupId")!!.toInt()
+            )
         }
 
         composable(route = Screen.AddGroupScreen.name) {

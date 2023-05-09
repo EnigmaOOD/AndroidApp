@@ -8,6 +8,7 @@ val IconMedium = 30.dp
 val IconLarge = 45.dp
 val IconSemiLarge = 60.dp
 val IconVeryLarge = 80.dp
+val IconExtraLarge = 120.dp
 
 val IconDefaultPadding = 4.dp
 

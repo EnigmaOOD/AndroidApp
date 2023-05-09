@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import ir.enigma.app.data.userE
+
 import ir.enigma.app.model.User
 
 @Composable
@@ -25,7 +25,6 @@ fun UserItem(
 
         IconText(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-            trueVar = trueVar,
             amount = amount,
             currency = currency,
             contentDescription = "Debt or credit"
@@ -37,12 +36,7 @@ fun UserItem(
 @Composable
 fun Previ() {
     RtlThemePreview {
-        UserItem(
-            user = userE,
-            trueVar = false,
-            amount = 16000.0,
-            currency = "تومان"
-        )
+
     }
 }
 

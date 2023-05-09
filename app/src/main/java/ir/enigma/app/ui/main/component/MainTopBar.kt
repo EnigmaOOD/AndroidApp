@@ -1,6 +1,8 @@
 package ir.enigma.app.ui.main.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -14,9 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.R
 import ir.enigma.app.component.*
-import ir.enigma.app.data.me
+
 import ir.enigma.app.data.userAvatars
 import ir.enigma.app.model.User
+import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.theme.*
 
 
@@ -37,24 +40,30 @@ fun MainTopBar(
         MVSpacer()
         Row(
             modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            CardWithImageOrIcon(
-                size = IconVeryLarge,
-                icon = false,
-                elevation = ElevationSmall,
-                resource = userAvatars[me.iconId],
-                contentPadding = 0.dp,
-                backgroundColor = UserProfileBackground
-            )
+            Box(modifier = Modifier.weight(1f)) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = ElevationSmall,
+                    shape = CircleShape
+                ) {
+                    Image(
+                        painterResource(userAvatars[me.iconId]),
+                        contentDescription = "User Avatar"
+                    )
+                }
+            }
 
+
+            MHSpacer()
 
             SettleUpAmount(amount = credit, currency = currency, isCredit = true)
-
-            HorizontalDivider(verticalPadding = IconVeryLarge/4)
-
+            SHSpacer()
+            HorizontalDivider(verticalPadding = IconVeryLarge / 4)
+            SHSpacer()
             SettleUpAmount(amount = dept, currency = currency, isCredit = false)
 
         }
@@ -66,13 +75,13 @@ fun MainTopBar(
 fun LogoAndAppName() {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            painter = painterResource(R.drawable.ic_launcher_foreground),
+            painter = painterResource(R.drawable.app_logo),
             tint = MaterialTheme.colors.primary,
             contentDescription = "App Icon",
             modifier = Modifier.size(IconLarge)
         )
         SHSpacer()
-        TextH6(stringResource(R.string.app_name))
+        TextH6(stringResource(R.string.app_name), color = MaterialTheme.colors.primary)
     }
 }
 

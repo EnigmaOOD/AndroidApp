@@ -1,12 +1,18 @@
 package ir.enigma.app.ui
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ir.enigma.app.component.TextBody2
@@ -15,13 +21,13 @@ import ir.enigma.app.ui.theme.*
 import kotlinx.coroutines.delay
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun <T : ApiResult<*>> ApiScreen(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
-    snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     isFloatingActionButtonDocked: Boolean = false,
@@ -35,51 +41,67 @@ fun <T : ApiResult<*>> ApiScreen(
     backgroundColor: Color = MaterialTheme.colors.background,
     contentColor: Color = contentColorFor(backgroundColor),
     apiResult: MutableState<T>,
-    messageDuration: Long = 5000,
+    snackbarDuration: SnackbarDuration = SnackbarDuration.Short,
     loading: Boolean = false,
     content: @Composable (PaddingValues) -> Unit
 ) {
 
-
-    Box {
-        Scaffold(
-            modifier,
-            scaffoldState,
-            topBar,
-            bottomBar,
-            snackbarHost,
-            floatingActionButton,
-            floatingActionButtonPosition,
-            isFloatingActionButtonDocked,
-            drawerContent,
-            drawerGesturesEnabled,
-            drawerShape,
-            drawerElevation,
-            drawerBackgroundColor,
-            drawerContentColor,
-            drawerScrimColor,
-            backgroundColor,
-            contentColor,
-            content
-        )
-        val result = apiResult.value
-        val message: Message? = getMessageByResult(result)
+    val result = apiResult.value
+    val message: Message? = getMessageByResult(result)
 
 
-        if (message != null) {
-            ShowMessageCard(message = message)
-
-            LaunchedEffect(Unit) {
-                delay(messageDuration)
-                apiResult.value = ApiResult.Empty() as T
+    Scaffold(
+        modifier,
+        scaffoldState,
+        topBar,
+        bottomBar,
+        snackbarHost = {
+            SnackbarHost(
+                modifier = Modifier.fillMaxHeight(),
+                hostState = it
+            ) { snackbarData: SnackbarData ->
+                Box() {
+                    Snackbar(
+                        snackbarData = snackbarData,
+                        Modifier.align(Alignment.TopCenter),
+                        elevation = 0.dp,
+                        backgroundColor = getMessageBackgroundColor(
+                            message?.type ?: MessageType.INFO
+                        ),
+                    )
+                }
             }
+        },
+        floatingActionButton,
+        floatingActionButtonPosition,
+        isFloatingActionButtonDocked,
+        drawerContent,
+        drawerGesturesEnabled,
+        drawerShape,
+        drawerElevation,
+        drawerBackgroundColor,
+        drawerContentColor,
+        drawerScrimColor,
+        backgroundColor,
+        contentColor,
+        content
+    )
+
+    if (message != null) {
+        LaunchedEffect(Unit) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message.text,
+                duration = snackbarDuration
+            )
+            apiResult.value = ApiResult.Empty() as T
         }
-
-        if (loading)
-            Loading()
-
-
     }
+
+
+    if (loading)
+        Loading()
+
+
 }
 
 @Composable
@@ -96,24 +118,12 @@ fun Loading() {
 }
 
 @Composable
-fun ShowMessageCard(message: Message) {
-
-    Card(
-        shape = MaterialTheme.shapes.toast,
-        backgroundColor =
-        when (message.type) {
-            MessageType.SUCCESS -> MaterialTheme.colors.secondary
-            MessageType.ERROR -> MaterialTheme.colors.error
-            MessageType.WARNING -> MaterialTheme.colors.primary
-            MessageType.INFO -> MaterialTheme.colors.primary
-        },
-        modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = SpaceMedium, vertical = SpaceThin)
-    ) {
-        TextBody2(
-            modifier = Modifier.padding(vertical = SpaceSmall, horizontal = SpaceMedium),
-            text = message.text
-        )
+fun getMessageBackgroundColor(messageType: MessageType): Color {
+    return when (messageType) {
+        MessageType.SUCCESS -> MaterialTheme.colors.secondary
+        MessageType.ERROR -> MaterialTheme.colors.error
+        MessageType.WARNING -> MaterialTheme.colors.onBackground
+        MessageType.INFO -> MaterialTheme.colors.onBackground
     }
 
 }

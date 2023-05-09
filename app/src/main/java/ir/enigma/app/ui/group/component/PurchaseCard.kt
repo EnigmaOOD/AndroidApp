@@ -1,5 +1,6 @@
 package ir.enigma.app.ui.group.component
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import ir.enigma.app.component.*
 import ir.enigma.app.data.*
 import ir.enigma.app.model.*
+import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.group.util.calculateUserContribution
 import ir.enigma.app.ui.theme.SpaceMedium
 import ir.enigma.app.ui.theme.onBackgroundAlpha7
@@ -29,10 +31,11 @@ fun PurchaseCard(
     onClick: () -> Unit,
 ) {
     val category = purchase.purchaseCategory
+    Log.d("ExceptionHandler", "PurchaseCard: $category")
     Card(
         modifier = modifier,
         elevation = 0.dp,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.surface,
         onClick = onClick
     ) {
         Column(modifier = Modifier.padding(horizontal = SpaceMedium)) {
@@ -49,7 +52,10 @@ fun PurchaseCard(
                 SHSpacer()
                 Column(modifier = Modifier.weight(1f)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        TextH6(modifier = Modifier.weight(1f), text = purchase.title)
+                        TextH6(
+                            modifier = Modifier.weight(1f),
+                            text = purchase.title ?: category.text
+                        )
                         MyContribution(me, purchase)
                     }
                     HintText(getPurchaseHint(purchase, currency))
@@ -109,6 +115,8 @@ fun getPurchaseHint(purchase: Purchase, currency: String): String {
     val buyersCount = purchase.buyers.size
     val verb: String
     val buyersText: String
+    if (buyersCount == 0)
+        return "هیچ کس پرداخت نکرد:)" //:))))))))))))))))))))
     if (buyersCount > 2) {
         if (isMeInBuyers) {
             buyersText = "شما و $buyersCount نفر دیگر"
@@ -120,7 +128,7 @@ fun getPurchaseHint(purchase: Purchase, currency: String): String {
 
     } else if (buyersCount == 2) {
         if (isMeInBuyers) {
-            buyersText = "شما" + " و " + getOtherUser(me, purchase.buyers)!!.name
+            buyersText = "شما" + " و " + getOtherUser(me = me, purchase.buyers)!!.name
             verb = "کردید"
         } else {
             buyersText = purchase.buyers[0].user.name + " و " + purchase.buyers[1].user.name
@@ -160,25 +168,25 @@ fun getOtherUser(me: User, contribution: List<Contribution>): User? {
 @Composable
 fun PurchasePreview() {
     RtlThemePreview {
-
-        PurchaseCard(
-            purchase = Purchase(
-                title = "پیتزا",
-                date = Date(System.currentTimeMillis()),
-                totalPrice = 25000.0,
-                sender = userE,
-                purchaseCategory = PurchaseCategory.WarmFood,
-                buyers = listOf(Contribution(userA, .5), Contribution(userC, .5)),
-                consumers = listOf(
-                    Contribution(me, 1.0 / 3),
-                    Contribution(userC, 1.0 / 3),
-                    Contribution(userD, 1.0 / 3)
-                )
-            ),
-            me = me,
-            currency = "تومان",
-            onClick = {},
-            onSenderClick = {})
+//
+//        PurchaseCard(
+//            purchase = Purchase(
+//                title = "پیتزا",
+//                date = Date(System.currentTimeMillis()),
+//                totalPrice = 25000.0,
+//                sender = userE,
+//                purchaseCategory = PurchaseCategory.WarmFood,
+//                buyers = listOf(Contribution(userA, .5), Contribution(userC, .5)),
+//                consumers = listOf(
+//                    Contribution(fakeMe, 1.0 / 3),
+//                    Contribution(userC, 1.0 / 3),
+//                    Contribution(userD, 1.0 / 3)
+//                )
+//            ),
+//            me = fakeMe,
+//            currency = "تومان",
+//            onClick = {},
+//            onSenderClick = {})
 
 
     }

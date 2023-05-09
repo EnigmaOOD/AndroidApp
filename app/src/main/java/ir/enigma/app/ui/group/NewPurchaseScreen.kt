@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.component.*
-import ir.enigma.app.data.me
+
 import ir.enigma.app.model.PurchaseCategory
 import ir.enigma.app.ui.theme.SpaceThin
 
@@ -96,7 +96,7 @@ fun NewPurchaseScreen(navController: NavController) {
 
                     if (isRelatedBuyer.value) {
                         Row(modifier = Modifier.padding(bottom = 15.dp)) {
-                            NewPurchase(user = me)
+
                         }
                         Row() {
                             AddOutlinedButton()
@@ -129,7 +129,7 @@ fun NewPurchaseScreen(navController: NavController) {
 
                     if (isRelatedConsumer.value) {
                         Row(modifier = Modifier.padding(bottom = 15.dp)) {
-                            NewPurchase(user = me)
+
                         }
                         Row() {
                             AddOutlinedButton()

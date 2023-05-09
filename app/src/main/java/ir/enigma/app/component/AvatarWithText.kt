@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.data.userAvatars
-import ir.enigma.app.data.userB
+
 import ir.enigma.app.model.User
 import ir.enigma.app.ui.theme.IconLarge
 
@@ -18,7 +18,9 @@ fun AvatarWithText(user: User, isMe: Boolean = false) {
         CardWithImageOrIcon(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
             icon = false,
-            resource = userAvatars[user.iconId],
+            resource = userAvatars[
+                    user.iconId % userAvatars.size
+            ],
             size = IconLarge,
             contentPadding = 0.dp,
             contentDescription = user.name,
@@ -38,6 +40,6 @@ fun AvatarWithText(user: User, isMe: Boolean = false) {
 @Composable
 fun sh() {
     RtlThemePreview {
-        AvatarWithText(userB)
+//        AvatarWithText(userB)
     }
 }

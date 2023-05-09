@@ -18,7 +18,8 @@ suspend fun <T> handleException(
 ): ApiResult<T> {
     val result = try {
         val data = call()
-        Log.d("ExceptionHandler", "handleException: " + data.code())
+        Log.d("ExceptionHandler", "handleException: " + data)
+        Log.d("ExceptionHandler", "handleExceptionErrorBody: ${data.errorBody()}")
         if (data.isSuccessful)
             ApiResult.Success(data.body())
         else {
