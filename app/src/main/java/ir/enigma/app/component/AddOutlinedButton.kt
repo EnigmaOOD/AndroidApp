@@ -11,10 +11,10 @@ import ir.enigma.app.ui.theme.BorderThin
 import ir.enigma.app.ui.theme.onBackgroundAlpha3
 
 @Composable
-fun AddOutlinedButton(modifier: Modifier = Modifier) {
+fun AddOutlinedButton(modifier: Modifier = Modifier, onClick: () -> Unit={}) {
     OutlinedButton(
         modifier = modifier.fillMaxWidth(),
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         border = BorderStroke(
             color = MaterialTheme.colors.onBackgroundAlpha3,
             width = BorderThin

@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ir.enigma.app.ui.add_group.AddGroupViewModel
 import ir.enigma.app.ui.auth.AuthScreen
 import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.auth.EditProfileScreen
@@ -20,6 +21,7 @@ fun Navigation(
     val groupViewModel = hiltViewModel<GroupViewModel>()
     val authViewModel = hiltViewModel<AuthViewModel>()
     val mainViewModel = hiltViewModel<MainViewModel>()
+    val addGroupViewModel = hiltViewModel<AddGroupViewModel>()
     NavHost(
         navController = navController,
         startDestination = Screen.AuthScreen.name
@@ -57,7 +59,7 @@ fun Navigation(
         }
 
         composable(route = Screen.AddGroupScreen.name) {
-            AddGroupScreen(navController = navController)
+            AddGroupScreen(navController = navController,addGroupViewModel)
         }
 
         composable(route = Screen.NewPurchaseScreen.name) {

@@ -1,5 +1,6 @@
 package ir.enigma.app.ui.main
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +37,7 @@ fun MainScreen(
 ) {
     val groups = mainViewModel.groupList.collectAsState().value
     LaunchedEffect(Unit) {
-
+        navController.navigate(Screen.AddGroupScreen.name)
         mainViewModel.fetchGroups()
     }
     ApiScreen(
@@ -46,6 +46,7 @@ fun MainScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate(Screen.AddGroupScreen.name)
+                Log.d("newGroup", "newGroup")
             }) {
 
                 CardWithImageOrIcon(
@@ -55,13 +56,15 @@ fun MainScreen(
                     tint = MaterialTheme.colors.onPrimary,
                     backgroundColor = MaterialTheme.colors.primary,
                     elevation = 4.dp
-                ) {
-
-                }
+                )
             }
         }
     ) {
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
             Card(elevation = 0.dp, shape = RectangleShape) {
                 MainTopBar(
                     Modifier
@@ -69,23 +72,29 @@ fun MainScreen(
                         .padding(horizontal = SpaceLarge, vertical = SpaceMedium),
                     me = me,
                     credit = 32000.0, dept = 16000.0, currency = "تومان"
-                )
+                ){
+                    navController.navigate(Screen.EditProfileScreen.name)
+                    Log.d("editProfile", "editProfile")
+                }
             }
             LVSpacer()
             Card(
                 modifier = Modifier
-                    .fillMaxWidth().weight(1f)
+                    .fillMaxWidth()
+                    .weight(1f)
             ) {
                 Column(modifier = Modifier.padding(all = SpaceMedium)) {
                     TextBody2(text = "گروه\u200Cها")
                     if (mainViewModel.state.value.status != ApiStatus.SUCCESS) {
                         MVSpacer()
-                        ShimmerColumn(count = 20, circleSize = IconLarge)
+                        ShimmerColumn(count = 20,
+                            circleSize = IconLarge,
+                        )
                     } else if (groups.isEmpty()) {
                         MVSpacer()
                         HintText(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "گروهی عضو نیستید. برای افزودن + را کلیک کنید",
+                            text = "شما عضو گروهی نیستید. برای افزودن + را کلیک کنید",
                             textAlign = TextAlign.Center,
                         )
                     } else {
@@ -97,6 +106,7 @@ fun MainScreen(
                                 GroupItem(
                                     modifier = Modifier.clickable {
                                         navController.navigate(Screen.GroupScreen.name + "/${item.id}")
+                                        Log.d("groupScreen", "groupScreen")
                                     },
                                     group = item,
                                     amount = 16000.0,

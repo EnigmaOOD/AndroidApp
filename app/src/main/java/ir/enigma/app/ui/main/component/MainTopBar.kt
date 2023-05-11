@@ -1,6 +1,7 @@
 package ir.enigma.app.ui.main.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
@@ -29,24 +30,32 @@ fun MainTopBar(
     me: User,
     credit: Double,
     dept: Double,
-    currency: String
+    currency: String,
+    onClick: () -> Unit = {},
 ) {
 
     Column(
-        modifier = modifier,
+        modifier = modifier
     ) {
-
         LogoAndAppName()
         MVSpacer()
         Row(
-            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            Box(modifier = Modifier.weight(1f)) {
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onClick
+                        },
                     elevation = ElevationSmall,
                     shape = CircleShape
                 ) {
@@ -93,7 +102,9 @@ fun MainTopBarPreview() {
 
             Card {
                 MainTopBar(
-                    Modifier.fillMaxWidth().padding(SpaceMedium),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(SpaceMedium),
                     me,
                     32000.0,
                     12000.0,

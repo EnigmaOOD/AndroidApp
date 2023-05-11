@@ -21,7 +21,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.component.*
-import ir.enigma.app.data.me
+import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.data.userAvatars
 import ir.enigma.app.ui.theme.IconSemiLarge
 import ir.enigma.app.ui.theme.IconVeryLarge
@@ -110,9 +110,9 @@ fun EditProfileScreen(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         TextSubtitle2(text = "انتخاب کاراکتر")
-//                        ExitIconButton() {
-//                            isShowDialogCharacter.value = !isShowDialogCharacter.value
-//                        }
+                        ExitIconButton() {
+                            isShowDialogCharacter.value = !isShowDialogCharacter.value
+                        }
                     }
 
                     TVSpacer()

@@ -7,6 +7,7 @@ data class Group(
     val currency: String,
 ) {
 
+
     lateinit var members: List<Member>
 
 

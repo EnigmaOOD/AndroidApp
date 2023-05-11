@@ -21,6 +21,10 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
     private val _groupList = MutableStateFlow<List<Group>>(emptyList())
     val groupList = _groupList.asStateFlow()
 
+
+
+
+
     fun fetchGroups() {
         viewModelScope.launch(Dispatchers.IO) {
             startLading()

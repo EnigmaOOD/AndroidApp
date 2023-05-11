@@ -58,4 +58,17 @@ interface Api {
         @Header("Authorization") token: String,
         @Field("groupID") groupId: Int
     ): Response<List<Member>>
+
+    @POST("/group/CreateGroup/")
+    suspend fun createGroup(
+        @Header("Authorization") token: String,
+        @Body addGroupRequest: AddGroupRequest
+    ): Response<Unit>
 }
+
+data class AddGroupRequest(
+    val name: String,
+    val picture_id: Int,
+    val currency: String,
+    val emails: List<String>
+)
