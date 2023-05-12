@@ -56,12 +56,7 @@ fun EnigmaAppTheme(
     val colors = LightColorPalette
 
 
-    if (!isPreview) {
-        val systemUiController = rememberSystemUiController()
-        systemUiController.setSystemBarsColor(
-            color = colors.background
-        )
-    }
+
 
     MaterialTheme(
         colors = colors,

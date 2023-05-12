@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.enigma.app.component.*
 import ir.enigma.app.data.*
 import ir.enigma.app.ui.group.component.GroupItem
@@ -35,6 +36,10 @@ fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        color = MaterialTheme.colors.background
+    )
     val groups = mainViewModel.groupList.collectAsState().value
     LaunchedEffect(Unit) {
 

@@ -49,7 +49,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
     }
 
     val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(
+    systemUiController.setStatusBarColor(
         color = colors.primary
     )
 
@@ -187,8 +187,7 @@ fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String, onDismiss: (
                             MyContribution(me, purchase)
                         }
                         TextBody2(
-                            text = purchase.totalPrice.toPrice(currency),
-                            color = colors.onSurface.copy(alpha = .5f)
+                            text = "قیمت کل:  " + purchase.totalPrice.toPrice(currency),
                         )
                     }
 
