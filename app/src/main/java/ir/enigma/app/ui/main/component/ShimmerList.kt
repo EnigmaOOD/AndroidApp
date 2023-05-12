@@ -61,7 +61,10 @@ fun ShimmerCircle(shimmer: Shimmer, circleSize: Dp = IconMedium) {
 }
 
 @Composable
-fun ShimmerText(shimmer: Shimmer, width: Dp = 70.dp) {
+fun ShimmerText(
+    shimmer: Shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.Window),
+    width: Dp = 70.dp
+) {
     Box(
         modifier = Modifier.width(width).height(10.dp).shimmer(shimmer)
             .background(MaterialTheme.colors.onBackgroundAlpha3)

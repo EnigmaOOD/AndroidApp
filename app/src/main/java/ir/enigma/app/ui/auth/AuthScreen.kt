@@ -36,9 +36,7 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
     val iconId = remember { mutableStateOf(0) }
     val password = remember { mutableStateOf("1") }
 
-    LaunchedEffect(Unit) {
-        authViewModel.checkForToken(context = context)
-    }
+
 
     val forLoginState = remember { mutableStateOf(false) }
 

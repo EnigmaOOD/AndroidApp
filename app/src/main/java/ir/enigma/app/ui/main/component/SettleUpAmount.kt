@@ -30,7 +30,7 @@ fun SettleUpAmount(
     val color: Color
     val hint: String
     if (amount == 0.0) {
-        icon = R.drawable.ic_arrow_square_down
+        icon = R.drawable.tick_square
         color = MaterialTheme.colors.secondary
         hint = "تسویه شده"
     } else if (isCredit) {

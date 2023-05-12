@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,10 +27,10 @@ import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.GroupCategory
 import ir.enigma.app.model.Purchase
+import ir.enigma.app.model.PurchaseCategory
 import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
-import ir.enigma.app.ui.group.component.GroupButtonbar
-import ir.enigma.app.ui.group.component.PurchaseCard
+import ir.enigma.app.ui.group.component.*
 import ir.enigma.app.ui.main.component.ShimmerColumn
 import ir.enigma.app.ui.main.component.ShimmerItem
 import ir.enigma.app.ui.navigation.Screen
@@ -45,7 +43,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
     val status = groupViewModel.state.value.status
     val group = groupViewModel.state.value.data
     val purchases = groupViewModel.purchaseList.collectAsState().value
-
+    val showingPurchase = remember { mutableStateOf<Purchase?>(null) }
     LaunchedEffect(Unit) {
         groupViewModel.fetchGroupData(groupId)
     }
@@ -56,6 +54,12 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
     )
 
     val interactionSource = remember { MutableInteractionSource() }
+
+    if (showingPurchase.value != null)
+        PurchaseFullDetailsDialog(showingPurchase.value!!, group!!.currency, onDismiss = {
+            showingPurchase.value = null
+        })
+
     ApiScreen(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = colors.background,
@@ -117,9 +121,8 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                             thisPurchase,
                             me,
                             group.currency,
-                            onSenderClick = {},
                             onClick = {
-                                //TODO: show all details of purchase
+                                showingPurchase.value = thisPurchase
                             }
                         )
                         SVSpacer()
@@ -161,12 +164,89 @@ fun GroupProfile(group: Group) {
 }
 
 @Composable
-fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String) {
+fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String, onDismiss: () -> Unit) {
+    val category = PurchaseCategory.values()[purchase.purchaseCategoryIndex]
     Dialog(
-        onDismissRequest = { },
+        onDismissRequest = onDismiss,
     ) {
+        Card {
+            Column(modifier = Modifier.padding(SpaceLarge)) {
+                SVSpacer()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CategoryIcon(category)
+                    SHSpacer()
+                    Column(modifier = Modifier.weight(1f)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            TextH6(
+                                modifier = Modifier.weight(1f),
+                                text = purchase.title ?: category.text
+                            )
+                            MyContribution(me, purchase)
+                        }
+                        TextBody2(
+                            text = purchase.totalPrice.toPrice(currency),
+                            color = colors.onSurface.copy(alpha = .5f)
+                        )
+                    }
 
 
+                }
+                // purchase buyers column
+                MVSpacer()
+
+                TextH6("خریداران")
+                SVSpacer()
+                purchase.buyers.forEach {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        HintText(it.user.name)
+                        Spacer(modifier = Modifier.weight(1f))
+                        HintText(it.price.toPrice(currency))
+                    }
+                    SVSpacer()
+                }
+
+                TextH6("مصرف کنندگان")
+                SVSpacer()
+                purchase.consumers.forEach {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        HintText(it.user.name)
+                        Spacer(modifier = Modifier.weight(1f))
+                        HintText(it.price.toPrice(currency))
+                    }
+                    SVSpacer()
+                }
+
+
+                LVSpacer()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    HintText("اضافه شده توسط ")
+
+                    HintText(
+
+                        text = purchase.sender.name,
+                        color = MaterialTheme.colors.primary
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    val pDate = purchase.getPersianDate()
+                    HintText(pDate.persianDay.toString() + " " + pDate.persianMonthName)
+                }
+            }
+
+        }
     }
 
 

@@ -3,14 +3,10 @@ package ir.enigma.app.repostitory
 import android.util.Log
 import com.google.gson.Gson
 import ir.enigma.app.data.ApiResult
-import ir.enigma.app.model.Contribution
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.network.Api
 import kotlinx.coroutines.flow.*
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 
@@ -88,6 +84,13 @@ class MainRepository @Inject constructor(private val api: Api) {
 
     suspend fun leaveGroup() {
         //todo complete this
+    }
+
+    suspend fun getGroupToAmount(token: String, groupId: Int, userID: Int): ApiResult<Double> {
+        return handleException({ api.getGroupDebtAndCredit(token, groupId, userID) }) {
+            null
+        }
+
     }
 
 }

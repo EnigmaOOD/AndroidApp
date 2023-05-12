@@ -11,14 +11,14 @@ import androidx.compose.ui.unit.dp
 import ir.enigma.app.component.*
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.GroupCategory
+import ir.enigma.app.ui.main.component.ShimmerText
 import ir.enigma.app.ui.theme.*
 
 @Composable
 fun GroupItem(
     modifier: Modifier = Modifier,
     group: Group,
-    amount: Double,
-    currency: String
+    amount: Double?,
 ) {
     Row(modifier = modifier) {
         CardWithImageOrIcon(
@@ -42,11 +42,14 @@ fun GroupItem(
 //TODO : Show Something!!!
         }
 
-        IconText(
-            modifier = Modifier.align(alignment = Alignment.CenterVertically),
-            amount = amount,
-            currency = currency,
-            contentDescription = "Debt or credit"
-        )
+        if (amount != null)
+            IconText(
+                modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                amount = amount,
+                currency = group.currency,
+                contentDescription = "Debt or credit"
+            )
+        else
+            ShimmerText()
     }
 }

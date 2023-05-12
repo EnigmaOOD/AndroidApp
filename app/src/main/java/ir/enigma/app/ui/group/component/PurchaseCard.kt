@@ -27,7 +27,6 @@ fun PurchaseCard(
     purchase: Purchase,
     me: User,
     currency: String,
-    onSenderClick: () -> Unit,
     onClick: () -> Unit,
 ) {
     val category = purchase.purchaseCategory
@@ -67,8 +66,6 @@ fun PurchaseCard(
                 HintText("اضافه شده توسط ")
 
                 HintText(
-                    modifier = Modifier
-                        .clickable(onClick = onSenderClick),
                     text = purchase.sender.name,
                     color = MaterialTheme.colors.primary
                 )

@@ -1,5 +1,7 @@
 package ir.enigma.app.ui.main
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.enigma.app.data.ApiResult
@@ -21,6 +23,8 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
     private val _groupList = MutableStateFlow<List<Group>>(emptyList())
     val groupList = _groupList.asStateFlow()
 
+    val groupToAmount = hashMapOf<Int, MutableState<Double?>>()
+
     fun fetchGroups() {
         viewModelScope.launch(Dispatchers.IO) {
             startLading()
@@ -29,13 +33,31 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                     state.value = ApiResult.Success(Unit)
                     result.data!!.distinctUntilChanged().collect { groups ->
                         _groupList.value = groups
+                        fetchGroupToAmountData(groups)
                     }
+
                 }
                 else -> {
                     fetchGroups()
                 }
             }
 
+        }
+    }
+
+    fun fetchGroupToAmountData(groupList: List<Group>) {
+
+        viewModelScope.launch {
+            groupList.forEach {
+                groupToAmount[it.id] = mutableStateOf(null)
+                val result = mainRepository.getGroupToAmount(
+                    token = token,
+                    groupId = it.id,
+                    userID = me.id
+                )
+                if (result.data != null)
+                    groupToAmount[it.id]?.value = result.data
+            }
         }
     }
 

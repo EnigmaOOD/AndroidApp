@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ir.enigma.app.ui.SplashScreen
 import ir.enigma.app.ui.auth.AuthScreen
 import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.group.*
@@ -22,8 +23,13 @@ fun Navigation(
     val mainViewModel = hiltViewModel<MainViewModel>()
     NavHost(
         navController = navController,
-        startDestination = Screen.AuthScreen.name
+        startDestination = Screen.SplashScreen.name
     ) {
+
+
+        composable(route = Screen.SplashScreen.name) {
+            SplashScreen(navController = navController , authViewModel)
+        }
 
         composable(route = Screen.MainScreen.name) {
             MainScreen(

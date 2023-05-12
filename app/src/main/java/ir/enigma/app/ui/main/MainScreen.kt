@@ -67,8 +67,6 @@ fun MainScreen(
                     Modifier
                         .fillMaxWidth()
                         .padding(horizontal = SpaceLarge, vertical = SpaceMedium),
-                    me = me,
-                    credit = 32000.0, dept = 16000.0, currency = "تومان"
                 )
             }
             LVSpacer()
@@ -99,8 +97,7 @@ fun MainScreen(
                                         navController.navigate(Screen.GroupScreen.name + "/${item.id}")
                                     },
                                     group = item,
-                                    amount = 16000.0,
-                                    currency = groups[index].currency
+                                    amount = mainViewModel.groupToAmount[item.id]?.value,
                                 )
                                 SVSpacer()
                                 if (index != groups.size - 1) {

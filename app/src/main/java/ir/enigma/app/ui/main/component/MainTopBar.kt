@@ -27,52 +27,12 @@ import ir.enigma.app.ui.theme.*
 @Composable
 fun MainTopBar(
     modifier: Modifier = Modifier,
-    me: User,
-    credit: Double,
-    dept: Double,
-    currency: String
 ) {
 
-    Column(
+    Row(
         modifier = modifier,
     ) {
-
         LogoAndAppName()
-        MVSpacer()
-        Row(
-            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            Box(modifier = Modifier.weight(1f)) {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    elevation = ElevationSmall,
-                    shape = CircleShape
-                ) {
-                    Image(
-                        painterResource(userAvatars[me.iconId]),
-                        contentDescription = "User Avatar"
-                    )
-                }
-            }
-
-
-            MHSpacer()
-
-            SettleUpAmount(amount = credit, currency = currency, isCredit = true)
-            SHSpacer()
-            Box(
-                modifier = Modifier
-                    .height(IconMedium)
-                    .width(1.dp)
-                    .background(color = MaterialTheme.colors.onBackgroundAlpha3)
-            )
-            SHSpacer()
-            SettleUpAmount(amount = dept, currency = currency, isCredit = false)
-
-        }
 
     }
 }
@@ -87,7 +47,21 @@ fun LogoAndAppName() {
             modifier = Modifier.size(IconLarge)
         )
         SHSpacer()
-        TextH6(stringResource(R.string.app_name), color = MaterialTheme.colors.primary)
+        TextH6(
+            modifier = Modifier.weight(1f),
+            text = stringResource(R.string.app_name),
+            color = MaterialTheme.colors.primary
+        )
+        Card(
+            modifier = Modifier.size(IconLarge),
+            elevation = ElevationSmall,
+            shape = CircleShape
+        ) {
+            Image(
+                painterResource(userAvatars[me.iconId]),
+                contentDescription = "User Avatar"
+            )
+        }
     }
 }
 
@@ -100,10 +74,7 @@ fun MainTopBarPreview() {
             Card {
                 MainTopBar(
                     Modifier.fillMaxWidth().padding(SpaceMedium),
-                    me,
-                    32000.0,
-                    12000.0,
-                    "تومان"
+
                 )
             }
         }
