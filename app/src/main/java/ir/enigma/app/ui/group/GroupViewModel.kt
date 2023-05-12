@@ -85,4 +85,10 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
             )
         }
     }
+
+    fun leaveGroup(group: Group) {
+        viewModelScope.launch {
+            mainRepository.leaveGroup()
+        }
+    }
 }

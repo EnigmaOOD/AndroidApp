@@ -38,7 +38,7 @@ import kotlin.collections.ArrayList
 fun NewPurchaseScreen(
     navController: NavController,
     groupViewModel: GroupViewModel,
-    amount: Double?
+    amount: Double
 ) {
     val group = groupViewModel.state.value.data!!
     val members = group.members!!
@@ -68,11 +68,19 @@ fun NewPurchaseScreen(
     val buyersError = checkSumError(priceDouble, buyers, isRelatedBuyer.value)
 
     LaunchedEffect(Unit) {
-        if (amount != null) {
+        if (amount != 0.0) {
             price.value = amount.toString()
             description.value = "تسویه حساب ${me.name}"
+            if (amount > 0) {
+                consumers[me.id] = MemberContribution(
+                    me, related = mutableStateOf("1.0"), exact = mutableStateOf("")
+                )
+            } else {
+                buyers[me.id] = MemberContribution(
+                    me, related = mutableStateOf("1.0"), exact = mutableStateOf("")
+                )
+            }
         } else {
-
             members.forEach {
                 consumers[it.user.id] = MemberContribution(
                     it.user,
@@ -88,6 +96,9 @@ fun NewPurchaseScreen(
             navController.popBackStack()
             groupViewModel.newPurchaseState.value = ApiResult.Empty()
         }
+    }
+    if (groupViewModel.newPurchaseState.value is ApiResult.Loading) {
+        LoadingDialog()
     }
 
     BackHandler(enabled = true, onBack = {
@@ -145,7 +156,7 @@ fun NewPurchaseScreen(
                                     modifier = Modifier.focusable(false)
                                         .clickable(false, onClick = {})
                                         .fillMaxWidth(),
-                                    enabled = amount == null,
+                                    enabled = amount == 0.0,
                                     readOnly = true,
                                     leadingIcon = {
                                         Icon(
@@ -163,7 +174,7 @@ fun NewPurchaseScreen(
 
                                 Box(
                                     modifier = Modifier.fillMaxSize()
-                                        .clickable(enabled = amount == null) {
+                                        .clickable(enabled = amount == 0.0) {
                                             showSelectCategory.value = true
                                         }
                                 )
@@ -176,7 +187,7 @@ fun NewPurchaseScreen(
                                 label = "قیمت",
                                 error = "قیمت نمی\u200Cتواند 0 باشد",
                                 hasError = priceError,
-                                enabled = amount == null,
+                                enabled = amount == 0.0,
                                 hint = priceDouble?.toPrice(group.currency),
                                 showError = showError.value,
 
@@ -206,15 +217,19 @@ fun NewPurchaseScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 TextH6(text = "خریدارها")
-                                SegmentedControl(onItemSelection = {
-                                    isRelatedBuyer.value = !isRelatedBuyer.value
-                                })
+                                if (amount == 0.0 || amount > 0)
+                                    SegmentedControl(onItemSelection = {
+                                        isRelatedBuyer.value = !isRelatedBuyer.value
+                                    })
+                                else
+                                    Box{}
                             }
 
                             buyers.forEach {
                                 MemberContributionItem(
                                     memberContribution = it.value,
                                     isRelated = isRelatedBuyer.value,
+                                    enabled = amount == 0.0 || amount > 0
                                 )
                                 SVSpacer()
                             }
@@ -230,15 +245,18 @@ fun NewPurchaseScreen(
                                 }
                             }
 
-                            if (buyersError) {
+                            if (buyersError != null && showError.value) {
                                 ErrorText(
-                                    text = "مجموع مبلغ خریدارها با قیمت خرید برابر نیست",
+                                    text = buyersError,
                                 )
                             }
 
-                            AddOutlinedButton(onClick = {
-                                buyersDialog.value = true
-                            }, text = "تغییر لیست")
+                            AddOutlinedButton(
+                                enabled = amount == 0.0 || amount > 0,
+                                onClick = {
+                                    buyersDialog.value = true
+                                }, text = "تغییر لیست"
+                            )
                         }
 
                     }
@@ -250,7 +268,9 @@ fun NewPurchaseScreen(
                         elevation = 0.dp
                     ) {
                         Column(
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp, vertical = 15.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Row(
@@ -261,15 +281,19 @@ fun NewPurchaseScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 TextH6(text = "مصرف کننده ها")
-                                SegmentedControl(onItemSelection = {
-                                    isRelatedConsumer.value = !isRelatedConsumer.value
-                                })
+                                if (amount == 0.0 || amount < 0) {
+                                    SegmentedControl(onItemSelection = {
+                                        isRelatedConsumer.value = !isRelatedConsumer.value
+                                    })
+                                } else
+                                    Box { }
                             }
 
                             consumers.forEach {
                                 MemberContributionItem(
                                     memberContribution = it.value,
                                     isRelated = isRelatedConsumer.value,
+                                    enabled = amount == 0.0 || amount < 0
                                 )
                                 SVSpacer()
                             }
@@ -285,13 +309,15 @@ fun NewPurchaseScreen(
                                 }
                             }
 
-                            if (consumerError) {
+                            if (consumerError != null && showError.value) {
                                 ErrorText(
-                                    text = "مجموع مبلغ مصرف کننده ها با قیمت خرید برابر نیست",
+                                    text = consumerError,
                                 )
                             }
 
-                            AddOutlinedButton(text = "تغییر لیست",
+                            AddOutlinedButton(
+                                enabled = amount == 0.0 || amount < 0,
+                                text = "تغییر لیست",
                                 onClick = {
                                     consumersDialog.value = true
                                 }
@@ -314,7 +340,7 @@ fun NewPurchaseScreen(
                         loading = groupViewModel.newPurchaseState.value is ApiResult.Loading,
                         onClick = {
                             showError.value = true
-                            if (priceError || buyersError || consumerError)
+                            if (priceError || buyersError != null || consumerError != null)
                                 return@LoadingButton
                             val buyersContribution =
                                 getContributionList(buyers, priceDouble!!, isRelatedBuyer.value)
@@ -364,16 +390,24 @@ fun checkSumError(
     priceDouble: Double?,
     list: SnapshotStateMap<Int, MemberContribution>,
     relatedConsumer: Boolean
-): Boolean {
-    if (relatedConsumer)
-        return false
-    if (priceDouble == null)
-        return false
-    var sum = 0.0
-    list.forEach {
-        sum += it.value.exact.value.toDoubleOrNull() ?: 0.0
+): String? {
+    if (relatedConsumer) {
+        list.forEach {
+            if (it.value.related.value.toDouble() > 0.0)
+                return null;
+        }
+        return "حداقل وزن یک نفر باید بیشتر از صفر باشد"
+    } else {
+        if (priceDouble == null)
+            return null
+        var sum = 0.0
+        list.forEach {
+            sum += it.value.exact.value.toDoubleOrNull() ?: 0.0
+        }
+        if (sum != priceDouble)
+            return "مجموع مبلغ ها با قیمت کل خرید برابر نیست"
+        return null
     }
-    return sum != priceDouble
 }
 
 
@@ -534,4 +568,11 @@ fun getContributionList(
 
     return list
 
+}
+
+@Composable
+fun LoadingDialog(){
+    Dialog(onDismissRequest = {}){
+        CircularProgressIndicator()
+    }
 }

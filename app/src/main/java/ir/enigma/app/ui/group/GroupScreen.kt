@@ -1,5 +1,6 @@
 package ir.enigma.app.ui.group
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -78,7 +79,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                     GroupProfile(group = group)
                     SHSpacer()
                     Column(modifier = Modifier.weight(1f)) {
-                        TextH6(group.name, color = MaterialTheme.colors.onPrimary)
+                        TextH6(group.name, color = colors.onPrimary)
                         if (group.members == null)
                             ShimmerItem()
                         else
@@ -87,7 +88,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                 }
                 EasyIconButton(
                     iconId = R.drawable.ic_filter,
-                    tint = MaterialTheme.colors.onPrimary,
+                    tint = colors.onPrimary,
                     size = IconMedium,
                     onClick = {
                         //TODO: Filter
@@ -98,8 +99,6 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
 
         ) {
         Column(modifier = Modifier.fillMaxSize()) {
-
-
             val topPaddingValues = it.calculateTopPadding()
             if (group == null || groupViewModel.purchaseState.value.status != ApiStatus.SUCCESS) {
                 SVSpacer()
@@ -131,8 +130,12 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                 GroupButtonbar(
                     amount = groupViewModel.meMember!!.cost,
                     currency = group.currency,
-                    onSettleUp = {
-                        navigateToNewPurchaseScreen(navController , it)
+                    onLeaveGroup = {
+                        groupViewModel.leaveGroup(group);
+                    },
+                    onSettleUp = { amount ->
+
+                        navigateToNewPurchaseScreen(navController, amount)
                     }, onAddPurchase = {
                         navigateToNewPurchaseScreen(navController)
                     })
@@ -151,8 +154,8 @@ fun GroupProfile(group: Group) {
         resource = GroupCategory.values()[group.categoryId].iconRes,
         contentPadding = 10.dp,
         size = IconLarge,
-        tint = MaterialTheme.colors.onPrimary,
-        backgroundColor = MaterialTheme.colors.onPrimary.copy(alpha = .2f),
+        tint = colors.onPrimary,
+        backgroundColor = colors.onPrimary.copy(alpha = .2f),
         contentDescription = group.name,
     )
 }
@@ -162,23 +165,19 @@ fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String) {
     Dialog(
         onDismissRequest = { },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SpaceMedium),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextH6(purchase.title ?: purchase.purchaseCategory.text)
-            TextH6(purchase.totalPrice.toPrice(currency))
 
-        }
+
     }
+
+
 }
 
 fun navigateToNewPurchaseScreen(navController: NavController, amount: Double? = null) {
+    Log.d("Screen", "GroupScreen navigateToNewPurchaseScreen: $amount")
     if (amount != null)
         navController.navigate(Screen.NewPurchaseScreen.name + "/$amount")
-    navController.navigate(Screen.NewPurchaseScreen.name)
+    else
+        navController.navigate(Screen.NewPurchaseScreen.name + "/0.0")
 }
 
 @Preview

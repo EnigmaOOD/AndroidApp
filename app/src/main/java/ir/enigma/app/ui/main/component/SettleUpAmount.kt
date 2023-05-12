@@ -29,7 +29,11 @@ fun SettleUpAmount(
     val icon: Int
     val color: Color
     val hint: String
-    if (isCredit) {
+    if (amount == 0.0) {
+        icon = R.drawable.ic_arrow_square_down
+        color = MaterialTheme.colors.secondary
+        hint = "تسویه شده"
+    } else if (isCredit) {
         icon = R.drawable.ic_arrow_square_down
         color = MaterialTheme.colors.secondary
         hint = "باید دریافت کنید"
@@ -47,7 +51,9 @@ fun SettleUpAmount(
         )
         THSpacer()
         Column {
-            TextBody2(text = amount.toPrice(currency), color = color)
+            if (amount != 0.0) {
+                TextBody2(text = amount.toPrice(currency), color = color)
+            }
             HintText(hint)
         }
     }

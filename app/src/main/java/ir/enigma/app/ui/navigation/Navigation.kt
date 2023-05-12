@@ -1,5 +1,6 @@
 package ir.enigma.app.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -52,9 +53,11 @@ fun Navigation(
         }
 
         composable(route = Screen.NewPurchaseScreen.name + "/{amount}") {
+            val amount = it.arguments?.getString("amount")!!
+            Log.d("Screen", "Navigation: $amount");
             NewPurchaseScreen(
                 navController = navController, groupViewModel,
-                it.arguments?.getString("amount")?.toDoubleOrNull()
+                amount.toDouble()
             )
         }
 

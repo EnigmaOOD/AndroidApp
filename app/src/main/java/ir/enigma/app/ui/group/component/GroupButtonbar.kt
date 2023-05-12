@@ -23,6 +23,7 @@ fun GroupButtonbar(
     amount: Double,
     currency: String,
     shimmer: Boolean = false,
+    onLeaveGroup: () -> Unit = {},
     onSettleUp: (Double) -> Unit = {},
     onAddPurchase: () -> Unit
 ) {
@@ -66,13 +67,23 @@ fun GroupButtonbar(
                     )
 
                     OutlinedButton(
-                        onClick = { onSettleUp(amount) },
+                        onClick = {
+                            if (amount == 0.0) {
+                                onLeaveGroup()
+                            } else {
+                                onSettleUp(amount)
+                            }
+                        },
                         border = BorderStroke(
                             color = MaterialTheme.colors.onBackgroundAlpha3,
                             width = BorderThin
                         ),
                     ) {
-                        TextBody2(text = "تسویه حساب")
+                        if (amount == 0.0) {
+                            TextBody2(text = "ترک گروه" , color = MaterialTheme.colors.error)
+                        } else {
+                            TextBody2(text = "تسویه حساب")
+                        }
                     }
                 }
             }

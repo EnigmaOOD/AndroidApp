@@ -81,8 +81,13 @@ class MainRepository @Inject constructor(private val api: Api) {
                 obj
             )
         }) {
+
             null
         }
+    }
+
+    suspend fun leaveGroup() {
+        //todo complete this
     }
 
 }

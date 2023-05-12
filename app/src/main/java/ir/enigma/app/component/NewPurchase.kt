@@ -21,7 +21,11 @@ import ir.enigma.app.ui.theme.onBackgroundAlpha3
 import ir.enigma.app.util.zeroIfEmpty
 
 @Composable
-fun MemberContributionItem(memberContribution: MemberContribution, isRelated: Boolean) {
+fun MemberContributionItem(
+    memberContribution: MemberContribution,
+    isRelated: Boolean,
+    enabled: Boolean = true
+) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -29,22 +33,25 @@ fun MemberContributionItem(memberContribution: MemberContribution, isRelated: Bo
         verticalAlignment = Alignment.CenterVertically
     ) {
         AvatarWithText(memberContribution.user)
-        if (isRelated) {
-            PlusMinusButtons(memberContribution.related)
-        } else {
+        if (enabled) {
+            if (isRelated) {
+                PlusMinusButtons(memberContribution.related)
+            } else {
 
-            BasicTextField(
-                modifier = Modifier.widthIn(50.dp, 100.dp).border(
-                    shape = RoundedCornerShape(3.dp),
-                    color = MaterialTheme.colors.onBackgroundAlpha3,
-                    width = BorderThin
-                ),
-                value = memberContribution.exact.value,
-                onValueChange = { memberContribution.exact.value = it.zeroIfEmpty() },
-                textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            )
-        }
+                BasicTextField(
+                    modifier = Modifier.widthIn(50.dp, 100.dp).border(
+                        shape = RoundedCornerShape(3.dp),
+                        color = MaterialTheme.colors.onBackgroundAlpha3,
+                        width = BorderThin
+                    ),
+                    value = memberContribution.exact.value,
+                    onValueChange = { memberContribution.exact.value = it.zeroIfEmpty() },
+                    textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                )
+            }
+        } else
+            Box { }
     }
 
 }

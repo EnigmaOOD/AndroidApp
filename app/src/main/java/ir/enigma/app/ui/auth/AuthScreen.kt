@@ -32,9 +32,9 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
     //todo: remove default values
     val name = remember { mutableStateOf("a") }
-    val email = remember { mutableStateOf("a@a.com") }
+    val email = remember { mutableStateOf("fatemeshafieepv@gmail.com") }
     val iconId = remember { mutableStateOf(0) }
-    val password = remember { mutableStateOf("12345678") }
+    val password = remember { mutableStateOf("1") }
 
     LaunchedEffect(Unit) {
         authViewModel.checkForToken(context = context)
