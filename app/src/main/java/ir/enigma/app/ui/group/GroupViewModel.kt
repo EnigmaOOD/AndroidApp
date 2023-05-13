@@ -11,6 +11,7 @@ import ir.enigma.app.model.Member
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.ui.ApiViewModel
+import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.token
 import kotlinx.coroutines.Dispatchers
@@ -86,9 +87,9 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
         }
     }
 
-    fun leaveGroup(group: Group) {
+    fun leaveGroup(groupID: Int) {
         viewModelScope.launch {
-            mainRepository.leaveGroup()
+            mainRepository.leaveGroup(token = token, groupID = groupID, userID = me.id)
         }
     }
 }

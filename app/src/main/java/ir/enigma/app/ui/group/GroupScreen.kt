@@ -157,7 +157,8 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                     amount = groupViewModel.meMember!!.cost,
                     currency = group.currency,
                     onLeaveGroup = {
-                        groupViewModel.leaveGroup(group);
+                        groupViewModel.leaveGroup(group.id)
+                        navController.navigate(Screen.MainScreen.name)
                     },
                     onSettleUp = { amount ->
 

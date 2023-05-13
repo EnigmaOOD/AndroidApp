@@ -110,6 +110,14 @@ interface Api {
         @Field("name") name: String,
         @Field("picture_id") picture_id: Int,
     ): Response<Any>
+
+    @POST("/auth/DeleteUser/")
+    @FormUrlEncoded
+    suspend fun leaveGroup(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupID: Int,
+        @Field("userID") userID: Int,
+    ): Response<Any>
 }
 
 data class AddGroupRequest(

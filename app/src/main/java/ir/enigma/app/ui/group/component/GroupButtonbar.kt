@@ -90,11 +90,3 @@ fun GroupButtonbar(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun p() {
-    RtlThemePreview {
-        GroupButtonbar(amount = 13000.0, currency = "تومان", true, onAddPurchase = {})
-    }
-}
