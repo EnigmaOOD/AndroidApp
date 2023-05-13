@@ -27,18 +27,19 @@ import ir.enigma.app.ui.theme.*
 @Composable
 fun MainTopBar(
     modifier: Modifier = Modifier,
+    onClickAvatar: () -> Unit
 ) {
 
     Row(
         modifier = modifier,
     ) {
-        LogoAndAppName()
+        LogoAndAppName(onClickAvatar)
 
     }
 }
 
 @Composable
-fun LogoAndAppName() {
+fun LogoAndAppName(onClickAvatar: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(R.drawable.app_logo),
@@ -65,18 +66,3 @@ fun LogoAndAppName() {
     }
 }
 
-@Preview
-@Composable
-fun MainTopBarPreview() {
-    RtlThemePreview {
-        Surface {
-
-            Card {
-                MainTopBar(
-                    Modifier.fillMaxWidth().padding(SpaceMedium),
-
-                )
-            }
-        }
-    }
-}
