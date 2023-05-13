@@ -35,13 +35,13 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
         ApiResult.Empty()
     )
 
-    fun fetchGroupData(groupId: Int) {
+    fun fetchGroupData(groupId: Int, filter: Int = 0) {
         viewModelScope.launch {
             val result = mainRepository.getGroupWithMembers(token = token, groupId = groupId)
             if (result is ApiResult.Success && result.data?.members != null) {
                 meMember = result.data.members!!.find { it.user.id == me.id }
                 state.value = result
-                fetchPurchases(groupId)
+                fetchPurchases(groupId, filter)
             } else {
                 fetchGroupData(groupId)
             }
@@ -50,7 +50,7 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
 
     }
 
-    fun fetchPurchases(groupId: Int) {
+    fun fetchPurchases(groupId: Int, filter: Int = 0) {
         viewModelScope.launch(Dispatchers.IO) {
             purchaseState.value = ApiResult.Loading()
             val group = state.value.data
@@ -59,7 +59,7 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
                 return@launch
             }
             when (val result =
-                mainRepository.getGroupPurchases(token = token, groupId = group.id)) {
+                mainRepository.getGroupPurchases(token = token, groupId = group.id, filter)) {
                 is ApiResult.Success -> {
                     purchaseState.value = ApiResult.Success(Unit)
                     result.data!!.distinctUntilChanged().collect { purchases ->

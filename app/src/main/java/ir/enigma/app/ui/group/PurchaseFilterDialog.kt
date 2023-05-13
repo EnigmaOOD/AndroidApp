@@ -17,13 +17,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import ir.enigma.app.component.*
 
-@Composable
-fun PurchaseFilterDialog(onAction: (Int) -> Unit, onDismiss: () -> Unit) {
-    val selectedIndex = remember { mutableStateOf(0) }
-    val grpCategoriesName =
-        listOf("خریدهای شما", "گران\u200Cترین", "ارزان\u200Cترین", "قدیمی\u200Cترین", "جدیدترین")
+const val FILTER_OLDEST = 0
+const val FILTER_NEWEST = 1
+const val FILTER_YOUR_PURCHASES = 2
+const val FILTER_MOST_EXPENSIVE = 3
+const val FILTER_CHEAPEST = 4
 
-    Dialog(onDismissRequest = { onDismiss() }) {
+
+@Composable
+fun PurchaseFilterDialog(filter :Int, onDismiss: () -> Unit, onAction: (Int) -> Unit) {
+
+    Dialog(onDismiss) {
+        val selectedIndex = remember { mutableStateOf(filter) }
+        val grpCategoriesName =
+            listOf(
+                "قدیمی\u200Cترین",
+                "جدیدترین",
+                "خریدهای شما",
+                "گران\u200Cترین",
+                "ارزان\u200Cترین"
+            )
+
         Card(elevation = 8.dp) {
             Column(
                 Modifier
@@ -66,4 +80,5 @@ fun PurchaseFilterDialog(onAction: (Int) -> Unit, onDismiss: () -> Unit) {
             }
         }
     }
+
 }

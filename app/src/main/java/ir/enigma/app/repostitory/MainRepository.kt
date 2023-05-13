@@ -8,6 +8,7 @@ import ir.enigma.app.model.Group
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.network.Api
+import ir.enigma.app.ui.group.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -44,20 +45,29 @@ class MainRepository @Inject constructor(private val api: Api) {
     suspend fun getGroupPurchases(
         token: String,
         groupId: Int,
+        filter: Int = 0
     ): ApiResult<Flow<List<Purchase>>> {
-        val result = handleException({ api.getGroupPurchases(token, groupId) }) {
+        val result = try {
+            when (filter) {
+                FILTER_OLDEST, FILTER_NEWEST -> api.getGroupPurchases(token, groupId).body()
+                FILTER_MOST_EXPENSIVE, FILTER_CHEAPEST -> api.filterBaseDecrease(token, groupId)
+                    .body()
+                FILTER_YOUR_PURCHASES -> api.filterByMe(token, groupId).body()!!.buyer_buys
+                else -> api.getGroupPurchases(token, groupId).body()
+
+            }
+        } catch (e: Exception) {
             null
         }
-        return when (result) {
-            is ApiResult.Success -> {
-                ApiResult.Success(flow {
-                    emit(result.data!!)
-                })
-            }
-            else -> {
-                ApiResult.Error(result.message ?: "خطا در دریافت گروه ها")
-            }
+
+        return if (result != null) {
+            ApiResult.Success(flow {
+                emit(result)
+            })
+        } else {
+            ApiResult.Error( "خطا در دریافت گروه ها")
         }
+
     }
 
     suspend fun createPurchase(

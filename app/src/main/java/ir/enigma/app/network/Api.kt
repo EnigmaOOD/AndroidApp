@@ -88,14 +88,18 @@ interface Api {
     suspend fun filterByMe(
         @Header("Authorization") token: String,
         @Field("groupID") groupId: Int
-    ): Response<List<Purchase>>
+    ): Response<UserGroupBuysResponse>
 
-    @POST("/buy/getGroupBuys/")
+    class UserGroupBuysResponse(
+        val buyer_buys: List<Purchase>,
+    )
+
+    @POST("/buy/GetGroupBuys/")
     @FormUrlEncoded
     suspend fun filterBaseDecrease(
         @Header("Authorization") token: String,
         @Field("groupID") groupId: Int,
-        @Field("sort") sort: String
+        @Field("sort") sort: String = "cost"
     ): Response<List<Purchase>>
 
 

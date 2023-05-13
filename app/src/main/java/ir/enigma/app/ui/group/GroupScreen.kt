@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.AlertDialog
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
@@ -36,17 +36,27 @@ import ir.enigma.app.ui.main.component.ShimmerItem
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.*
 import ir.enigma.app.util.toPrice
-import java.util.Currency
 
 @Composable
 fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, groupId: Int) {
     val status = groupViewModel.state.value.status
     val group = groupViewModel.state.value.data
     val purchases = groupViewModel.purchaseList.collectAsState().value
+    val showFilter = remember { mutableStateOf(false) }
     val showingPurchase = remember { mutableStateOf<Purchase?>(null) }
-    LaunchedEffect(Unit) {
-        groupViewModel.fetchGroupData(groupId)
+    val selectedFilter = remember { mutableStateOf(FILTER_OLDEST) }
+    val lazyState = rememberLazyListState()
+    val reverse = selectedFilter.value == FILTER_NEWEST || selectedFilter.value == FILTER_MOST_EXPENSIVE
+
+
+    LaunchedEffect(selectedFilter.value) {
+        groupViewModel.fetchGroupData(groupId , selectedFilter.value)
+        if (reverse)
+            lazyState.scrollToItem(purchases.size - 1)
+        else
+            lazyState.scrollToItem(0)
     }
+
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
@@ -59,6 +69,17 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
         PurchaseFullDetailsDialog(showingPurchase.value!!, group!!.currency, onDismiss = {
             showingPurchase.value = null
         })
+
+    if (showFilter.value)
+        PurchaseFilterDialog(
+            filter = selectedFilter.value,
+            onDismiss = {
+                showFilter.value = false
+            })
+        { filter ->
+            selectedFilter.value = filter
+            showFilter.value = false
+        }
 
     ApiScreen(
         modifier = Modifier.fillMaxSize(),
@@ -95,7 +116,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                     tint = colors.onPrimary,
                     size = IconMedium,
                     onClick = {
-                        //TODO: Filter
+                        showFilter.value = true
                     }
                 )
             }
@@ -111,6 +132,8 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize().weight(1f),
+                    reverseLayout = reverse,
+                    state = lazyState
                 ) {
                     items(purchases) { thisPurchase ->
                         SVSpacer()

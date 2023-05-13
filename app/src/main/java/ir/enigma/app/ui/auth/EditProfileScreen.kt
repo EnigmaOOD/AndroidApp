@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.enigma.app.component.*
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
@@ -48,6 +49,12 @@ fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel
         LaunchedEffect(key1 = Unit) {
             navController.popBackStack()
         }
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        color = MaterialTheme.colors.primary
+    )
+
 
     ApiScreen(
         modifier = Modifier.fillMaxSize(),
