@@ -12,7 +12,7 @@ import ir.enigma.app.ui.auth.AuthScreen
 import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.auth.EditProfileScreen
 import ir.enigma.app.ui.group.*
-import ir.enigma.app.ui.main.AddGroupScreen
+import ir.enigma.app.ui.add_group.AddGroupScreen
 import ir.enigma.app.ui.main.MainScreen
 import ir.enigma.app.ui.main.MainViewModel
 
@@ -50,7 +50,7 @@ fun Navigation(
         }
 
         composable(route = Screen.EditProfileScreen.name) {
-            EditProfileScreen(navController = navController)
+            EditProfileScreen(navController = navController, authViewModel)
         }
 
         composable(route = Screen.GroupMembersScreen.name) {

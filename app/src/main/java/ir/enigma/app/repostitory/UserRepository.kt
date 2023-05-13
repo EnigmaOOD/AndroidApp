@@ -46,4 +46,14 @@ class UserRepository @Inject constructor(private val api: Api) {
         }
     }
 
+    suspend fun editProfile(token: String, name: String, picture_id: Int): ApiResult<Any> {
+        return handleException({
+            api.editProfile(token, name, picture_id)
+        }) {
+            if (it == 401)
+                "برای ادامه باید دوباره وارد شوید"
+            else
+                null
+        }
+    }
 }
