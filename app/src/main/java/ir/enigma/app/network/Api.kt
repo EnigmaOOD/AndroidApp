@@ -8,6 +8,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface Api {
@@ -64,6 +65,31 @@ interface Api {
         @Header("Authorization") token: String,
         @Body addGroupRequest: AddGroupRequest
     ): Response<Unit>
+
+
+    @POST("/buy/UserGroupBuys/")
+    @FormUrlEncoded
+    suspend fun filterByMe(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupId: Int
+    ): Response<List<Purchase>>
+
+    @POST("/buy/getGroupBuys/")
+    @FormUrlEncoded
+    suspend fun filterBaseDecrease(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupId: Int,
+        @Field("sort") sort: String
+    ): Response<List<Purchase>>
+
+
+    @PATCH("/auth/EditProfile/")
+    @FormUrlEncoded
+    suspend fun editProfile(
+        @Header("Authorization") token: String,
+        @Field("name") name: String,
+        @Field("picture_id") picture_id: Int,
+    ): Response<Any>
 }
 
 data class AddGroupRequest(

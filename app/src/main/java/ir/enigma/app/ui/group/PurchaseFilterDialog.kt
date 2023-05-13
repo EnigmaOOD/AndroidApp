@@ -1,6 +1,5 @@
 package ir.enigma.app.ui.group
 
-import InputTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,17 +13,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import ir.enigma.app.component.RtlThemePreview
-import ir.enigma.app.component.SHSpacer
-import ir.enigma.app.component.TextBody2
-import ir.enigma.app.component.TextSubtitle1
+import ir.enigma.app.component.*
 
 @Composable
-fun PurchaseFilterDialog(onDismiss: () -> Unit) {
-    val filter = remember { mutableStateOf("") }
+fun PurchaseFilterDialog(onAction: (Int) -> Unit, onDismiss: () -> Unit) {
+    val selectedIndex = remember { mutableStateOf(0) }
+    val grpCategoriesName =
+        listOf("خریدهای شما", "گران\u200Cترین", "ارزان\u200Cترین", "قدیمی\u200Cترین", "جدیدترین")
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(elevation = 8.dp) {
@@ -33,13 +30,14 @@ fun PurchaseFilterDialog(onDismiss: () -> Unit) {
                     .background(Color.White)
                     .padding(vertical = 12.dp, horizontal = 20.dp)
             ) {
-                TextBody2(text = "فیلتر")
-
-                InputTextField(
-                    text = filter,
-                    label = "خریدار",
-                    onValueChange = { filter.value = it })
-
+                TextBody2(text = "فیلتر مورد نظر خود را انتخاب کنید:")
+                MVSpacer()
+                MultiToggleButton(
+                    options = grpCategoriesName,
+                    selectedIndex = selectedIndex.value,
+                    onSelectedIndexChange = { index -> selectedIndex.value = index }
+                )
+                MVSpacer()
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
                         modifier = Modifier
@@ -57,10 +55,7 @@ fun PurchaseFilterDialog(onDismiss: () -> Unit) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
-                        onClick = {
-//                            Toast.makeText(context, searchedFood, Toast.LENGTH_SHORT).show()
-                            onDismiss()
-                        },
+                        onClick = { onAction(selectedIndex.value) },
                     ) {
                         TextSubtitle1(
                             modifier = Modifier.padding(horizontal = 5.dp),
@@ -68,19 +63,6 @@ fun PurchaseFilterDialog(onDismiss: () -> Unit) {
                         )
                     }
                 }
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun m() {
-    RtlThemePreview {
-        var showCustomDialog = remember { mutableStateOf(true) }
-        if (showCustomDialog.value) {
-            PurchaseFilterDialog() {
-                showCustomDialog.value = !showCustomDialog.value
             }
         }
     }

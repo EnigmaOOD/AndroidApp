@@ -1,5 +1,6 @@
 package ir.enigma.app.repostitory
 
+import android.util.Log
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.Purchase
@@ -42,7 +43,10 @@ class MainRepository @Inject constructor(private val api: Api) {
         }
     }
 
-    suspend fun getGroupPurchases(token: String, groupId: Int): ApiResult<Flow<List<Purchase>>> {
+    suspend fun getGroupPurchases(
+        token: String,
+        groupId: Int,
+    ): ApiResult<Flow<List<Purchase>>> {
         val result = handleException({ api.getGroupPurchases(token, groupId) }) {
             null
         }
@@ -61,14 +65,12 @@ class MainRepository @Inject constructor(private val api: Api) {
     suspend fun createGroup(token: String, addGroupRequest: AddGroupRequest): ApiResult<Unit> {
         return handleException({
             api.createGroup(token, addGroupRequest)
-        }) { code ->
-
-            null
+        }) {
+            if (it == 404)
+                "ایمیل اعضا معتبر نمی باشد."
+            else
+                null
         }
-
-
     }
-
-
 }
 

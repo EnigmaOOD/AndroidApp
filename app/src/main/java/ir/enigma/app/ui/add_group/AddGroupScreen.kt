@@ -1,9 +1,7 @@
-package ir.enigma.app.ui.main
+package ir.enigma.app.ui.add_group
 
 import InputTextField
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -21,7 +19,7 @@ import ir.enigma.app.component.*
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.ui.ApiScreen
-import ir.enigma.app.ui.add_group.AddGroupViewModel
+import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.SpaceThin
 
 @Composable
@@ -43,7 +41,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
     }
     val state = addGroupViewModel.state.value
 
-    if (state is ApiResult.Loading)  // = if (addGroupViewModel.state.value.status == ApiStatus.LOADING)
+    if (state is ApiResult.Loading)
         Dialog(onDismissRequest = {}) {
             CircularProgressIndicator()
         }
@@ -118,7 +116,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                         TextH6(text = "اعضا")
                         TVSpacer()
 
-                        for (member in members){
+                        for (member in members) {
                             InputTextField(
                                 text = member,
                                 label = "ایمیل عضو جدید",
@@ -127,7 +125,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                             )
                         }
 
-                        AddOutlinedButton(){
+                        AddOutlinedButton() {
                             members.add(mutableStateOf(""))
                         }
                     }
@@ -138,25 +136,17 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
                 onClick = {
-                    val nemGroup = AddGroupRequest(
+                    val newGroup = AddGroupRequest(
                         name = grpName.value,
                         currency = currency.value,
                         emails = members.map { mutableState -> mutableState.value },
-                        picture_id = 1
+                        picture_id = selectedIndex.value
                     )
-                    addGroupViewModel.createGroup(nemGroup)
+                    addGroupViewModel.createGroup(newGroup)
+                    navController.navigate(Screen.MainScreen.name)
                 },
                 text = "تایید"
             )
         }
-    }
-
-}
-
-@Preview
-@Composable
-fun v() {
-    RtlThemePreview {
-        AddGroupScreen(rememberNavController(), viewModel())
     }
 }
