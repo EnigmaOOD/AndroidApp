@@ -37,7 +37,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun setMe() {
+    fun setMe() {
         viewModelScope.launch {
             startLading()
             val result = userRepository.getUserInfo(token)

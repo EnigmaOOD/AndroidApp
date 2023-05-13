@@ -35,7 +35,6 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                         _groupList.value = groups
                         fetchGroupToAmountData(groups)
                     }
-
                 }
                 else -> {
                     fetchGroups()

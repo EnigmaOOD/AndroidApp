@@ -186,7 +186,9 @@ fun AvatarSelectorDialog(
             isShowDialogCharacter.value = false
         }) {
             Column(
-                modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.surface),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.surface),
                 horizontalAlignment = Alignment.CenterHorizontally,
 
                 ) {

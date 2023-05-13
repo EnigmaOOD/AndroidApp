@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.enigma.app.component.*
 import ir.enigma.app.data.*
 import ir.enigma.app.ui.group.component.GroupItem
@@ -58,7 +57,7 @@ fun MainScreen(
                     resource = R.drawable.ic_fill_add,
                     size = 50.dp,
                     tint = MaterialTheme.colors.onPrimary,
-                    backgroundColor = MaterialTheme.colors.secondary,
+                    backgroundColor = MaterialTheme.colors.primary,
                     elevation = 4.dp
                 ) {
                     navController.navigate(Screen.AddGroupScreen.name)
@@ -72,7 +71,9 @@ fun MainScreen(
                     Modifier
                         .fillMaxWidth()
                         .padding(horizontal = SpaceLarge, vertical = SpaceMedium),
-                )
+                ){
+                    navController.navigate(Screen.EditProfileScreen.name)
+                }
             }
             LVSpacer()
             Card(

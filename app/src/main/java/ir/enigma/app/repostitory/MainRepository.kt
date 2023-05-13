@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.Purchase
+import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.network.Api
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -92,6 +93,18 @@ class MainRepository @Inject constructor(private val api: Api) {
         }
 
     }
+
+    suspend fun createGroup(token: String, addGroupRequest: AddGroupRequest): ApiResult<Unit> {
+        return handleException({
+            api.createGroup(token, addGroupRequest)
+        }) { code ->
+
+            null
+        }
+
+
+    }
+
 
 }
 

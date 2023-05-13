@@ -2,8 +2,13 @@ package ir.enigma.app.ui.group
 
 import InputTextField
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,12 +17,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import ir.enigma.app.component.*
+import ir.enigma.app.component.RtlThemePreview
+import ir.enigma.app.component.SHSpacer
+import ir.enigma.app.component.TextBody2
+import ir.enigma.app.component.TextSubtitle1
 
 @Composable
-fun AddMemberDialog(onDismiss: () -> Unit) {
-//    val context = LocalContext.current
-    val email = remember { mutableStateOf("") }
+fun PurchaseFilterDialog(onDismiss: () -> Unit) {
+    val filter = remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(elevation = 8.dp) {
@@ -26,16 +33,18 @@ fun AddMemberDialog(onDismiss: () -> Unit) {
                     .background(Color.White)
                     .padding(vertical = 12.dp, horizontal = 20.dp)
             ) {
-                TextBody2(text = "ایمیل عضو جدید را وارد نمایید:")
+                TextBody2(text = "فیلتر")
 
                 InputTextField(
-                    text = email,
-//                    label = "ایمیل",
-                    onValueChange = { email.value = it })
+                    text = filter,
+                    label = "خریدار",
+                    onValueChange = { filter.value = it })
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         onClick = { onDismiss() },
                     ) {
                         TextSubtitle1(
@@ -45,7 +54,9 @@ fun AddMemberDialog(onDismiss: () -> Unit) {
                     }
                     SHSpacer()
                     Button(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         onClick = {
 //                            Toast.makeText(context, searchedFood, Toast.LENGTH_SHORT).show()
                             onDismiss()
@@ -53,7 +64,7 @@ fun AddMemberDialog(onDismiss: () -> Unit) {
                     ) {
                         TextSubtitle1(
                             modifier = Modifier.padding(horizontal = 5.dp),
-                            text = "افزودن"
+                            text = "تایید"
                         )
                     }
                 }
@@ -64,11 +75,11 @@ fun AddMemberDialog(onDismiss: () -> Unit) {
 
 @Preview
 @Composable
-fun v() {
+fun m() {
     RtlThemePreview {
         var showCustomDialog = remember { mutableStateOf(true) }
         if (showCustomDialog.value) {
-            AddMemberDialog() {
+            PurchaseFilterDialog() {
                 showCustomDialog.value = !showCustomDialog.value
             }
         }
