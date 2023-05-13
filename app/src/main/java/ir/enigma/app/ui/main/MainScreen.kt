@@ -58,7 +58,7 @@ fun MainScreen(
                     resource = R.drawable.ic_fill_add,
                     size = 50.dp,
                     tint = MaterialTheme.colors.onPrimary,
-                    backgroundColor = MaterialTheme.colors.primary,
+                    backgroundColor = MaterialTheme.colors.secondary,
                     elevation = 4.dp
                 ) {
                     navController.navigate(Screen.AddGroupScreen.name)

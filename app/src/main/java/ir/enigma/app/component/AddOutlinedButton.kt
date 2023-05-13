@@ -13,9 +13,9 @@ import ir.enigma.app.ui.theme.onBackgroundAlpha3
 @Composable
 fun AddOutlinedButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     enabled: Boolean = true,
-    text: String = "افزودن"
+    text: String = "افزودن",
+    onClick: () -> Unit,
 ) {
     OutlinedButton(
         modifier = modifier.fillMaxWidth(),

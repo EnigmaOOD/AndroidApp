@@ -58,7 +58,7 @@ fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel
                 BackIconButton(onClick = {
                     navController.popBackStack()
                 })
-                TextH6(text = "ویرایش اطلاعات حساب کاربری")
+                TextH6(text = "ویرایش اطلاعات حساب کاربری", color = MaterialTheme.colors.onPrimary)
             }
         },
     ) {

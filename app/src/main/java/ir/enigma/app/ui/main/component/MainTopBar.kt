@@ -2,6 +2,7 @@ package ir.enigma.app.ui.main.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
@@ -60,7 +61,10 @@ fun LogoAndAppName(onClickAvatar: () -> Unit) {
         ) {
             Image(
                 painterResource(userAvatars[me.iconId]),
-                contentDescription = "User Avatar"
+                contentDescription = "User Avatar",
+                modifier = Modifier.clickable {
+                    onClickAvatar()
+                }
             )
         }
     }

@@ -28,7 +28,7 @@ fun MultiToggleButton(
                     backgroundColor = if (index == selectedIndex) {
                         MaterialTheme.colors.primary
                     } else {
-                        MaterialTheme.colors.background
+                        MaterialTheme.colors.surface
                     }
                 )
             ) {

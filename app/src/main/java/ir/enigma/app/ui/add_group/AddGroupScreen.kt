@@ -1,7 +1,9 @@
-package ir.enigma.app.ui.add_group
+package ir.enigma.app.ui.main
 
 import InputTextField
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -14,12 +16,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.ui.ApiScreen
-import ir.enigma.app.ui.navigation.Screen
+import ir.enigma.app.ui.add_group.AddGroupViewModel
 import ir.enigma.app.ui.theme.SpaceThin
 
 @Composable
@@ -36,12 +39,17 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
         R.drawable.ic_fill_gamepad
     )
 
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        color = MaterialTheme.colors.primary
+    )
+
     val members = remember {
         mutableStateListOf<MutableState<String>>()
     }
     val state = addGroupViewModel.state.value
 
-    if (state is ApiResult.Loading)
+    if (state is ApiResult.Loading)  // = if (addGroupViewModel.state.value.status == ApiStatus.LOADING)
         Dialog(onDismissRequest = {}) {
             CircularProgressIndicator()
         }
@@ -61,7 +69,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                 BackIconButton(onClick = {
                     navController.popBackStack()
                 })
-                TextH6(text = "گروه جدید")
+                TextH6(text = "گروه جدید" , color = MaterialTheme.colors.onPrimary)
             }
         },
 
@@ -93,7 +101,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
 
                         MVSpacer()
 
-                        TextSubtitle1(text = "دسته بندی")
+                        TextH6(text = "دسته بندی")
                         TVSpacer()
                         MultiToggleButton(
                             options = grpCategoriesName,
@@ -125,7 +133,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                             )
                         }
 
-                        AddOutlinedButton() {
+                        AddOutlinedButton{
                             members.add(mutableStateOf(""))
                         }
                     }
@@ -143,10 +151,12 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                         picture_id = selectedIndex.value
                     )
                     addGroupViewModel.createGroup(newGroup)
-                    navController.navigate(Screen.MainScreen.name)
+
                 },
                 text = "تایید"
             )
         }
     }
+
 }
+
