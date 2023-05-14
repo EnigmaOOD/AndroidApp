@@ -72,8 +72,8 @@ interface Api {
     @FormUrlEncoded
     suspend fun getGroupDebtAndCredit(
         @Header("Authorization") token: String,
-        @Field ("groupID") groupId: Int,
-        @Field ("userID") userId: Int
+        @Field("groupID") groupId: Int,
+        @Field("userID") userId: Int
     ): Response<Double>
 
     @POST("/group/CreateGroup/")
@@ -110,7 +110,17 @@ interface Api {
         @Field("name") name: String,
         @Field("picture_id") picture_id: Int,
     ): Response<Any>
+
+    @POST("/group/AddUserGroup/")
+    suspend fun addUserToGroup(
+        @Header("Authorization") token: String,
+        @Body addUserToGroupRequest: AddUserToGroupRequest
+    ): Response<Unit>
 }
+
+data class AddUserToGroupRequest (
+    val groupID: Int,
+    val emails: List<String>)
 
 data class AddGroupRequest(
     val name: String,

@@ -29,6 +29,8 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
     private val _purchaseList = MutableStateFlow<List<Purchase>>(emptyList())
     val purchaseList = _purchaseList.asStateFlow()
 
+    val addUserToGroupState = mutableStateOf<ApiResult<Unit>>(ApiResult.Empty())
+
     var meMember: Member? = null
 
     val newPurchaseState = mutableStateOf<ApiResult<Any>>(
@@ -89,6 +91,16 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
     fun leaveGroup(group: Group) {
         viewModelScope.launch {
             mainRepository.leaveGroup()
+        }
+    }
+
+    fun addMember(email: String) {
+        viewModelScope.launch {
+            addUserToGroupState.value = ApiResult.Loading()
+            val result = mainRepository.addUserToGroup(token, email, state.value.data!!.id)
+            if(result.status == ApiStatus.SUCCESS)
+                fetchGroupData(state.value.data!!.id)
+            addUserToGroupState.value = result
         }
     }
 }

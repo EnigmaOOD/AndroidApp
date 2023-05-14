@@ -7,6 +7,7 @@ import ir.enigma.app.data.ApiResult
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.network.AddGroupRequest
+import ir.enigma.app.network.AddUserToGroupRequest
 import ir.enigma.app.network.Api
 import ir.enigma.app.ui.group.*
 import kotlinx.coroutines.flow.*
@@ -65,7 +66,7 @@ class MainRepository @Inject constructor(private val api: Api) {
                 emit(result)
             })
         } else {
-            ApiResult.Error( "خطا در دریافت گروه ها")
+            ApiResult.Error("خطا در دریافت گروه ها")
         }
 
     }
@@ -119,6 +120,19 @@ class MainRepository @Inject constructor(private val api: Api) {
         }
 
 
+    }
+
+    suspend fun addUserToGroup(token: String, email: String, groupId: Int): ApiResult<Unit> {
+        // log all fields
+        Log.d("ExceptionHandler", "addUserToGroup: $email $groupId")
+        return handleException({
+            api.addUserToGroup(
+                token,
+                AddUserToGroupRequest(groupId, listOf(email))
+            )
+        }) {
+            null
+        }
     }
 
 

@@ -1,11 +1,9 @@
 package ir.enigma.app.ui.auth
 
 import InputTextField
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,9 +20,7 @@ import ir.enigma.app.data.ApiResult
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.data.userAvatars
 import ir.enigma.app.ui.ApiScreen
-import ir.enigma.app.ui.theme.IconVeryLarge
 import ir.enigma.app.ui.theme.SpaceThin
-import ir.enigma.app.ui.group.PurchaseFilterDialog
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.IconExtraLarge
 

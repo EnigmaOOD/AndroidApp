@@ -44,7 +44,13 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
 
     if (authViewModel.state.value is ApiResult.Success) {
         LaunchedEffect(key1 = Unit) {
-            navController.navigate(Screen.MainScreen.name)
+            //navigate to main that can not back to auth
+            navController.navigate(Screen.MainScreen.name) {
+                popUpTo(Screen.AuthScreen.name) {
+                    inclusive = true
+                }
+            }
+
         }
     }
 
