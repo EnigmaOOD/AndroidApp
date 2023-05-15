@@ -25,23 +25,7 @@ class MockApi : Api {
     override suspend fun getGroupPurchases(token: String, groupId: Int): Response<List<Purchase>> {
         return Response.success(
             listOf(
-                Purchase(
-                    title = "test",
-                    "2022-02-02",
-                    totalPrice = 2000.0,
-                    sender = User(1, "test", "test", 2, "test"),
-                    purchaseCategoryIndex = 2,
-                    buyers = listOf(
-                        Contribution(
-                            User(1, "test", "test", 2, "test"), 2000.0
-                        ),
-                    ),
-                    consumers = listOf(
-                        Contribution(
-                            User(2, "test2", "test2", 5, "test2"), 2000.0
-                        ),
-                    )
-                )
+                fakePurchase1, fakePurchase2
             )
         )
 
@@ -59,7 +43,7 @@ class MockApi : Api {
                     User(1, "test", "test", 2, "test"),
                     2000.0,
 
-                ),
+                    ),
                 Member(
                     User(2, "test2", "test2", 5, "test2"),
                     2000.0,
@@ -83,4 +67,42 @@ class MockApi : Api {
         return Response.success(2000.0)
     }
 
+
 }
+
+val fakePurchase1 = Purchase(
+    title = "test",
+    "2022-02-02",
+    totalPrice = 2000.0,
+    sender = User(1, "test", "test", 2, "test"),
+    purchaseCategoryIndex = 2,
+    buyers = listOf(
+        Contribution(
+            User(1, "test", "test", 2, "test"), 2000.0
+        ),
+    ),
+    consumers = listOf(
+        Contribution(
+            User(2, "test2", "test2", 5, "test2"), 2000.0
+        ),
+    )
+)
+
+
+val fakePurchase2 = Purchase(
+    title = "test2",
+    "2022-02-02",
+    totalPrice = 2000.0,
+    sender = User(1, "test", "test", 2, "test"),
+    purchaseCategoryIndex = 2,
+    buyers = listOf(
+        Contribution(
+            User(2, "test2", "test2", 5, "test2"), 2000.0
+        ),
+    ),
+    consumers = listOf(
+        Contribution(
+            User(1, "test", "test", 2, "test"), 2000.0
+        ),
+    )
+)
