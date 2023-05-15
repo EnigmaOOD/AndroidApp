@@ -1,6 +1,8 @@
 package ir.enigma.app
 
 import ir.enigma.app.model.*
+import ir.enigma.app.network.AddGroupRequest
+import ir.enigma.app.network.AddUserToGroupRequest
 import ir.enigma.app.network.Api
 import ir.enigma.app.repostitory.CreatePurchaseRequest
 import retrofit2.Response
@@ -65,6 +67,43 @@ class MockApi : Api {
         userId: Int
     ): Response<Double> {
         return Response.success(2000.0)
+    }
+
+    override suspend fun createGroup(
+        token: String,
+        addGroupRequest: AddGroupRequest
+    ): Response<Unit> {
+        return Response.success(Unit)
+    }
+
+    override suspend fun filterByMe(
+        token: String,
+        groupId: Int
+    ): Response<Api.UserGroupBuysResponse> {
+        return Response.success(Api.UserGroupBuysResponse(listOf(fakePurchase1, fakePurchase2)))
+    }
+
+    override suspend fun filterBaseDecrease(
+        token: String,
+        groupId: Int,
+        sort: String
+    ): Response<List<Purchase>> {
+        return Response.success(listOf(fakePurchase1, fakePurchase2))
+    }
+
+    override suspend fun editProfile(token: String, name: String, picture_id: Int): Response<Any> {
+        return Response.success(Unit)
+    }
+
+    override suspend fun leaveGroup(token: String, groupID: Int, userID: Int): Response<Any> {
+        return Response.success(Unit)
+    }
+
+    override suspend fun addUserToGroup(
+        token: String,
+        addUserToGroupRequest: AddUserToGroupRequest
+    ): Response<Unit> {
+        return Response.success(Unit)
     }
 
 
