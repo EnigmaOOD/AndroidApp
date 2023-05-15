@@ -98,8 +98,16 @@ class MainRepository @Inject constructor(private val api: Api) {
         }
     }
 
-    suspend fun leaveGroup() {
-        //todo complete this
+    suspend fun leaveGroup(token: String, groupID: Int, userID: Int): ApiResult<Any> {
+        return handleException({
+            api.leaveGroup(token, groupID, userID)
+        }) {
+            if (it == 401)
+                "برای ادامه باید دوباره وارد شوید"
+                //ToDo: edit code of that and message
+            else
+                null
+        }
     }
 
     suspend fun getGroupToAmount(token: String, groupId: Int, userID: Int): ApiResult<Double> {

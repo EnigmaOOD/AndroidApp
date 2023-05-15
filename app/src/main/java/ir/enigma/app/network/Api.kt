@@ -72,8 +72,8 @@ interface Api {
     @FormUrlEncoded
     suspend fun getGroupDebtAndCredit(
         @Header("Authorization") token: String,
-        @Field("groupID") groupId: Int,
-        @Field("userID") userId: Int
+        @Field ("groupID") groupId: Int,
+        @Field ("userID") userId: Int
     ): Response<Double>
 
     @POST("/group/CreateGroup/")
@@ -109,6 +109,14 @@ interface Api {
         @Header("Authorization") token: String,
         @Field("name") name: String,
         @Field("picture_id") picture_id: Int,
+    ): Response<Any>
+
+    @POST("/auth/DeleteUser/")
+    @FormUrlEncoded
+    suspend fun leaveGroup(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupID: Int,
+        @Field("userID") userID: Int,
     ): Response<Any>
 
     @POST("/group/AddUserGroup/")
