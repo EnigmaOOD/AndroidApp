@@ -2,10 +2,14 @@ package ir.enigma.app.repostitory
 
 import android.util.Log
 import com.google.gson.Gson
+
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.model.Group
 import ir.enigma.app.model.Purchase
+import ir.enigma.app.network.AddGroupRequest
+import ir.enigma.app.network.AddUserToGroupRequest
 import ir.enigma.app.network.Api
+import ir.enigma.app.ui.group.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -39,20 +43,32 @@ class MainRepository @Inject constructor(private val api: Api) {
         }
     }
 
-    suspend fun getGroupPurchases(token: String, groupId: Int): ApiResult<Flow<List<Purchase>>> {
-        val result = handleException({ api.getGroupPurchases(token, groupId) }) {
+    suspend fun getGroupPurchases(
+        token: String,
+        groupId: Int,
+        filter: Int = 0
+    ): ApiResult<Flow<List<Purchase>>> {
+        val result = try {
+            when (filter) {
+                FILTER_OLDEST, FILTER_NEWEST -> api.getGroupPurchases(token, groupId).body()
+                FILTER_MOST_EXPENSIVE, FILTER_CHEAPEST -> api.filterBaseDecrease(token, groupId)
+                    .body()
+                FILTER_YOUR_PURCHASES -> api.filterByMe(token, groupId).body()!!.buyer_buys
+                else -> api.getGroupPurchases(token, groupId).body()
+
+            }
+        } catch (e: Exception) {
             null
         }
-        return when (result) {
-            is ApiResult.Success -> {
-                ApiResult.Success(flow {
-                    emit(result.data!!)
-                })
-            }
-            else -> {
-                ApiResult.Error(result.message ?: "خطا در دریافت گروه ها")
-            }
+
+        return if (result != null) {
+            ApiResult.Success(flow {
+                emit(result)
+            })
+        } else {
+            ApiResult.Error("خطا در دریافت گروه ها")
         }
+
     }
 
     suspend fun createPurchase(
@@ -93,8 +109,32 @@ class MainRepository @Inject constructor(private val api: Api) {
 
     }
 
+    suspend fun createGroup(token: String, addGroupRequest: AddGroupRequest): ApiResult<Unit> {
+        return handleException({
+            api.createGroup(token, addGroupRequest)
+        }) {
+            if (it == 404)
+                "ایمیل اعضا معتبر نمی باشد."
+            else
+                null
+        }
 
-    
+
+    }
+
+    suspend fun addUserToGroup(token: String, email: String, groupId: Int): ApiResult<Unit> {
+        // log all fields
+        Log.d("ExceptionHandler", "addUserToGroup: $email $groupId")
+        return handleException({
+            api.addUserToGroup(
+                token,
+                AddUserToGroupRequest(groupId, listOf(email))
+            )
+        }) {
+            null
+        }
+    }
+
 
 }
 

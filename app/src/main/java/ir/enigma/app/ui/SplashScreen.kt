@@ -62,13 +62,21 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
             if (loadedToken == null) {
                 LaunchedEffect(key1 = Unit) {
                     delay(3000)
-                    navController.navigate(Screen.AuthScreen.name)
+                    navController.navigate(Screen.MainScreen.name) {
+                        popUpTo(Screen.SplashScreen.name) {
+                            inclusive = true
+                        }
+                    }
                 }
             } else if (authViewModel.state.value is ApiResult.Loading) {
                 CircularProgressIndicator()
             } else if (authViewModel.state.value is ApiResult.Success) {
                 LaunchedEffect(key1 = Unit) {
-                    navController.navigate(Screen.MainScreen.name)
+                    navController.navigate(Screen.MainScreen.name) {
+                        popUpTo(Screen.SplashScreen.name) {
+                            inclusive = true
+                        }
+                    }
                 }
             } else if (authViewModel.state.value is ApiResult.Error) {
 

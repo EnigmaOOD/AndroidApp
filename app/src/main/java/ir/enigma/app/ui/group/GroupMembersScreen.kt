@@ -1,18 +1,21 @@
 package ir.enigma.app.ui.group
 
+import InputTextField
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
+import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.model.GroupCategory
 import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
@@ -20,9 +23,23 @@ import ir.enigma.app.ui.theme.*
 
 @Composable
 fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewModel) {
+    val addMemberDialog = remember { mutableStateOf(false) }
+    if (addMemberDialog.value)
+        AddMemberDialog(
+            onDismiss = {
+                addMemberDialog.value = false
+            },
+            groupViewModel.addUserToGroupState.value,
+            onAction = { email ->
+                groupViewModel.addMember(email)
+            })
+    if (groupViewModel.addUserToGroupState.value.status == ApiStatus.SUCCESS) {
+        addMemberDialog.value = false
+    }
     ApiScreen(backgroundColor = MaterialTheme.colors.primary, apiResult = groupViewModel.state) {
         val group = groupViewModel.state.value.data!!
         val members = group.members!!
+
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -61,7 +78,9 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                         vertical = SpaceSmall
                     )
                 ) {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = {
+                        addMemberDialog.value = true
+                    }) {
                         Icon(
                             modifier = Modifier.size(IconSmall),
                             painter = painterResource(id = R.drawable.ic_profile_add),
@@ -115,6 +134,7 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
     }
 
 }
+
 
 @Preview
 @Composable

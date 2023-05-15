@@ -9,6 +9,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface Api {
@@ -71,7 +72,59 @@ interface Api {
     @FormUrlEncoded
     suspend fun getGroupDebtAndCredit(
         @Header("Authorization") token: String,
-        @Field ("groupID") groupId: Int,
-        @Field ("userID") userId: Int
+        @Field("groupID") groupId: Int,
+        @Field("userID") userId: Int
     ): Response<Double>
+
+    @POST("/group/CreateGroup/")
+    suspend fun createGroup(
+        @Header("Authorization") token: String,
+        @Body addGroupRequest: AddGroupRequest
+    ): Response<Unit>
+
+
+    @POST("/buy/UserGroupBuys/")
+    @FormUrlEncoded
+    suspend fun filterByMe(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupId: Int
+    ): Response<UserGroupBuysResponse>
+
+    class UserGroupBuysResponse(
+        val buyer_buys: List<Purchase>,
+    )
+
+    @POST("/buy/GetGroupBuys/")
+    @FormUrlEncoded
+    suspend fun filterBaseDecrease(
+        @Header("Authorization") token: String,
+        @Field("groupID") groupId: Int,
+        @Field("sort") sort: String = "cost"
+    ): Response<List<Purchase>>
+
+
+    @PATCH("/auth/EditProfile/")
+    @FormUrlEncoded
+    suspend fun editProfile(
+        @Header("Authorization") token: String,
+        @Field("name") name: String,
+        @Field("picture_id") picture_id: Int,
+    ): Response<Any>
+
+    @POST("/group/AddUserGroup/")
+    suspend fun addUserToGroup(
+        @Header("Authorization") token: String,
+        @Body addUserToGroupRequest: AddUserToGroupRequest
+    ): Response<Unit>
 }
+
+data class AddUserToGroupRequest (
+    val groupID: Int,
+    val emails: List<String>)
+
+data class AddGroupRequest(
+    val name: String,
+    val picture_id: Int,
+    val currency: String,
+    val emails: List<String>
+)

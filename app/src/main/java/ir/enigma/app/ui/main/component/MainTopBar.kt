@@ -2,6 +2,7 @@ package ir.enigma.app.ui.main.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
@@ -27,18 +28,19 @@ import ir.enigma.app.ui.theme.*
 @Composable
 fun MainTopBar(
     modifier: Modifier = Modifier,
+    onClickAvatar: () -> Unit
 ) {
 
     Row(
         modifier = modifier,
     ) {
-        LogoAndAppName()
+        LogoAndAppName(onClickAvatar)
 
     }
 }
 
 @Composable
-fun LogoAndAppName() {
+fun LogoAndAppName(onClickAvatar: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(R.drawable.app_logo),
@@ -59,24 +61,12 @@ fun LogoAndAppName() {
         ) {
             Image(
                 painterResource(userAvatars[me.iconId]),
-                contentDescription = "User Avatar"
+                contentDescription = "User Avatar",
+                modifier = Modifier.clickable {
+                    onClickAvatar()
+                }
             )
         }
     }
 }
 
-@Preview
-@Composable
-fun MainTopBarPreview() {
-    RtlThemePreview {
-        Surface {
-
-            Card {
-                MainTopBar(
-                    Modifier.fillMaxWidth().padding(SpaceMedium),
-
-                )
-            }
-        }
-    }
-}

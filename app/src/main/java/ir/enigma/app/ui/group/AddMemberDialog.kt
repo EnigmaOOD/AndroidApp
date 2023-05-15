@@ -8,52 +8,55 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import ir.enigma.app.component.*
+import ir.enigma.app.data.ApiResult
+import ir.enigma.app.data.ApiStatus
 
 @Composable
-fun AddMemberDialog(onDismiss: () -> Unit) {
-//    val context = LocalContext.current
+fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (String) -> Unit) {
+
     val email = remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(elevation = 8.dp) {
             Column(
                 Modifier
-                    .background(Color.White)
+                    .background(MaterialTheme.colors.surface)
                     .padding(vertical = 12.dp, horizontal = 20.dp)
             ) {
-                TextBody2(text = "ایمیل عضو جدید را وارد نمایید:")
+                TextBody2(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "ایمیل عضو جدید را وارد نمایید:"
+                )
 
                 InputTextField(
                     text = email,
-//                    label = "ایمیل",
+                    error = state.message ?: "",
+                    hasError = state.status == ApiStatus.ERROR,
+                    showError = true,
                     onValueChange = { email.value = it })
 
-                Row {
+                Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
                         onClick = { onDismiss() },
                     ) {
-                        TextSubtitle1(
-                            modifier = Modifier.padding(horizontal = 5.dp),
+                        Text(
                             text = "انصراف"
                         )
                     }
                     SHSpacer()
-                    Button(
+                    LoadingButton(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
                         onClick = {
-//                            Toast.makeText(context, searchedFood, Toast.LENGTH_SHORT).show()
-                            onDismiss()
+                            onAction(email.value)
                         },
-                    ) {
-                        TextSubtitle1(
-                            modifier = Modifier.padding(horizontal = 5.dp),
-                            text = "افزودن"
-                        )
-                    }
+                        loading = state.status == ApiStatus.LOADING,
+                        actionText = "افزودن"
+                    )
                 }
             }
         }
@@ -66,9 +69,12 @@ fun v() {
     RtlThemePreview {
         var showCustomDialog = remember { mutableStateOf(true) }
         if (showCustomDialog.value) {
-            AddMemberDialog() {
-                showCustomDialog.value = !showCustomDialog.value
-            }
+            AddMemberDialog({},
+                ApiResult.Error(_message = "کاربر با این ایمیل وجود ندارد"),
+                { email ->
+                    showCustomDialog.value = !showCustomDialog.value
+                }
+            )
         }
     }
 }

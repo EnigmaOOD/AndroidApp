@@ -72,7 +72,9 @@ fun MainScreen(
                     Modifier
                         .fillMaxWidth()
                         .padding(horizontal = SpaceLarge, vertical = SpaceMedium),
-                )
+                ){
+                    navController.navigate(Screen.EditProfileScreen.name)
+                }
             }
             LVSpacer()
             Card(

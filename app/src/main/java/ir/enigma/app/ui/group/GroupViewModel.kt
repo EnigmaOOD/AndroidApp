@@ -29,19 +29,21 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
     private val _purchaseList = MutableStateFlow<List<Purchase>>(emptyList())
     val purchaseList = _purchaseList.asStateFlow()
 
+    val addUserToGroupState = mutableStateOf<ApiResult<Unit>>(ApiResult.Empty())
+
     var meMember: Member? = null
 
     val newPurchaseState = mutableStateOf<ApiResult<Any>>(
         ApiResult.Empty()
     )
 
-    fun fetchGroupData(groupId: Int) {
+    fun fetchGroupData(groupId: Int, filter: Int = 0) {
         viewModelScope.launch {
             val result = mainRepository.getGroupWithMembers(token = token, groupId = groupId)
             if (result is ApiResult.Success && result.data?.members != null) {
                 meMember = result.data.members!!.find { it.user.id == me.id }
                 state.value = result
-                fetchPurchases(groupId)
+                fetchPurchases(groupId, filter)
             } else {
                 fetchGroupData(groupId)
             }
@@ -50,7 +52,7 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
 
     }
 
-    fun fetchPurchases(groupId: Int) {
+    fun fetchPurchases(groupId: Int, filter: Int = 0) {
         viewModelScope.launch(Dispatchers.IO) {
             purchaseState.value = ApiResult.Loading()
             val group = state.value.data
@@ -59,7 +61,7 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
                 return@launch
             }
             when (val result =
-                mainRepository.getGroupPurchases(token = token, groupId = group.id)) {
+                mainRepository.getGroupPurchases(token = token, groupId = group.id, filter)) {
                 is ApiResult.Success -> {
                     purchaseState.value = ApiResult.Success(Unit)
                     result.data!!.distinctUntilChanged().collect { purchases ->
@@ -89,6 +91,16 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
     fun leaveGroup(group: Group) {
         viewModelScope.launch {
             mainRepository.leaveGroup()
+        }
+    }
+
+    fun addMember(email: String) {
+        viewModelScope.launch {
+            addUserToGroupState.value = ApiResult.Loading()
+            val result = mainRepository.addUserToGroup(token, email, state.value.data!!.id)
+            if(result.status == ApiStatus.SUCCESS)
+                fetchGroupData(state.value.data!!.id)
+            addUserToGroupState.value = result
         }
     }
 }
