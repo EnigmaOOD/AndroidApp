@@ -30,10 +30,5 @@ open class ApiViewModel<T> : ViewModel() {
         state.value = ApiResult.Success(data)
     }
 
-    fun callApi(apiCall: suspend () -> ApiResult<T>) {
-        viewModelScope.launch {
-            startLading()
-            state.value = apiCall()
-        }
-    }
+
 }

@@ -1,6 +1,5 @@
 package ir.enigma.app.ui.group
 
-import InputTextField
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -29,11 +28,11 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
             onDismiss = {
                 addMemberDialog.value = false
             },
-            groupViewModel.addUserToGroupState.value,
+            groupViewModel.newMemberState.value,
             onAction = { email ->
                 groupViewModel.addMember(email)
             })
-    if (groupViewModel.addUserToGroupState.value.status == ApiStatus.SUCCESS) {
+    if (groupViewModel.newMemberState.value.status == ApiStatus.SUCCESS) {
         addMemberDialog.value = false
     }
     ApiScreen(backgroundColor = MaterialTheme.colors.primary, apiResult = groupViewModel.state) {

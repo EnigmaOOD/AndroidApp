@@ -10,7 +10,6 @@ import ir.enigma.app.data.ApiResult
 import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
-import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.ui.ApiViewModel
 import ir.enigma.app.util.SharedPrefManager
@@ -43,7 +42,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun setMe() {
+    private fun setMe() {
         viewModelScope.launch {
             startLading()
             val result = userRepository.getUserInfo(token)
@@ -52,7 +51,7 @@ class AuthViewModel @Inject constructor(
                 Log.d(TAG, "setMe: $me")
                 success(Token(token))
             } else
-                setMe()
+                error(result.message!!)
         }
     }
 

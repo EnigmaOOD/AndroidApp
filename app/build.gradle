@@ -102,5 +102,13 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.robolectric:robolectric:4.4.1"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    testImplementation 'androidx.test.ext:junit:1.1.5'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1'
+    androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'io.mockk:mockk:1.12.0'
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1") {
+        // https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-debug#debug-agent-and-android
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
 }

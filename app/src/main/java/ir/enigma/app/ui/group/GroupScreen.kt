@@ -81,6 +81,9 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
             showFilter.value = false
         }
 
+    if(groupViewModel.leaveGroupState.value.status == ApiStatus.SUCCESS)
+        navController.popBackStack()
+
     ApiScreen(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = colors.background,
@@ -158,7 +161,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                     currency = group.currency,
                     onLeaveGroup = {
                         groupViewModel.leaveGroup(group.id)
-                        navController.navigate(Screen.MainScreen.name)
+
                     },
                     onSettleUp = { amount ->
 

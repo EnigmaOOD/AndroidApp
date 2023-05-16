@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
     val groupToAmount = hashMapOf<Int, MutableState<Double?>>()
 
     fun fetchGroups() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             startLading()
             when (val result = mainRepository.getGroups(token = token)) {
                 is ApiResult.Success -> {
@@ -37,7 +37,7 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                     }
                 }
                 else -> {
-                    fetchGroups()
+                    state.value = ApiResult.Error(result.message?: "خطا در دریافت گروه ها")
                 }
             }
 

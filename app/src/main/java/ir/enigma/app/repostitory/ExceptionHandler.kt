@@ -16,11 +16,10 @@ suspend fun <T> handleException(
     call: suspend () -> Response<T>,
     errorCodeHande: (code: Int) -> String?
 ): ApiResult<T> {
-    Log.d("ExceptionHandler", "handleException: $call")
+
     val result = try {
         val data = call()
-        Log.d("ExceptionHandler", "handleException: $data")
-        Log.d("ExceptionHandler", "handleExceptionErrorBody: ${data.errorBody()}")
+
         if (data.isSuccessful)
             ApiResult.Success(data.body())
         else {
@@ -31,9 +30,9 @@ suspend fun <T> handleException(
                 ApiResult.Error(generalErrorHandler(data.code()))
         }
     } catch (e: Exception) {
-        Log.e("ExceptionHandler", "handleException: ", e)
+
         ApiResult.Error("اتصال به اینترنت برقرار نیست")
     }
-    Log.d("ExceptionHandler", "handleException: $result")
+
     return result
 }
