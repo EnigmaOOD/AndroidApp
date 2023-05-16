@@ -345,6 +345,16 @@ class GroupViewModelTest : BaseViewModelTest() {
         //Arrange
         login()
         val email = "test@test.com"
+        coEvery { mainRepository.getGroupWithMembers(any(), any()) } returns ApiResult.Success(
+            mockGroup
+        )
+        coEvery {
+            mainRepository.getGroupPurchases(
+                any(),
+                any(),
+                any()
+            )
+        } returns ApiResult.Success(flowOf(listOf(mockk())))
         coEvery {
             mainRepository.addUserToGroup(
                 any(),
