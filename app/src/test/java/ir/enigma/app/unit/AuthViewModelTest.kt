@@ -1,6 +1,5 @@
 package ir.enigma.app.unit
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import ir.enigma.app.data.ApiResult
@@ -11,13 +10,11 @@ import ir.enigma.app.util.SharedPrefManager.KEY_TOKEN
 import junit.framework.TestCase.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class AuthViewModelTest : BaseViewModelTest() {
 

@@ -102,20 +102,20 @@ fun MyContribution(me: User, purchase: Purchase) {
 
 }
 
-@Composable
+
 fun getPurchaseHint(purchase: Purchase, currency: String): String {
     val isMeInBuyers = isMeInContributors(me, purchase.buyers)
     val buyersCount = purchase.buyers.size
     val verb: String
     val buyersText: String
     if (buyersCount == 0)
-        return "هیچ کس پرداخت نکرد:)" //:))))))))))))))))))))
+        return "هیچ کس پرداخت نکرد"
     if (buyersCount > 2) {
         if (isMeInBuyers) {
-            buyersText = "شما و $buyersCount نفر دیگر"
+            buyersText = "شما و ${buyersCount-1} نفر دیگر"
             verb = "کردید"
         } else {
-            buyersText = purchase.buyers[0].user.name + " و " + buyersCount + "نفر دیگر"
+            buyersText = purchase.buyers[0].user.name + " و " + buyersCount + " نفر دیگر"
             verb = "کردند"
         }
 

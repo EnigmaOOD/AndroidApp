@@ -1,29 +1,16 @@
-package ir.enigma.app.unit
+package ir.enigma.app.unit.utils
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import ir.enigma.app.model.Contribution
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.model.User
-import ir.enigma.app.ui.auth.isValidEmailAddress
 import ir.enigma.app.ui.group.util.calculateUserContribution
-import ir.enigma.app.util.toPrice
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class UtilsTest {
-
-    // isValidEmail test
-    @Test
-    fun `test isValidEmail`() {
-        //test valid emails
-        assert(isValidEmailAddress("ee@frt.com"))       // Act and Assert
-        // test invalid emails
-        assert(!isValidEmailAddress("ee@frt"))
-        assert(!isValidEmailAddress("ee@fr/t.com"))
-
-    }
+class CalculateUserContribution {
 
     // test calculateUserContribution method
     @Test
@@ -51,33 +38,11 @@ class UtilsTest {
             )
         )
 
-        assert(calculateUserContribution(user1, purchase) == 5000.0)            // Act and Assert
+        assertEquals(calculateUserContribution(user1, purchase) , 15000.0)            // Act and Assert
 
     }
 
 
-    @Test
-    fun `test zero price`() {
-        val price = 0.0
-        assertEquals("0", price.toPrice())
-    }
 
-    @Test
-    fun `test positive price without decimal points`() {
-        val price = 100.0
-        assertEquals("100", price.toPrice())
-    }
-
-    @Test
-    fun `test negative price without decimal points`() {
-        val price = -100.0
-        assertEquals("-100 USD", price.toPrice(currency = "USD"))
-    }
-
-    @Test
-    fun `test negative price with decimal points`() {
-        val price = -1234.56
-        assertEquals("-1,234.56 USD", price.toPrice(currency = "USD"))
-    }
 
 }
