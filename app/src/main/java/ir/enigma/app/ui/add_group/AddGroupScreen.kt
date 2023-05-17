@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -139,7 +140,8 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
             EasyButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
+                    .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                    .testTag("OkButton"),
                 onClick = {
                     val newGroup = AddGroupRequest(
                         name = grpName.value,

@@ -1,5 +1,6 @@
 package ir.enigma.app.ui.main
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -54,6 +55,7 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                     groupId = it.id,
                     userID = me.id
                 )
+                Log.d("mainViewModel", "${it.id} ${result.data}")
                 if (result.data != null)
                     groupToAmount[it.id]?.value = result.data
             }
