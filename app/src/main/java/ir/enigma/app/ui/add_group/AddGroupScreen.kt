@@ -15,6 +15,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
 import ir.enigma.app.data.ApiResult
+import ir.enigma.app.model.GroupCategory
 import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.add_group.AddGroupViewModel
@@ -26,13 +27,12 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
     val currency = remember { mutableStateOf("") }
     var selectedIndex = remember { mutableStateOf(0) }
 
-    val grpCategoriesName = listOf("سفر", "خانه", "مهمانی", "سایر")
-    val grpCategoriesIcon = listOf(
-        R.drawable.ic_airplane,
-        R.drawable.ic_home,
-        R.drawable.ic_people,
-        R.drawable.ic_fill_gamepad
-    )
+    val grpCategoriesName = GroupCategory.values().map {
+        it.text
+    }
+    val grpCategoriesIcon = GroupCategory.values().map {
+        it.iconRes
+    }
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
@@ -66,7 +66,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                 BackIconButton(onClick = {
                     navController.popBackStack()
                 })
-                TextH6(text = "گروه جدید" , color = MaterialTheme.colors.onPrimary)
+                TextH6(text = "گروه جدید", color = MaterialTheme.colors.onPrimary)
             }
         },
 
@@ -130,7 +130,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                             )
                         }
 
-                        AddOutlinedButton{
+                        AddOutlinedButton {
                             members.add(mutableStateOf(""))
                         }
                     }
