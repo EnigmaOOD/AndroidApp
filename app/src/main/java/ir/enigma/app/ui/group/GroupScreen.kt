@@ -122,6 +122,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                             OnPrimaryHint(group.members!!.size.toString() + " عضو")
                     }
                 }
+
                 EasyIconButton(
                     iconId = R.drawable.ic_filter,
                     tint = colors.onPrimary,
