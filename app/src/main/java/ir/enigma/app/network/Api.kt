@@ -111,12 +111,11 @@ interface Api {
         @Field("picture_id") picture_id: Int,
     ): Response<Any>
 
-    @POST("/auth/DeleteUser/")
+    @POST("auth/LeaveGroup/")
     @FormUrlEncoded
     suspend fun leaveGroup(
         @Header("Authorization") token: String,
         @Field("groupID") groupID: Int,
-        @Field("userID") userID: Int,
     ): Response<Any>
 
     @POST("/group/AddUserGroup/")

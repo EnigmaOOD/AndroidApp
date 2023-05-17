@@ -1,6 +1,7 @@
 package ir.enigma.app.ui.group
 
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,6 @@ import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.ui.ApiViewModel
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.token
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,10 +41,12 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
 
     fun fetchGroupData(groupId: Int, filter: Int = 0) {
         viewModelScope.launch {
+            startLading()
             val result = mainRepository.getGroupWithMembers(token = token, groupId = groupId)
             if (result is ApiResult.Success && result.data?.members != null) {
                 meMember = result.data.members!!.find { it.user.id == me.id }
-                state.value = result
+                state.value = ApiResult.Success(result.data)
+                Log.d("GroupViewModel", "fetchGroupData: ${result.data?.members}")
                 fetchPurchases(groupId, filter)
             } else {
                 fetchGroupData(groupId)
@@ -94,8 +96,9 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
 
     fun leaveGroup(groupID: Int) {
         viewModelScope.launch {
+            leaveGroupState.value = ApiResult.Loading()
             leaveGroupState.value =
-                mainRepository.leaveGroup(token = token, groupID = groupID, userID = me.id)
+                mainRepository.leaveGroup(token = token, groupID = groupID)
 
         }
     }
@@ -110,4 +113,15 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
         }
     }
 
+    fun newMemberReset(){
+        newMemberState.value = ApiResult.Empty()
+    }
+
+    fun newPurchaseReset(){
+        newPurchaseState.value = ApiResult.Empty()
+    }
+
+    fun leaveStateReset(){
+        leaveGroupState.value = ApiResult.Empty()
+    }
 }

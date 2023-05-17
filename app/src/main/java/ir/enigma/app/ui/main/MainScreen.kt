@@ -50,7 +50,6 @@ fun MainScreen(
         apiResult = mainViewModel.state,
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(Screen.AddGroupScreen.name)
             }) {
 
                 CardWithImageOrIcon(

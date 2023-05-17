@@ -25,6 +25,7 @@ class AuthViewModel @Inject constructor(
         const val TAG = "AuthViewModel"
         lateinit var me: User
         lateinit var token: String
+        const val EMAIL_VERIFICATION = "ایمیل تایید برای شما ارسال شد. لطفا پس از تایید ورود را کلیک کنید"
     }
 
     var editUserState: MutableState<ApiResult<Any>> = mutableStateOf(ApiResult.Empty())
@@ -75,7 +76,6 @@ class AuthViewModel @Inject constructor(
     }
 
     fun register(
-        context: Context,
         name: String,
         email: String,
         iconId: Int,
@@ -83,7 +83,7 @@ class AuthViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             startLading()
-            var user = User(
+            val user = User(
                 id = -1,
                 name = name,
                 email = email,
@@ -92,13 +92,7 @@ class AuthViewModel @Inject constructor(
             )
             val result = userRepository.register(user)
             if (result.status == ApiStatus.SUCCESS) {
-                user = result.data!!
-                state.value = userRepository.login(email, password)
-                if (state.value.status == ApiStatus.SUCCESS) {
-                    me = user
-                    token = state.value.data!!.token
-                    saveToken(context, state.value.data!!.token)
-                }
+                state.value = ApiResult.Success(_data = null , _message = EMAIL_VERIFICATION)
             } else
                 error(result.message!!)
         }
@@ -118,6 +112,15 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             SharedPrefManager(context).putString(SharedPrefManager.KEY_TOKEN, token)
         }
+    }
+
+    fun logout(context: Context) {
+        empty()
+        SharedPrefManager(context).putString(SharedPrefManager.KEY_TOKEN, null)
+    }
+
+    fun editFinish() {
+        editUserState.value = ApiResult.Empty()
     }
 
 }

@@ -31,6 +31,7 @@ import ir.enigma.app.util.toPrice
 import ir.enigma.app.util.zeroIfEmpty
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
+import java.lang.Math.abs
 import kotlin.collections.ArrayList
 
 
@@ -40,8 +41,8 @@ fun NewPurchaseScreen(
     groupViewModel: GroupViewModel,
     amount: Double
 ) {
-    val group = groupViewModel.state.value.data!!
-    val members = group.members!!
+
+
     val showSelectCategory = remember { mutableStateOf(false) }
     val purchaseCategories = PurchaseCategory.values()
     val description = remember { mutableStateOf("") }
@@ -66,323 +67,331 @@ fun NewPurchaseScreen(
 
     val consumerError = checkSumError(priceDouble, consumers, isRelatedConsumer.value)
     val buyersError = checkSumError(priceDouble, buyers, isRelatedBuyer.value)
+    val _group = groupViewModel.state.value.data
+    if(_group != null) {
+        val group = groupViewModel.state.value.data!!
+        val members = group.members!!
 
-    LaunchedEffect(Unit) {
-        if (amount != 0.0) {
-            price.value = amount.toString()
-            description.value = "تسویه حساب ${me.name}"
-            if (amount > 0) {
-                consumers[me.id] = MemberContribution(
-                    me, related = mutableStateOf("1.0"), exact = mutableStateOf("")
-                )
-            } else {
-                buyers[me.id] = MemberContribution(
-                    me, related = mutableStateOf("1.0"), exact = mutableStateOf("")
-                )
-            }
-        } else {
-            members.forEach {
-                consumers[it.user.id] = MemberContribution(
-                    it.user,
-                    mutableStateOf("1.0"),
-                    mutableStateOf("0")
-                )
-            }
-        }
-    }
-
-    if (groupViewModel.newPurchaseState.value is ApiResult.Success) {
         LaunchedEffect(Unit) {
-            navController.popBackStack()
-            groupViewModel.newPurchaseState.value = ApiResult.Empty()
-        }
-    }
-    if (groupViewModel.newPurchaseState.value is ApiResult.Loading) {
-        LoadingDialog()
-    }
-
-    BackHandler(enabled = true, onBack = {
-        if (showSelectCategory.value) {
-            showSelectCategory.value = false
-        } else {
-            navController.popBackStack()
-        }
-    })
-
-    if (showSelectCategory.value) {
-        CategorySelectScreen(onBack = {
-            showSelectCategory.value = false
-        }, onCategorySelected = {
-            showSelectCategory.value = false
-            selectedCategoryIndex.value = it.ordinal
-        })
-    } else {
-
-        ApiScreen(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(contentPadding = PaddingValues(vertical = SpaceThin)) {
-                    BackIconButton(onClick = {
-                        navController.popBackStack()
-                    })
-                    TextH6(text = "خرید جدید", color = MaterialTheme.colors.onPrimary)
+            if (amount != 0.0) {
+                price.value = abs(amount).toString()
+                description.value = "تسویه حساب ${me.name}"
+                if (amount > 0) {
+                    consumers[me.id] = MemberContribution(
+                        me, related = mutableStateOf("1.0"), exact = mutableStateOf("")
+                    )
+                } else {
+                    buyers[me.id] = MemberContribution(
+                        me, related = mutableStateOf("1.0"), exact = mutableStateOf("")
+                    )
                 }
-            },
-            apiResult = groupViewModel.newPurchaseState,
-        ) { it ->
-            Box(modifier = Modifier.fillMaxSize()) {
-
-
-                Column(modifier = Modifier.verticalScroll(scrollState)) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = SpaceMedium),
-                        elevation = 0.dp
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(
-                                horizontal = 20.dp,
-                                vertical = SpaceSmall
-                            )
-                        ) {
-                            InputTextField(
-                                text = description,
-                                label = "توضیحات",
-                            )
-
-                            Box(Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
-                                OutlinedTextField(
-                                    modifier = Modifier.focusable(false)
-                                        .clickable(false, onClick = {})
-                                        .fillMaxWidth(),
-                                    enabled = amount == 0.0,
-                                    readOnly = true,
-                                    leadingIcon = {
-                                        Icon(
-                                            painter = painterResource(selectedCategory.iconRes),
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colors.onBackground
-                                        )
-                                    },
-                                    value = selectedCategory.text,
-                                    label = {
-                                        Text("بابت")
-                                    },
-                                    onValueChange = {},
-                                )
-
-                                Box(
-                                    modifier = Modifier.fillMaxSize()
-                                        .clickable(enabled = amount == 0.0) {
-                                            showSelectCategory.value = true
-                                        }
-                                )
-
-                            }
-                            Text("")
-                            InputTextField(
-                                text = price,
-                                keyboardType = KeyboardType.Decimal,
-                                label = "قیمت",
-                                error = "قیمت نمی\u200Cتواند 0 باشد",
-                                hasError = priceError,
-                                enabled = amount == 0.0,
-                                hint = priceDouble?.toPrice(group.currency),
-                                showError = showError.value,
-
-                                onValueChange = {
-
-                                    price.value = it.zeroIfEmpty()
-                                },
-                            )
-                        }
-                    }
-
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = SpaceMedium),
-                        elevation = 0.dp
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                TextH6(text = "خریدارها")
-                                if (amount == 0.0 || amount > 0)
-                                    SegmentedControl(onItemSelection = {
-                                        isRelatedBuyer.value = !isRelatedBuyer.value
-                                    })
-                                else
-                                    Box{}
-                            }
-
-                            buyers.forEach {
-                                MemberContributionItem(
-                                    memberContribution = it.value,
-                                    isRelated = isRelatedBuyer.value,
-                                    enabled = amount == 0.0 || amount > 0
-                                )
-                                SVSpacer()
-                            }
-                            if (buyers.isEmpty()) {
-                                if (showError.value) {
-                                    ErrorText(
-                                        text = "لیست خریدارها نمی\u200Cتواند خالی باشد",
-                                    )
-                                } else {
-                                    HintText(
-                                        text = "لیست خالی است",
-                                    )
-                                }
-                            }
-
-                            if (buyersError != null && showError.value) {
-                                ErrorText(
-                                    text = buyersError,
-                                )
-                            }
-
-                            AddOutlinedButton(
-                                enabled = amount == 0.0 || amount > 0,
-                                onClick = {
-                                    buyersDialog.value = true
-                                }, text = "تغییر لیست"
-                            )
-                        }
-
-                    }
-
-
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        elevation = 0.dp
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 15.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                TextH6(text = "مصرف کننده ها")
-                                if (amount == 0.0 || amount < 0) {
-                                    SegmentedControl(onItemSelection = {
-                                        isRelatedConsumer.value = !isRelatedConsumer.value
-                                    })
-                                } else
-                                    Box { }
-                            }
-
-                            consumers.forEach {
-                                MemberContributionItem(
-                                    memberContribution = it.value,
-                                    isRelated = isRelatedConsumer.value,
-                                    enabled = amount == 0.0 || amount < 0
-                                )
-                                SVSpacer()
-                            }
-                            if (consumers.isEmpty()) {
-                                if (showError.value) {
-                                    ErrorText(
-                                        text = "لیست مصرف کننده ها نمی\u200Cتواند خالی باشد",
-                                    )
-                                } else {
-                                    HintText(
-                                        text = "لیست خالی می\u200Cباشد",
-                                    )
-                                }
-                            }
-
-                            if (consumerError != null && showError.value) {
-                                ErrorText(
-                                    text = consumerError,
-                                )
-                            }
-
-                            AddOutlinedButton(
-                                enabled = amount == 0.0 || amount < 0,
-                                text = "تغییر لیست",
-                                onClick = {
-                                    consumersDialog.value = true
-                                }
-                            )
-
-                        }
-                    }
-                }
-
-
-                Row(
-                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
-                        .background(color = MaterialTheme.colors.surface)
-                ) {
-
-                    LoadingButton(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = SpaceLarge, vertical = SpaceSmall),
-                        actionText = "ثبت خرید",
-                        loading = groupViewModel.newPurchaseState.value is ApiResult.Loading,
-                        onClick = {
-                            showError.value = true
-                            if (priceError || buyersError != null || consumerError != null)
-                                return@LoadingButton
-                            val buyersContribution =
-                                getContributionList(buyers, priceDouble!!, isRelatedBuyer.value)
-                            val consumersContribution =
-                                getContributionList(consumers, priceDouble, isRelatedConsumer.value)
-
-                            groupViewModel.createPurchase(
-                                Purchase(
-                                    title = description.value,
-                                    totalPrice = priceDouble,
-                                    purchaseCategoryIndex = selectedCategory.ordinal,
-                                    buyers = buyersContribution,
-                                    consumers = consumersContribution,
-                                    date = LocalDate.now()
-                                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                                    sender = me
-                                )
-                            )
-                        }
+            } else {
+                members.forEach {
+                    consumers[it.user.id] = MemberContribution(
+                        it.user,
+                        mutableStateOf("1.0"),
+                        mutableStateOf("0")
                     )
                 }
             }
+        }
 
-            if (buyersDialog.value)
-                SelecetMembersDialog(
-                    members = members,
-                    selectedMembers = buyers,
-                    onDismiss = {
-                        buyersDialog.value = false
-                    },
-                )
-            if (consumersDialog.value)
-                SelecetMembersDialog(
-                    members = members,
-                    selectedMembers = consumers,
-                    onDismiss = {
-                        consumersDialog.value = false
-                    },
-                )
+        if (groupViewModel.newPurchaseState.value is ApiResult.Success) {
+            LaunchedEffect(Unit) {
+                navController.popBackStack()
+                groupViewModel.newPurchaseReset()
+            }
+        }
+        if (groupViewModel.newPurchaseState.value is ApiResult.Loading) {
+            LoadingDialog()
+        }
+
+        BackHandler(enabled = true, onBack = {
+            if (showSelectCategory.value) {
+                showSelectCategory.value = false
+            } else {
+                navController.popBackStack()
+            }
+        })
+
+        if (showSelectCategory.value) {
+            CategorySelectScreen(onBack = {
+                showSelectCategory.value = false
+            }, onCategorySelected = {
+                showSelectCategory.value = false
+                selectedCategoryIndex.value = it.ordinal
+            })
+        } else {
+
+            ApiScreen(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    TopAppBar(contentPadding = PaddingValues(vertical = SpaceThin)) {
+                        BackIconButton(onClick = {
+                            navController.popBackStack()
+                        })
+                        TextH6(text = "خرید جدید", color = MaterialTheme.colors.onPrimary)
+                    }
+                },
+                apiResult = groupViewModel.newPurchaseState,
+            ) { it ->
+                Box(modifier = Modifier.fillMaxSize()) {
+
+
+                    Column(modifier = Modifier.verticalScroll(scrollState)) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = SpaceMedium),
+                            elevation = 0.dp
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(
+                                    horizontal = 20.dp,
+                                    vertical = SpaceSmall
+                                )
+                            ) {
+                                InputTextField(
+                                    text = description,
+                                    label = "توضیحات",
+                                )
+
+                                Box(Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
+                                    OutlinedTextField(
+                                        modifier = Modifier.focusable(false)
+                                            .clickable(false, onClick = {})
+                                            .fillMaxWidth(),
+                                        enabled = amount == 0.0,
+                                        readOnly = true,
+                                        leadingIcon = {
+                                            Icon(
+                                                painter = painterResource(selectedCategory.iconRes),
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colors.onBackground
+                                            )
+                                        },
+                                        value = selectedCategory.text,
+                                        label = {
+                                            Text("بابت")
+                                        },
+                                        onValueChange = {},
+                                    )
+
+                                    Box(
+                                        modifier = Modifier.fillMaxSize()
+                                            .clickable(enabled = amount == 0.0) {
+                                                showSelectCategory.value = true
+                                            }
+                                    )
+
+                                }
+                                Text("")
+                                InputTextField(
+                                    text = price,
+                                    keyboardType = KeyboardType.Decimal,
+                                    label = "قیمت",
+                                    error = "قیمت نمی\u200Cتواند 0 باشد",
+                                    hasError = priceError,
+                                    enabled = amount == 0.0,
+                                    hint = priceDouble?.toPrice(group.currency),
+                                    showError = showError.value,
+
+                                    onValueChange = {
+
+                                        price.value = it.zeroIfEmpty()
+                                    },
+                                )
+                            }
+                        }
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = SpaceMedium),
+                            elevation = 0.dp
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    TextH6(text = "خریدارها")
+                                    if (amount == 0.0 || amount > 0)
+                                        SegmentedControl(onItemSelection = {
+                                            isRelatedBuyer.value = !isRelatedBuyer.value
+                                        })
+                                    else
+                                        Box {}
+                                }
+
+                                buyers.forEach {
+                                    MemberContributionItem(
+                                        memberContribution = it.value,
+                                        isRelated = isRelatedBuyer.value,
+                                        enabled = amount == 0.0 || amount > 0
+                                    )
+                                    SVSpacer()
+                                }
+                                if (buyers.isEmpty()) {
+                                    if (showError.value) {
+                                        ErrorText(
+                                            text = "لیست خریدارها نمی\u200Cتواند خالی باشد",
+                                        )
+                                    } else {
+                                        HintText(
+                                            text = "لیست خالی است",
+                                        )
+                                    }
+                                }
+
+                                if (buyersError != null && showError.value) {
+                                    ErrorText(
+                                        text = buyersError,
+                                    )
+                                }
+
+                                AddOutlinedButton(
+                                    enabled = amount == 0.0 || amount > 0,
+                                    onClick = {
+                                        buyersDialog.value = true
+                                    }, text = "تغییر لیست"
+                                )
+                            }
+
+                        }
+
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            elevation = 0.dp
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 15.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    TextH6(text = "مصرف کننده ها")
+                                    if (amount == 0.0 || amount < 0) {
+                                        SegmentedControl(onItemSelection = {
+                                            isRelatedConsumer.value = !isRelatedConsumer.value
+                                        })
+                                    } else
+                                        Box { }
+                                }
+
+                                consumers.forEach {
+                                    MemberContributionItem(
+                                        memberContribution = it.value,
+                                        isRelated = isRelatedConsumer.value,
+                                        enabled = amount == 0.0 || amount < 0
+                                    )
+                                    SVSpacer()
+                                }
+                                if (consumers.isEmpty()) {
+                                    if (showError.value) {
+                                        ErrorText(
+                                            text = "لیست مصرف کننده ها نمی\u200Cتواند خالی باشد",
+                                        )
+                                    } else {
+                                        HintText(
+                                            text = "لیست خالی می\u200Cباشد",
+                                        )
+                                    }
+                                }
+
+                                if (consumerError != null && showError.value) {
+                                    ErrorText(
+                                        text = consumerError,
+                                    )
+                                }
+
+                                AddOutlinedButton(
+                                    enabled = amount == 0.0 || amount < 0,
+                                    text = "تغییر لیست",
+                                    onClick = {
+                                        consumersDialog.value = true
+                                    }
+                                )
+
+                            }
+                        }
+                    }
+
+
+                    Row(
+                        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
+                            .background(color = MaterialTheme.colors.surface)
+                    ) {
+
+                        LoadingButton(
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = SpaceLarge, vertical = SpaceSmall),
+                            actionText = "ثبت خرید",
+                            loading = groupViewModel.newPurchaseState.value is ApiResult.Loading,
+                            onClick = {
+                                showError.value = true
+                                if (priceError || buyersError != null || consumerError != null)
+                                    return@LoadingButton
+                                val buyersContribution =
+                                    getContributionList(buyers, priceDouble!!, isRelatedBuyer.value)
+                                val consumersContribution =
+                                    getContributionList(
+                                        consumers,
+                                        priceDouble,
+                                        isRelatedConsumer.value
+                                    )
+
+                                groupViewModel.createPurchase(
+                                    Purchase(
+                                        title = description.value,
+                                        totalPrice = priceDouble,
+                                        purchaseCategoryIndex = selectedCategory.ordinal,
+                                        buyers = buyersContribution,
+                                        consumers = consumersContribution,
+                                        date = LocalDate.now()
+                                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                                        sender = me
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
+
+                if (buyersDialog.value)
+                    SelecetMembersDialog(
+                        members = members,
+                        selectedMembers = buyers,
+                        onDismiss = {
+                            buyersDialog.value = false
+                        },
+                    )
+                if (consumersDialog.value)
+                    SelecetMembersDialog(
+                        members = members,
+                        selectedMembers = consumers,
+                        onDismiss = {
+                            consumersDialog.value = false
+                        },
+                    )
+            }
         }
     }
-
 
 }
 

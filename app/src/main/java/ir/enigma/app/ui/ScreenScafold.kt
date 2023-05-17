@@ -93,7 +93,7 @@ fun <T : ApiResult<*>> ApiScreen(
                 message.text,
                 duration = snackbarDuration
             )
-            apiResult.value = ApiResult.Empty() as T
+            apiResult.value = ApiResult.Error("") as T
         }
     }
 

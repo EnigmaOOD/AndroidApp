@@ -20,4 +20,9 @@ class AddGroupViewModel @Inject constructor(private val mainRepository: MainRepo
                 mainRepository.createGroup(token = token, addGroupRequest)
         }
     }
+
+    fun reset(){
+        empty()
+    }
+
 }

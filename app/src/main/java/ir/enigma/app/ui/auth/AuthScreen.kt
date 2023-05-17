@@ -20,7 +20,9 @@ import androidx.navigation.NavController
 import ir.enigma.app.R
 import ir.enigma.app.component.*
 import ir.enigma.app.data.ApiResult
+import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.ui.ApiScreen
+import ir.enigma.app.ui.auth.AuthViewModel.Companion.EMAIL_VERIFICATION
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.*
 
@@ -29,20 +31,19 @@ import ir.enigma.app.ui.theme.*
 @Composable
 fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
-    //todo: remove default values
-    val name = remember { mutableStateOf("a") }
-    val email = remember { mutableStateOf("fatemeshafieepv@gmail.com") }
-    val iconId = remember { mutableStateOf(0) }
-    val password = remember { mutableStateOf("1") }
 
+    val name = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf("") }
+    val iconId = remember { mutableStateOf(0) }
+    val password = remember { mutableStateOf("") }
 
 
     val forLoginState = remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
 
-
-    if (authViewModel.state.value is ApiResult.Success) {
+    val state = authViewModel.state.value
+    if (state.status == ApiStatus.SUCCESS && state.message != EMAIL_VERIFICATION) {
         LaunchedEffect(key1 = Unit) {
             //navigate to main that can not back to auth
             navController.navigate(Screen.MainScreen.name) {
@@ -52,6 +53,8 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
             }
 
         }
+    } else if (state.status == ApiStatus.SUCCESS && state.message == EMAIL_VERIFICATION) {
+        forLoginState.value = true
     }
 
     ApiScreen(
@@ -119,7 +122,6 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
                     onSubmit = { forLogin ->
                         if (forLogin) authViewModel.login(context, email.value, password.value)
                         else authViewModel.register(
-                            context = context,
                             name = name.value,
                             email = email.value,
                             password = password.value,

@@ -49,10 +49,12 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
             CircularProgressIndicator()
         }
 
-    if (state is ApiResult.Success)
+    if (state is ApiResult.Success) {
         LaunchedEffect(key1 = Unit) {
             navController.popBackStack()
         }
+        addGroupViewModel.reset()
+    }
 
 
     ApiScreen(

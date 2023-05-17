@@ -30,7 +30,6 @@ fun PurchaseCard(
     onClick: () -> Unit,
 ) {
     val category = purchase.purchaseCategory
-    Log.d("ExceptionHandler", "PurchaseCard: $category")
     Card(
         modifier = modifier,
         elevation = 0.dp,
@@ -49,7 +48,7 @@ fun PurchaseCard(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         TextH6(
                             modifier = Modifier.weight(1f),
-                            text = purchase.title ?: category.text
+                            text = if (purchase.title.isNullOrEmpty()) category.text else purchase.title
                         )
                         MyContribution(me, purchase)
                     }
@@ -112,7 +111,7 @@ fun getPurchaseHint(purchase: Purchase, currency: String): String {
         return "هیچ کس پرداخت نکرد"
     if (buyersCount > 2) {
         if (isMeInBuyers) {
-            buyersText = "شما و ${buyersCount-1} نفر دیگر"
+            buyersText = "شما و ${buyersCount - 1} نفر دیگر"
             verb = "کردید"
         } else {
             buyersText = purchase.buyers[0].user.name + " و " + buyersCount + " نفر دیگر"

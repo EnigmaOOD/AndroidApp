@@ -46,11 +46,12 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
     val showingPurchase = remember { mutableStateOf<Purchase?>(null) }
     val selectedFilter = remember { mutableStateOf(FILTER_OLDEST) }
     val lazyState = rememberLazyListState()
-    val reverse = selectedFilter.value == FILTER_NEWEST || selectedFilter.value == FILTER_MOST_EXPENSIVE
+    val reverse =
+        selectedFilter.value == FILTER_NEWEST || selectedFilter.value == FILTER_MOST_EXPENSIVE
 
 
     LaunchedEffect(selectedFilter.value) {
-        groupViewModel.fetchGroupData(groupId , selectedFilter.value)
+        groupViewModel.fetchGroupData(groupId, selectedFilter.value)
         if (reverse)
             lazyState.scrollToItem(purchases.size - 1)
         else
@@ -81,8 +82,15 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
             showFilter.value = false
         }
 
-    if(groupViewModel.leaveGroupState.value.status == ApiStatus.SUCCESS)
-        navController.popBackStack()
+    if (groupViewModel.leaveGroupState.value.status == ApiStatus.LOADING)
+        LoadingDialog()
+
+    if (groupViewModel.leaveGroupState.value.status == ApiStatus.SUCCESS) {
+        LaunchedEffect(Unit) {
+            navController.popBackStack()
+            groupViewModel.leaveStateReset()
+        }
+    }
 
     ApiScreen(
         modifier = Modifier.fillMaxSize(),
@@ -209,7 +217,7 @@ fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String, onDismiss: (
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             TextH6(
                                 modifier = Modifier.weight(1f),
-                                text = purchase.title ?: category.text
+                                text = if (purchase.title.isNullOrEmpty()) category.text else purchase.title,
                             )
                             MyContribution(me, purchase)
                         }

@@ -1,8 +1,13 @@
 package ir.enigma.app.repostitory
 
 import android.util.Log
+import com.google.gson.Gson
 import ir.enigma.app.data.ApiResult
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Response
+import java.io.IOException
+
 
 fun generalErrorHandler(code: Int): String {
 
@@ -18,8 +23,19 @@ suspend fun <T> handleException(
 ): ApiResult<T> {
 
     val result = try {
+        Log.d("ExceptionHandler", "handleException: $call")
         val data = call()
-
+        Log.d("ExceptionHandler", "handleException: $data")
+        if (data.errorBody() != null) {
+            try {
+                val errorString = data.errorBody()!!.string()
+                Log.d("ExceptionHandler", "handleException: Errod body $errorString")
+            } catch (e: JSONException) {
+                Log.e("ExceptionHandler", "handleException: ", e)
+            } catch (e: IOException) {
+                Log.e("ExceptionHandler", "handleException: ", e)
+            }
+        }
         if (data.isSuccessful)
             ApiResult.Success(data.body())
         else {

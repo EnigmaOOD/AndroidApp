@@ -16,6 +16,9 @@ import javax.inject.Inject
 
 class MainRepository @Inject constructor(private val api: Api) {
 
+    companion object {
+        const val NO_GROUP = "NoGroup"
+    }
 
     suspend fun getGroupWithMembers(token: String, groupId: Int): ApiResult<Group> {
         val result = handleException({ api.getAGroup(token, groupId) }) {
@@ -24,12 +27,16 @@ class MainRepository @Inject constructor(private val api: Api) {
         result.data?.members = handleException({ api.getGroupMembers(token, groupId) }) {
             null
         }.data
+        Log.d("MainRepository", "getGroupWithMembers: " + result.data?.members)
         return result
     }
 
     suspend fun getGroups(token: String): ApiResult<Flow<List<Group>>> {
         val result = handleException({ api.getGroups(token) }) {
-            null
+            if (it == 404)
+                NO_GROUP
+            else
+                null
         }
         return when (result) {
             is ApiResult.Success -> {
@@ -38,7 +45,10 @@ class MainRepository @Inject constructor(private val api: Api) {
                 })
             }
             else -> {
-                ApiResult.Error(result.message ?: "خطا در دریافت گروه ها")
+                if (result.message == NO_GROUP)
+                    ApiResult.Success(_data = flowOf(listOf()))
+                else
+                    ApiResult.Error(result.message ?: "خطا در دریافت گروه ها")
             }
         }
     }
@@ -98,13 +108,13 @@ class MainRepository @Inject constructor(private val api: Api) {
         }
     }
 
-    suspend fun leaveGroup(token: String, groupID: Int, userID: Int): ApiResult<Any> {
+    suspend fun leaveGroup(token: String, groupID: Int): ApiResult<Any> {
         return handleException({
-            api.leaveGroup(token, groupID, userID)
+            api.leaveGroup(token, groupID)
         }) {
             if (it == 401)
-                "برای ادامه باید دوباره وارد شوید"
-                //ToDo: edit code of that and message
+                "تسویه حساب نشده است"
+
             else
                 null
         }

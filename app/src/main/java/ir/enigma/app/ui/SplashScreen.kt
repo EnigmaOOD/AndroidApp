@@ -19,6 +19,7 @@ import ir.enigma.app.R
 import ir.enigma.app.component.EasyButton
 import ir.enigma.app.component.LVSpacer
 import ir.enigma.app.data.ApiResult
+import ir.enigma.app.repostitory.UserRepository.Companion.UN_AUTHORIZE_ERROR
 import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.SpaceLarge
@@ -59,10 +60,10 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
             LaunchedEffect(Unit) {
                 authViewModel.checkForToken(context = context)
             }
-            if (loadedToken == null) {
+            if (loadedToken == null || authViewModel.state.value.message == UN_AUTHORIZE_ERROR) {
                 LaunchedEffect(key1 = Unit) {
                     delay(3000)
-                    navController.navigate(Screen.MainScreen.name) {
+                    navController.navigate(Screen.AuthScreen.name) {
                         popUpTo(Screen.SplashScreen.name) {
                             inclusive = true
                         }

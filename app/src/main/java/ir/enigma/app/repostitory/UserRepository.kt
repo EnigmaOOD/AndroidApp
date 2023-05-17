@@ -10,6 +10,11 @@ import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val api: Api) {
 
+    companion object {
+
+        const val UN_AUTHORIZE_ERROR: String =  "برای ادامه باید دوباره وارد شوید"
+    }
+
     suspend fun login(email: String, password: String): ApiResult<Token> {
 
         return handleException({
@@ -40,7 +45,7 @@ class UserRepository @Inject constructor(private val api: Api) {
             api.userInfo(token)
         }) {
             if (it == 401)
-                "برای ادامه باید دوباره وارد شوید"
+                UN_AUTHORIZE_ERROR
             else
                 null
         }
