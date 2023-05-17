@@ -9,6 +9,7 @@ import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
 import ir.enigma.app.model.UserInfo
 import ir.enigma.app.repostitory.UserRepository
+import ir.enigma.app.ui.auth.AuthViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -65,7 +66,10 @@ open class BaseViewModelTest() {
     }
 
     fun everyRegisterSuccess() {
-        coEvery { userRepository.register(any()) } returns ApiResult.Success(mockUser1)
+        coEvery { userRepository.register(any()) } returns ApiResult.Success(
+            _data = null,
+            _message = AuthViewModel.EMAIL_VERIFICATION
+        )
     }
 
     fun everyRegisterError() {

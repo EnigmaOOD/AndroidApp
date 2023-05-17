@@ -197,13 +197,13 @@ class GroupViewModelTest : BaseViewModelTest() {
     fun `leaveGroup should call mainRepository's leaveGroup and set leaveGroupState when api call is successful`() {
         //Arrange
         login()
-        coEvery { mainRepository.leaveGroup(any(), any(), any()) } returns ApiResult.Success(Unit)
+        coEvery { mainRepository.leaveGroup(any(), any()) } returns ApiResult.Success(Unit)
 
         // Act
         groupViewModel.leaveGroup(mockGroup.id)
 
         // Assert
-        coVerify { mainRepository.leaveGroup(any(), mockGroup.id, mockUser1.id) }
+        coVerify { mainRepository.leaveGroup(any(), mockGroup.id) }
         assertEquals(ApiStatus.SUCCESS, groupViewModel.leaveGroupState.value.status)
     }
 
@@ -214,7 +214,6 @@ class GroupViewModelTest : BaseViewModelTest() {
         coEvery {
             mainRepository.leaveGroup(
                 any(),
-                any(),
                 any()
             )
         } returns ApiResult.Error("no saddle up")
@@ -223,7 +222,7 @@ class GroupViewModelTest : BaseViewModelTest() {
         groupViewModel.leaveGroup(mockGroup.id)
 
         // Assert
-        coVerify { mainRepository.leaveGroup(any(), mockGroup.id, mockUser1.id) }
+        coVerify { mainRepository.leaveGroup(any(), mockGroup.id) }
         assertEquals(ApiStatus.ERROR, groupViewModel.leaveGroupState.value.status)
         assertEquals("no saddle up", groupViewModel.leaveGroupState.value.message)
     }

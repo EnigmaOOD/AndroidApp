@@ -32,24 +32,21 @@ class AuthViewModelTest : BaseViewModelTest() {
 
     // test for register, setMe and saveToken in SharedPreference
     @Test
-    fun `register should set token and user info when api result is success`() {
+    fun `register should set state to success and set message to verify email when api result is success`() {
         everyRegisterSuccess()                                                                       //Arrange
         everyLoginSuccess()
         val user = User(0, "test", name = "test", 12, "test")
 
         authViewModel.register(
-            context,
             user.name,
             user.email,
             user.iconId,
             user.password!!
         )                                                                                             //Act
-        val token = authViewModel.state.value.data?.token
+
 
         assert(authViewModel.state.value is ApiResult.Success)                                        //Assert
-        assert(token == AuthViewModel.token)
-        assert(token == "token")
-        assert(AuthViewModel.me.email == user.email)
+        assertEquals(authViewModel.state.value.message , AuthViewModel.EMAIL_VERIFICATION)
     }
 
     @Test
@@ -58,7 +55,6 @@ class AuthViewModelTest : BaseViewModelTest() {
 
         val user = User(0, "test", name = "test", 12, "test")
         authViewModel.register(
-            context,
             user.name,
             user.email,
             user.iconId,
