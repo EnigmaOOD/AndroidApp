@@ -44,7 +44,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
     }
     val state = addGroupViewModel.state.value
 
-    if (state is ApiResult.Loading)  // = if (addGroupViewModel.state.value.status == ApiStatus.LOADING)
+    if (state is ApiResult.Loading)
         Dialog(onDismissRequest = {}) {
             CircularProgressIndicator()
         }

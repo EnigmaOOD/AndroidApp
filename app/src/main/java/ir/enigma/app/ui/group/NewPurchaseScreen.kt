@@ -4,6 +4,7 @@ import InputTextField
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -135,10 +136,10 @@ fun NewPurchaseScreen(
                 },
                 apiResult = groupViewModel.newPurchaseState,
             ) { it ->
-                Box(modifier = Modifier.fillMaxSize()) {
+                Column (modifier = Modifier.fillMaxSize()) {
 
 
-                    Column(modifier = Modifier.verticalScroll(scrollState)) {
+                    Column(modifier = Modifier.verticalScroll(scrollState).weight(1f)) {
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -334,7 +335,7 @@ fun NewPurchaseScreen(
 
 
                     Row(
-                        modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                             .background(color = MaterialTheme.colors.surface)
                     ) {
 
