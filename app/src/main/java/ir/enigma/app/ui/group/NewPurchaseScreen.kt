@@ -250,8 +250,7 @@ fun NewPurchaseScreen(
                                         )
                                     }
                                 }
-
-                                if (buyersError != null && showError.value) {
+                                else if (buyersError != null && showError.value) {
                                     ErrorText(
                                         text = buyersError,
                                     )
@@ -313,9 +312,7 @@ fun NewPurchaseScreen(
                                             text = "لیست خالی می\u200Cباشد",
                                         )
                                     }
-                                }
-
-                                if (consumerError != null && showError.value) {
+                                }else if (consumerError != null && showError.value) {
                                     ErrorText(
                                         text = consumerError,
                                     )
