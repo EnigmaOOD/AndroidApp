@@ -13,6 +13,7 @@ class UserRepository @Inject constructor(private val api: Api) {
     companion object {
 
         const val UN_AUTHORIZE_ERROR: String =  "برای ادامه باید دوباره وارد شوید"
+        const val EMAIL_EXIST = "کاربری با این ایمیل وجود دارد"
     }
 
     suspend fun login(email: String, password: String): ApiResult<Token> {
@@ -33,7 +34,7 @@ class UserRepository @Inject constructor(private val api: Api) {
         }) {
 
             if (it == 400)
-                "کاربری با این ایمیل وجود دارد"
+                EMAIL_EXIST
             else
                 null
         }

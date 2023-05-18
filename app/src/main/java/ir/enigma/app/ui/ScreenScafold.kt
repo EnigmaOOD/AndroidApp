@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -57,19 +58,18 @@ fun <T : ApiResult<*>> ApiScreen(
         bottomBar,
         snackbarHost = {
             SnackbarHost(
-                modifier = Modifier.fillMaxHeight(),
                 hostState = it
             ) { snackbarData: SnackbarData ->
-                Box() {
-                    Snackbar(
-                        snackbarData = snackbarData,
-                        Modifier.align(Alignment.TopCenter),
-                        elevation = 0.dp,
-                        backgroundColor = getMessageBackgroundColor(
-                            message?.type ?: MessageType.INFO
-                        ),
-                    )
-                }
+
+                Snackbar(
+                    snackbarData = snackbarData,
+                    modifier = Modifier.testTag("snackbar"),
+                    elevation = 0.dp,
+                    backgroundColor = getMessageBackgroundColor(
+                        message?.type ?: MessageType.INFO
+                    ),
+                )
+
             }
         },
         floatingActionButton,
@@ -93,7 +93,10 @@ fun <T : ApiResult<*>> ApiScreen(
                 message.text,
                 duration = snackbarDuration
             )
-            apiResult.value = ApiResult.Error("") as T
+            if (message.type == MessageType.SUCCESS)
+                apiResult.value = ApiResult.Success(null, "") as T
+            else
+                apiResult.value = ApiResult.Error("") as T
         }
     }
 

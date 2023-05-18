@@ -71,6 +71,7 @@ fun InputTextField(
 
         KeyboardType.Password ->
             PasswordTextField(
+                modifier = modifier,
                 password = text,
                 leadingIcon = leadingIcon,
                 onValueChange = onValueChange,
@@ -158,6 +159,7 @@ fun GeneralTextField(
 
 @Composable
 fun PasswordTextField(
+    modifier: Modifier = Modifier,
     password: MutableState<String>,
     label: String,
     error: String,
@@ -173,6 +175,7 @@ fun PasswordTextField(
     val passwordVisible = remember { mutableStateOf(false) }
 
     GeneralTextField(
+        modifier = modifier,
         text = password,
         onValueChange = onValueChange,
         label = label,
@@ -210,9 +213,9 @@ fun PasswordTextField(
 
 @Composable
 fun OutlinedTextFieldValidation(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
     showError: Boolean = false,
     enabled: Boolean = true,
     readOnly: Boolean = false,

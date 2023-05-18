@@ -130,6 +130,7 @@ fun AuthForm(
             LVSpacer()
 
         InputTextField(
+            modifier = Modifier.testTag("emailTextField"),
             keyboardType = KeyboardType.Email,
             text = email,
             imeAction = ImeAction.Next,
@@ -137,6 +138,7 @@ fun AuthForm(
         )
 
         InputTextField(
+            modifier = Modifier.testTag("passwordTextField"),
             keyboardType = KeyboardType.Password,
             text = password,
             showError = showErrors.value, hasError = errors[2], imeAction = ImeAction.Done,
@@ -147,7 +149,7 @@ fun AuthForm(
         MVSpacer()
 
         LoadingButton(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag("submitButton"),
             onClick = submit,
             actionText = title,
             loading = loading
@@ -160,6 +162,7 @@ fun AuthForm(
         ) {
             HintText(changeScreenText)
             TextButton(
+                modifier = Modifier.testTag("loginToggle"),
                 contentPadding = PaddingValues(SpaceThin),
                 onClick = {
                     showErrors.value = false
