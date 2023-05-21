@@ -189,7 +189,8 @@ fun AvatarSelectorDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.surface),
+                    .background(MaterialTheme.colors.surface)
+                    .testTag("characterDialog"),
                 horizontalAlignment = Alignment.CenterHorizontally,
 
                 ) {
@@ -219,6 +220,7 @@ fun AvatarSelectorDialog(
                                     shape = CircleShape,
                                     width = BorderThin
                                 )
+                                .testTag("charactersList")
                         )
                     }
                 }
