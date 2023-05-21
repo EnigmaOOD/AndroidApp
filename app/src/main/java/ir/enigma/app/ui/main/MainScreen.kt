@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -69,7 +70,7 @@ fun MainScreen(
             Card(elevation = 0.dp, shape = RectangleShape) {
                 MainTopBar(
                     Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth().testTag("MainTopBar")
                         .padding(horizontal = SpaceLarge, vertical = SpaceMedium),
                 ){
                     navController.navigate(Screen.EditProfileScreen.name)

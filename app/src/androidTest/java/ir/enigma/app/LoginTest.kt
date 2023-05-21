@@ -8,12 +8,18 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import ir.enigma.app.component.RtlThemePreview
 import ir.enigma.app.data.ApiResult
+import ir.enigma.app.model.Group
+import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
+import ir.enigma.app.model.UserInfo
+import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.repostitory.UserRepository.Companion.EMAIL_EXIST
 import ir.enigma.app.ui.auth.AuthScreen
 import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.EMAIL_VERIFICATION
+import ir.enigma.app.ui.navigation.Screen
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -26,6 +32,7 @@ class AuthTest {
     val composeTestRule = createComposeRule()
 
     lateinit var userRepository: UserRepository
+    lateinit var mainRepository: MainRepository
 
     // define all local Semantic nodes in testRegisterAndLogin here
     lateinit var tfName: SemanticsNodeInteraction
@@ -41,13 +48,17 @@ class AuthTest {
 
     @Before
     fun setUp() {
-        // Arrange
+        // Arrange of all tests in this class
         userRepository = mockk()
+        mainRepository = mockk()
+
         composeTestRule.setContent {
-            val navController = rememberNavController()
-            val authViewModel = AuthViewModel(userRepository)
             RtlThemePreview {
-                AuthScreen(navController = navController, authViewModel)
+                TestNavHost(
+                    mockMainRepository = mainRepository,
+                    mockUserRepository = userRepository,
+                    startDestination = Screen.AuthScreen.name
+                )
             }
         }
         tfName = composeTestRule.onNodeWithTag("nameTextField").onChildren()[0]
@@ -64,24 +75,16 @@ class AuthTest {
     @Test
     fun register_should_display_errors_when_empty_fields() {
 
-
         //Act: click on submit button when text fields are empty
-        btnSubmit.assertIsDisplayed()
-            .assertHasClickAction()
-            .performClick()
+        btnSubmit.performClick()
 
         //Assert: errors should be displayed
         tfNameError.assertTextEquals("نام و نام خانوادگی نمی\u200Cتواند خالی باشد")
         tfPasswordError.assertTextEquals("رمز عبور باید حداقل ۸ کاراکتر باشد")
         tfEmailError.assertTextEquals("فرمت ایمیل صحیح نیست")
 
-
     }
 
-    companion object {
-        val mockUser1 = User(1, "test", "test", 2)
-        val mockUser2 = User(2, "test2", "test2", 5)
-    }
 
     @Test
     fun register_should_invisible_all_displayed_errors_when_valid_inputs() {
@@ -116,15 +119,15 @@ class AuthTest {
         //Test for register
         //Arrange: mock api error result
         coEvery { userRepository.register(any()) } returns ApiResult.Error(EMAIL_EXIST)
-        setInputFields()
 
 
         //Act: click on submit button should show EMAIL_VERIFICATION snackbar when api result is success
+        setInputFields()
         btnSubmit.performClick()
 
         //Assert: EMAIL_EXIST Error snackbar should be displayed
         snackbar.assertIsDisplayed()
-        composeTestRule.onNodeWithText(EMAIL_EXIST)
+        composeTestRule.onNodeWithText(EMAIL_EXIST).assertIsDisplayed()
 
     }
 
@@ -132,9 +135,9 @@ class AuthTest {
     fun register_should_show_email_verification_snackbar_when_valid_input_fields_and_api_result_is_success() {
         //Arrange: mock api success result
         coEvery { userRepository.register(any()) } returns ApiResult.Success(mockUser1)
-        setInputFields()
 
         //Act: click on submit button should show EMAIL_VERIFICATION snackbar when api result is success
+        setInputFields()
         btnSubmit.performClick()
 
         //Assert: EMAIL_VERIFICATION snackbar should be displayed
@@ -142,13 +145,34 @@ class AuthTest {
         composeTestRule.onNodeWithText(EMAIL_VERIFICATION).assertIsDisplayed()
     }
 
+    @Test
+    fun login_should_navigate_to_main_when_valid_input_fields_and_api_result_is_success() {
+        //Arrange: mock api success result
+        coEvery { userRepository.login(any(), any()) } returns ApiResult.Success(Token("token"))
+        coEvery { userRepository.getUserInfo(any()) } returns ApiResult.Success(UserInfo(mockUser1))
+        coEvery { mainRepository.getGroups(any()) } returns ApiResult.Success(flowOf(emptyList()))
 
 
+
+        //Act: click on submit button should navigate to main when api result is success
+        setInputFields()
+        btnLoginToggle.performClick()
+        btnSubmit.performClick()
+
+        //Assert: main screen should be displayed
+        composeTestRule.onNodeWithTag("MainTopBar").assertIsDisplayed()
+    }
 
     //---------------------------------------------------------------------------tools
     private fun setInputFields() {
         tfName.performTextInput("test")
         tfEmail.performTextInput("a@a.com")
         tfPassword.performTextInput("12345678")
+    }
+
+
+    companion object {
+        val mockUser1 = User(1, "test", "test", 2)
+        val mockUser2 = User(2, "test2", "test2", 5)
     }
 }
