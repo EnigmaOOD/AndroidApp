@@ -54,6 +54,7 @@ fun MainScreen(
             }) {
 
                 CardWithImageOrIcon(
+                    modifier = Modifier.testTag("addGroupButton"),
                     icon = true,
                     resource = R.drawable.ic_fill_add,
                     size = 50.dp,
@@ -100,7 +101,7 @@ fun MainScreen(
                         ) {
                             itemsIndexed(groups) { index, item ->
                                 GroupItem(
-                                    modifier = Modifier.clickable {
+                                    modifier = Modifier.testTag("group").clickable {
                                         navController.navigate(Screen.GroupScreen.name + "/${item.id}")
                                     },
                                     group = item,

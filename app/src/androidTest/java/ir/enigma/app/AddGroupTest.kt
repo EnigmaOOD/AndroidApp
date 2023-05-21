@@ -14,32 +14,23 @@ class AddGroupTest : BaseUiTest(Screen.AddGroupScreen.name) {
     // define all local Semantic nodes in testRegisterAndLogin here
     lateinit var tfGrpName: SemanticsNodeInteraction
     lateinit var tfGrpNameError: SemanticsNodeInteraction
-
     lateinit var tfGrpCurrency: SemanticsNodeInteraction
     lateinit var tfGrpCurrencyError: SemanticsNodeInteraction
-
     lateinit var btnAddEmailField: SemanticsNodeInteraction
-
     lateinit var btnAddGroupButton: SemanticsNodeInteraction
 
     @Before
     override fun setUp() {
         // Arrange of all tests in this class
         super.setUp()
-
         initMeAndToken()
-
         coEvery { mainRepository.createGroup(any(), any()) } returns ApiResult.Success(Unit)
-
         setComposeTestRule()
         tfGrpName = composeTestRule.onNodeWithTag("groupNameTextField").onChildren()[0]
         tfGrpNameError = tfGrpName.onSibling()
-
         tfGrpCurrency = composeTestRule.onNodeWithTag("groupCurrencyTextField").onChildren()[0]
         tfGrpCurrencyError = tfGrpCurrency.onSibling()
-
         btnAddEmailField = composeTestRule.onNodeWithTag("addEmailField")
-
         btnAddGroupButton = composeTestRule.onNodeWithTag("addGroupButton")
     }
 
@@ -63,7 +54,6 @@ class AddGroupTest : BaseUiTest(Screen.AddGroupScreen.name) {
         //Act: click on add button while there is no email field
         btnAddEmailField.performClick()
 
-
         //Assert: new email field should be display and equal to "one"
         composeTestRule.onAllNodesWithTag("emailField").assertCountEquals(1)
 
@@ -77,7 +67,6 @@ class AddGroupTest : BaseUiTest(Screen.AddGroupScreen.name) {
         tfGrpCurrency.performTextInput("currencyTest")
         btnAddEmailField.performClick()
         composeTestRule.onAllNodesWithTag("emailField")[0].performTextInput("test@gmail.com")
-
         btnAddGroupButton.performClick()
 
         //Assert: errors should be displayed

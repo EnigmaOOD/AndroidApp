@@ -56,7 +56,7 @@ fun LogoAndAppName(onClickAvatar: () -> Unit) {
             color = MaterialTheme.colors.primary
         )
         Card(
-            modifier = Modifier.size(IconLarge),
+            modifier = Modifier.size(IconLarge).testTag("profileCharacterCard"),
             elevation = ElevationSmall,
             shape = CircleShape
         ) {
