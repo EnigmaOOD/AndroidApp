@@ -52,7 +52,7 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
     }
 
     @Test
-    fun register_should_display_errors_when_empty_fields() {
+    fun authScreen_register_should_display_errors_when_empty_fields() {
 
         //Act: click on submit button when text fields are empty
         btnSubmit.performClick()
@@ -66,7 +66,7 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
 
 
     @Test
-    fun register_should_invisible_all_displayed_errors_when_valid_inputs() {
+    fun authScreen_register_should_invisible_all_displayed_errors_when_valid_inputs() {
         //Arrange: click on submit button when fields is empty to show errors
         btnSubmit.performClick()
 
@@ -80,7 +80,7 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
     }
 
     @Test
-    fun toggle_register_to_login_should_set_page_to_login_state() {
+    fun authScreen_toggle_register_to_login_should_set_page_to_login_state() {
         // Test for register text
         //Assert: text should be register first
         btnSubmit.assertTextEquals("ثبت\u200Cنام")
@@ -94,7 +94,7 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
     }
 
     @Test
-    fun register_should_show_error_snackbar_when_valid_input_fields_and_api_result_is_error() {
+    fun authScreen_register_should_show_error_snackbar_when_valid_input_fields_and_api_result_is_error() {
         //Test for register
         //Arrange: mock api error result
         coEvery { userRepository.register(any()) } returns ApiResult.Error(EMAIL_EXIST)
@@ -111,7 +111,7 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
     }
 
     @Test
-    fun register_should_show_email_verification_snackbar_when_valid_input_fields_and_api_result_is_success() {
+    fun authScreen_register_should_show_email_verification_snackbar_when_valid_input_fields_and_api_result_is_success() {
         //Arrange: mock api success result
         coEvery { userRepository.register(any()) } returns ApiResult.Success(mockUser1)
 
@@ -125,7 +125,7 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
     }
 
     @Test
-    fun login_should_navigate_to_main_when_valid_input_fields_and_api_result_is_success() {
+    fun authScreen_login_should_navigate_to_main_when_valid_input_fields_and_api_result_is_success() {
         //Arrange: mock api success result
         coEvery { userRepository.login(any(), any()) } returns ApiResult.Success(Token("token"))
         coEvery { userRepository.getUserInfo(any()) } returns ApiResult.Success(UserInfo(mockUser1))

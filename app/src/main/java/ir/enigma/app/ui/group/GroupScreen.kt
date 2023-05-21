@@ -99,7 +99,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
         apiResult = groupViewModel.state,
         topBar = {
             TopAppBar(
-                modifier = Modifier.clickable(
+                modifier = Modifier.testTag("topAppBar").clickable(
                     interactionSource = interactionSource,
                     indication = null
                 ) {
@@ -152,7 +152,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                         SVSpacer()
                         PurchaseCard(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth().testTag("purchaseCard")
                                 .padding(horizontal = SpaceMedium),
                             thisPurchase,
                             me,
@@ -204,9 +204,10 @@ fun GroupProfile(group: Group) {
 fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String, onDismiss: () -> Unit) {
     val category = PurchaseCategory.values()[purchase.purchaseCategoryIndex]
     Dialog(
+
         onDismissRequest = onDismiss,
     ) {
-        Card {
+        Card() {
             Column(modifier = Modifier.padding(SpaceLarge)) {
                 SVSpacer()
                 Row(
@@ -224,6 +225,7 @@ fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String, onDismiss: (
                             MyContribution(me, purchase)
                         }
                         TextBody2(
+                            modifier = Modifier.testTag("purchaseTotalPrice"),
                             text = "قیمت کل:  " + purchase.totalPrice.toPrice(currency),
                         )
                     }

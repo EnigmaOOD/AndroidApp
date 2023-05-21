@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -113,10 +114,11 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
 
                         val meItem = groupViewModel.meMember
 //                    Divider(startIndent = 55.dp)
-                        LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
+                        LazyColumn(modifier = Modifier.padding(top = 10.dp).testTag("membersLazyColumn")) {
                             if (meItem != null) {
                                 item {
                                     UserItem(
+                                        modifier = Modifier.testTag("userItem"),
                                         user = me,
                                         trueVar = true,
                                         isMe = true,
@@ -133,6 +135,7 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                             itemsIndexed(members) { index, item ->
                                 if (item.user != me) {
                                     UserItem(
+                                        modifier = Modifier.testTag("userItem"),
                                         user = item.user,
                                         trueVar = true,
                                         amount = item.cost,
