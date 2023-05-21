@@ -3,6 +3,8 @@ package ir.enigma.app
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,13 +22,14 @@ import ir.enigma.app.ui.main.MainScreen
 import ir.enigma.app.ui.main.MainViewModel
 import ir.enigma.app.ui.navigation.Screen
 
+
 @Composable
 fun TestNavHost(
+    navController: NavHostController,
     mockMainRepository: MainRepository,
     mockUserRepository: UserRepository,
     startDestination: String = Screen.SplashScreen.name
 ) {
-    val navController = rememberNavController()
     val groupViewModel = GroupViewModel(mockMainRepository)
     val authViewModel = AuthViewModel(mockUserRepository)
     val mainViewModel = MainViewModel(mockMainRepository)

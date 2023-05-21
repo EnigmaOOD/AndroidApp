@@ -8,12 +8,14 @@ import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.model.Token
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.ui.navigation.Screen
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-class EditProfileTest : BaseUiTest(Screen.EditProfileScreen.name) {
+class EditProfileTest : BaseUiTest(Screen.MainScreen.name) {
 
     // define all local Semantic nodes in testRegisterAndLogin here
     lateinit var tfName: SemanticsNodeInteraction
@@ -26,8 +28,10 @@ class EditProfileTest : BaseUiTest(Screen.EditProfileScreen.name) {
     override fun setUp() {
         // Arrange of all tests in this class
         super.setUp()
+        coEvery { mainRepository.getGroups(any()) } returns ApiResult.Success(flowOf(emptyList()))
         initMeAndToken()
         setComposeTestRule()
+        composeTestRule.onNodeWithTag("User Avatar").performClick()
         tfName = composeTestRule.onNodeWithTag("nameTextField").onChildren()[0]
         btnEdit = composeTestRule.onNodeWithTag("editButton")
         btnExit = composeTestRule.onNodeWithTag("exitButton")
@@ -55,10 +59,10 @@ class EditProfileTest : BaseUiTest(Screen.EditProfileScreen.name) {
         tfName.performTextInput("editTestName")
         btnEdit.performClick()
 
-        //Assert: error should be empty and navigate to main screen
+
+        //Assert:  pop back stack
         composeTestRule.onNodeWithTag("MainTopBar").assertIsDisplayed()
 
-        //ToDo: it is not work and have bug: io.mockk.MockKException: Failed matching mocking signature for left matchers: [any(), any(), any()]
 
     }
 

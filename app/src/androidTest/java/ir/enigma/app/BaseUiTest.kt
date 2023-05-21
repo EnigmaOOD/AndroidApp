@@ -1,6 +1,9 @@
 package ir.enigma.app
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import io.mockk.mockk
 import ir.enigma.app.component.RtlThemePreview
 import ir.enigma.app.model.*
@@ -15,6 +18,7 @@ abstract class BaseUiTest(val startDestination: String) {
     @get:Rule(order = 0)
     val composeTestRule = createComposeRule()
 
+    lateinit var navController: NavHostController
     lateinit var userRepository: UserRepository
     lateinit var mainRepository: MainRepository
 
@@ -32,8 +36,10 @@ abstract class BaseUiTest(val startDestination: String) {
 
     fun setComposeTestRule() {
         composeTestRule.setContent {
+            navController = rememberNavController()
             RtlThemePreview {
                 TestNavHost(
+                    navController = navController,
                     mockMainRepository = mainRepository,
                     mockUserRepository = userRepository,
                     startDestination = startDestination
