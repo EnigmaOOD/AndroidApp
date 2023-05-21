@@ -149,8 +149,4 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
     }
 
 
-    companion object {
-        val mockUser1 = User(1, "test", "test", 2)
-        val mockUser2 = User(2, "test2", "test2", 5)
-    }
 }

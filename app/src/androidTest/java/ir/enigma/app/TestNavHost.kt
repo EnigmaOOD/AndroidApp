@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ir.enigma.app.model.User
 import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.ui.SplashScreen
@@ -72,4 +73,8 @@ fun TestNavHost(
         }
 
     }
+
+
+
 }
+

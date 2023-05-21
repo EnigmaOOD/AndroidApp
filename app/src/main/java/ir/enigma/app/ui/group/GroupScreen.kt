@@ -15,6 +15,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -143,7 +144,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                 ShimmerColumn(count = 20, circleSize = IconLarge)
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().weight(1f),
+                    modifier = Modifier.fillMaxSize().weight(1f).testTag("purchaseLazyColumn"),
                     reverseLayout = reverse,
                     state = lazyState
                 ) {
