@@ -21,18 +21,17 @@ abstract class BaseUiTest(val startDestination: String) {
         userRepository = mockk()
         mainRepository = mockk()
 
-        userRepository = mockk()
-        mainRepository = mockk()
+    }
 
+    fun setComposeTestRule() {
         composeTestRule.setContent {
             RtlThemePreview {
                 TestNavHost(
                     mockMainRepository = mainRepository,
                     mockUserRepository = userRepository,
-                    startDestination = Screen.AuthScreen.name
+                    startDestination = startDestination
                 )
             }
         }
-
     }
 }

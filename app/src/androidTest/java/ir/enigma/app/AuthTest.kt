@@ -39,6 +39,7 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
     override fun setUp() {
         // Arrange of all tests in this class
         super.setUp()
+        setComposeTestRule()
         tfName = composeTestRule.onNodeWithTag("nameTextField").onChildren()[0]
         tfNameError = tfName.onSibling()
         tfEmail = composeTestRule.onNodeWithTag("emailTextField").onChildren()[0]
@@ -129,7 +130,6 @@ class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
         coEvery { userRepository.login(any(), any()) } returns ApiResult.Success(Token("token"))
         coEvery { userRepository.getUserInfo(any()) } returns ApiResult.Success(UserInfo(mockUser1))
         coEvery { mainRepository.getGroups(any()) } returns ApiResult.Success(flowOf(emptyList()))
-
 
 
         //Act: click on submit button should navigate to main when api result is success
