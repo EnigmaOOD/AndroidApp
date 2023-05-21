@@ -2,21 +2,17 @@ package ir.enigma.app
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mockk.coEvery
 import io.mockk.mockk
 import ir.enigma.app.component.RtlThemePreview
 import ir.enigma.app.data.ApiResult
-import ir.enigma.app.model.Group
 import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
 import ir.enigma.app.model.UserInfo
 import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.repostitory.UserRepository.Companion.EMAIL_EXIST
-import ir.enigma.app.ui.auth.AuthScreen
-import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.EMAIL_VERIFICATION
 import ir.enigma.app.ui.navigation.Screen
 import kotlinx.coroutines.flow.flowOf
@@ -25,14 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
-class AuthTest {
-
-
-    @get:Rule(order = 0)
-    val composeTestRule = createComposeRule()
-
-    lateinit var userRepository: UserRepository
-    lateinit var mainRepository: MainRepository
+class AuthTest : BaseUiTest(Screen.AuthScreen.name) {
 
     // define all local Semantic nodes in testRegisterAndLogin here
     lateinit var tfName: SemanticsNodeInteraction
@@ -47,20 +36,9 @@ class AuthTest {
 
 
     @Before
-    fun setUp() {
+    override fun setUp() {
         // Arrange of all tests in this class
-        userRepository = mockk()
-        mainRepository = mockk()
-
-        composeTestRule.setContent {
-            RtlThemePreview {
-                TestNavHost(
-                    mockMainRepository = mainRepository,
-                    mockUserRepository = userRepository,
-                    startDestination = Screen.AuthScreen.name
-                )
-            }
-        }
+        super.setUp()
         tfName = composeTestRule.onNodeWithTag("nameTextField").onChildren()[0]
         tfNameError = tfName.onSibling()
         tfEmail = composeTestRule.onNodeWithTag("emailTextField").onChildren()[0]
