@@ -28,6 +28,8 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
     val currency = remember { mutableStateOf("") }
     var selectedIndex = remember { mutableStateOf(0) }
 
+    var showErrors = remember { mutableStateOf(false) }
+
     val grpCategoriesName = GroupCategory.values().map {
         it.text
     }
@@ -89,12 +91,22 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                         TextH6(text = "اطلاعات گروه")
                         TVSpacer()
                         InputTextField(
+                            modifier = Modifier.testTag("groupNameTextField"),
                             text = grpName,
                             label = "نام گروه",
+                            hasError = grpName.value.isEmpty(),
+                            error = "نام گروه نمی\u200Cتواند خالی باشد",
+                            showError = showErrors.value,
+                            onValueChange = { grpName.value = it }
                         )
                         InputTextField(
+                            modifier = Modifier.testTag("groupCurrencyTextField"),
                             text = currency,
                             label = "واحد پول",
+                            hasError = currency.value.isEmpty(),
+                            error = "واحد پول نمی\u200Cتواند خالی باشد",
+                            showError = showErrors.value,
+                            onValueChange = { currency.value = it }
                         )
 
                         MVSpacer()
@@ -124,6 +136,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
 
                         for (member in members) {
                             InputTextField(
+                                modifier = Modifier.testTag("emailField"),
                                 text = member,
                                 label = "ایمیل عضو جدید",
                                 keyboardType = KeyboardType.Email,
@@ -131,7 +144,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                             )
                         }
 
-                        AddOutlinedButton {
+                        AddOutlinedButton(modifier = Modifier.testTag("addEmailField")) {
                             members.add(mutableStateOf(""))
                         }
                     }
@@ -141,15 +154,18 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-                    .testTag("OkButton"),
+                    .testTag("addGroupButton"),
                 onClick = {
+                    showErrors.value = true
                     val newGroup = AddGroupRequest(
                         name = grpName.value,
                         currency = currency.value,
                         emails = members.map { mutableState -> mutableState.value },
                         picture_id = selectedIndex.value
                     )
-                    addGroupViewModel.createGroup(newGroup)
+                    if (grpName.value.isNotEmpty() && currency.value.isNotEmpty()) {
+                        addGroupViewModel.createGroup(newGroup)
+                    }
 
                 },
                 text = "تایید"

@@ -50,7 +50,7 @@ class EditProfileTest : BaseUiTest(Screen.MainScreen.name) {
     }
 
     @Test
-    fun edit_name_field_when_change_name_field() {
+    fun edit_screen_should_navigate_to_main_and_change_name_field_when_edit_name_and_api_result_is_success() {
 
         //Arrange: mock api success result
         coEvery { userRepository.editProfile(any(), any(), any()) } returns ApiResult.Success(Unit)
@@ -59,10 +59,8 @@ class EditProfileTest : BaseUiTest(Screen.MainScreen.name) {
         tfName.performTextInput("editTestName")
         btnEdit.performClick()
 
-
-        //Assert:  pop back stack
+        //Assert: pop back stack
         composeTestRule.onNodeWithTag("MainTopBar").assertIsDisplayed()
-
 
     }
 
@@ -78,13 +76,13 @@ class EditProfileTest : BaseUiTest(Screen.MainScreen.name) {
     }
 
     @Test
-    fun click_on_character_card_and_change_character_and_should_changed_character() {
+    fun click_on_one_character_in_dialog_and_dialog_should_close() {
 
-        //Act: click on character card
+        //Act: click on character card and one of the characters in dialog
         characterCard.performClick()
         composeTestRule.onAllNodesWithTag("charactersList")[5].performClick()
 
-        //Assert: character dialog should be displayed
+        //Assert: character dialog should be closed and not exist
         composeTestRule.onNodeWithTag("characterDialog").assertDoesNotExist()
 
     }
@@ -92,10 +90,10 @@ class EditProfileTest : BaseUiTest(Screen.MainScreen.name) {
     @Test
     fun exit_account_should_be_success_and_navigate_to_login_screen() {
 
-        //Act: empty value of edit text field
+        //Act: click on exit button
         btnExit.performClick()
 
-        //Assert: error should be equal to suitable text
+        //Assert: exit account and navigate to login screen
         composeTestRule.onNodeWithTag("loginToggle").assertIsDisplayed()
 
     }
