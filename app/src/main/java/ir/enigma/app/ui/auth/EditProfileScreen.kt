@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
@@ -83,6 +84,7 @@ fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CardWithImageOrIcon(
+                        modifier = Modifier.testTag("characterCard"),
                         icon = false,
                         resource = userAvatars[iconId.value],
                         size = IconExtraLarge
@@ -99,15 +101,20 @@ fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel
                 TextBody1(text = "ایمیل شما: ${me.email}")
                 LVSpacer()
                 InputTextField(
+                    modifier = Modifier.testTag("nameTextField"),
                     text = name,
                     label = "نام و نام خانوادگی",
+                    showError =true,
+                    hasError = name.value.isEmpty(),
+                    error = "نام و نام خانوادگی نمی\u200Cتواند خالی باشد",
                     onValueChange = { name.value = it }
                 )
 
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, top = 20.dp),
+                        .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                        .testTag("exitButton"),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
                     onClick = {
                         authViewModel.logout(context)
@@ -127,9 +134,12 @@ fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel
             EasyButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
+                    .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                    .testTag("editButton"),
                 onClick = {
-                    authViewModel.editProfile(name.value, iconId.value)
+                    if (name.value.isNotEmpty()){
+                        authViewModel.editProfile(name.value, iconId.value)
+                    }
                 },
                 text = "تایید"
             )
