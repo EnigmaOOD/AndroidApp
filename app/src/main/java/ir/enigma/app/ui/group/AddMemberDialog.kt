@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,10 @@ fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (Str
     val email = remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = { onDismiss() }) {
-        Card(elevation = 8.dp) {
+        Card(
+            modifier = Modifier.testTag("addMemberDialog"),
+            elevation = 8.dp
+        ) {
             Column(
                 Modifier
                     .background(MaterialTheme.colors.surface)
@@ -34,6 +38,7 @@ fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (Str
                 )
 
                 InputTextField(
+                    modifier = Modifier.testTag("addMemberEmail"),
                     text = email,
                     keyboardType = KeyboardType.Email,
                     error = state.message ?: "",
@@ -43,7 +48,7 @@ fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (Str
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier.testTag("addMemberCancel").fillMaxWidth().weight(1f),
                         onClick = { onDismiss() },
                     ) {
                         Text(
@@ -52,7 +57,7 @@ fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (Str
                     }
                     SHSpacer()
                     LoadingButton(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier.fillMaxWidth().weight(1f).testTag("addMemberConfirm"),
                         onClick = {
                             onAction(email.value)
                         },

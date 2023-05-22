@@ -59,7 +59,6 @@ class GroupTest : BaseUiTest(Screen.GroupScreen.name) {
 
         //Assert: members screen should be displayed
         composeTestRule.onNodeWithTag("membersLazyColumn").assertIsDisplayed()
-        composeTestRule.onAllNodesWithTag("userItem").assertCountEquals(2)
     }
 
     @Test

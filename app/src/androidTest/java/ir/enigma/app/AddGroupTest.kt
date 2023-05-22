@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Test
 
-class AddGroupTest : BaseUiTest(Screen.AddGroupScreen.name) {
+class AddGroupTest : BaseUiTest(Screen.MainScreen.name) {
     // define all local Semantic nodes in testRegisterAndLogin here
     lateinit var tfGrpName: SemanticsNodeInteraction
     lateinit var tfGrpNameError: SemanticsNodeInteraction
@@ -24,8 +24,10 @@ class AddGroupTest : BaseUiTest(Screen.AddGroupScreen.name) {
         // Arrange of all tests in this class
         super.setUp()
         initMeAndToken()
+        coEvery { mainRepository.getGroups(any()) } returns ApiResult.Success(flowOf(emptyList()))
         coEvery { mainRepository.createGroup(any(), any()) } returns ApiResult.Success(Unit)
         setComposeTestRule()
+        composeTestRule.onNodeWithTag("addGroupButton").performClick()
         tfGrpName = composeTestRule.onNodeWithTag("groupNameTextField").onChildren()[0]
         tfGrpNameError = tfGrpName.onSibling()
         tfGrpCurrency = composeTestRule.onNodeWithTag("groupCurrencyTextField").onChildren()[0]
@@ -66,13 +68,11 @@ class AddGroupTest : BaseUiTest(Screen.AddGroupScreen.name) {
         tfGrpName.performTextInput("nameTest")
         tfGrpCurrency.performTextInput("currencyTest")
         btnAddEmailField.performClick()
-        composeTestRule.onAllNodesWithTag("emailField")[0].performTextInput("test@gmail.com")
+        composeTestRule.onAllNodesWithTag("emailField")[0].onChildren()[0].performTextInput("test@gmail.com")
         btnAddGroupButton.performClick()
 
-        //Assert: errors should be displayed
-        tfGrpNameError.assertTextEquals("")
-        tfGrpCurrencyError.assertTextEquals("")
-        btnAddGroupButton.assertDoesNotExist()
+        //Assert: navigate to main
+        composeTestRule.onNodeWithTag("MainTopBar").assertIsDisplayed()
 
     }
 

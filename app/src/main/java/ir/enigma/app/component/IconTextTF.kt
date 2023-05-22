@@ -6,6 +6,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import ir.enigma.app.R
 import ir.enigma.app.ui.theme.IconVerySmall
@@ -30,6 +31,7 @@ fun IconText(
             )
             THSpacer()
             HintText(
+                modifier = Modifier.testTag("deptOrCreditAmount"),
                 text = "${amount.toPrice()} $currency", color = MaterialTheme.colors.secondary
             )
         }
@@ -45,6 +47,7 @@ fun IconText(
             )
             THSpacer()
             HintText(
+                modifier = Modifier.testTag("deptOrCreditAmount"),
                 text = "${amount.toPrice()} $currency", color = MaterialTheme.colors.error
             )
         }

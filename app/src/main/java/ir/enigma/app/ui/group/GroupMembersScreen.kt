@@ -42,9 +42,9 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
         groupViewModel.newMemberReset()
     }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         val _group = groupViewModel.state.value.data
-        if(_group != null) {
+        if (_group != null) {
             groupViewModel.fetchGroupData(_group.id)
         }
     }
@@ -52,7 +52,7 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
 
     ApiScreen(backgroundColor = MaterialTheme.colors.primary, apiResult = groupViewModel.state) {
         val group = groupViewModel.state.value.data
-        if(group != null) {
+        if (group != null) {
 
             val members = group.members!!
 
@@ -79,10 +79,19 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
 
                     SHSpacer()
                     Column(modifier = Modifier.weight(1f)) {
-                        TextH6(group.name, color = MaterialTheme.colors.onPrimary)
+                        TextH6(
+                            modifier = Modifier.testTag("groupName"),
+                            text = group.name, color = MaterialTheme.colors.onPrimary
+                        )
                         if (group.members != null)
-                            OnPrimaryHint(group.members!!.size.toString() + " عضو")
-                        OnPrimaryHint("واحد پولی: " + group.currency)
+                            OnPrimaryHint(
+                                modifier = Modifier.testTag("groupMembersCount"),
+                                text = group.members!!.size.toString() + " عضو"
+                            )
+                        OnPrimaryHint(
+                            modifier = Modifier.testTag("groupCurrency"),
+                            text = "واحد پولی: " + group.currency
+                        )
                     }
                 }
 
@@ -97,9 +106,11 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                             vertical = SpaceSmall
                         )
                     ) {
-                        TextButton(onClick = {
-                            addMemberDialog.value = true
-                        }) {
+                        TextButton(
+                            modifier = Modifier.testTag("addMemberButton"),
+                            onClick = {
+                                addMemberDialog.value = true
+                            }) {
                             Icon(
                                 modifier = Modifier.size(IconSmall),
                                 painter = painterResource(id = R.drawable.ic_profile_add),
@@ -114,7 +125,9 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
 
                         val meItem = groupViewModel.meMember
 //                    Divider(startIndent = 55.dp)
-                        LazyColumn(modifier = Modifier.padding(top = 10.dp).testTag("membersLazyColumn")) {
+                        LazyColumn(
+                            modifier = Modifier.padding(top = 10.dp).testTag("membersLazyColumn")
+                        ) {
                             if (meItem != null) {
                                 item {
                                     UserItem(
@@ -152,8 +165,11 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
                     }
                 }
             }
-        }else{
-            Box(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colors.background))
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .background(color = MaterialTheme.colors.background)
+            )
         }
     }
 
