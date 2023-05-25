@@ -114,16 +114,25 @@ class MainRepository @Inject constructor(private val api: Api) {
         }) {
             if (it == 401)
                 "تسویه حساب نشده است"
-
             else
                 null
         }
     }
 
-    suspend fun getGroupToAmount(token: String, groupId: Int, userID: Int): ApiResult<Double> {
-        return handleException({ api.getGroupDebtAndCredit(token, groupId, userID) }) {
+    suspend fun getGroupToAmount(token: String, groupId: Int, userID: Int): ApiResult<Double?> {
+        val result = handleException({ api.getGroupMembers(token, groupId) }) {
             null
         }
+
+        if (result.data != null) {
+            result.data.forEach {
+                if (it.user.id == userID) {
+                    return ApiResult.Success(it.cost)
+                }
+            }
+
+        }
+        return ApiResult.Error("")
 
     }
 
