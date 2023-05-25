@@ -36,7 +36,7 @@ class MainTest : BaseUiTest(Screen.MainScreen.name) {
         profileCharacterCard.performClick()
 
         //Assert: navigate to editProfile screen
-        composeTestRule.onNodeWithTag("MainTopBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("editButton").assertIsDisplayed()
 
     }
 
@@ -47,17 +47,17 @@ class MainTest : BaseUiTest(Screen.MainScreen.name) {
         btnAddGroup.performClick()
 
         //Assert: navigate to addGroup screen
-        composeTestRule.onNodeWithTag("MainTopBar").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("addGroupButton").assertIsDisplayed()
 
     }
 
     @Test
     fun number_of_groups_on_screen_should_be_equal_to_number_of_mock_groups() {
 
-        //Act: click on add group button
-
         //Assert: navigate to addGroup screen
         composeTestRule.onAllNodesWithTag("group").assertCountEquals(1)
-        //Todo: need edit
+        composeTestRule.onNodeWithTag("groupName", useUnmergedTree = true).assertExists(mockGroup.name)
+        composeTestRule.onNodeWithTag("groupCurrency", useUnmergedTree = true).assertExists(mockGroup.currency)
+
     }
 }

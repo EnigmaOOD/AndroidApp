@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.component.*
 import ir.enigma.app.model.Group
@@ -37,9 +38,8 @@ fun GroupItem(
                 .padding(start = 12.dp)
                 .weight(1f)
         ) {
-            TextBody2(text = group.name)
-            HintText(text = "واحد: ${group.currency}")
-//TODO : Show Something!!!
+            TextBody2(modifier = Modifier.testTag("groupName"), text = group.name)
+            HintText(modifier = Modifier.testTag("groupCurrency"),text = "واحد: ${group.currency}")
         }
 
         if (amount != null)

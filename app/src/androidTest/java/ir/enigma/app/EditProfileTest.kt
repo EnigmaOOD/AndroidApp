@@ -2,16 +2,9 @@ package ir.enigma.app
 
 import androidx.compose.ui.test.*
 import io.mockk.coEvery
-import io.mockk.mockk
 import ir.enigma.app.data.ApiResult
-import ir.enigma.app.data.ApiStatus
-import ir.enigma.app.model.Token
-import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.ui.navigation.Screen
-import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
@@ -19,7 +12,6 @@ class EditProfileTest : BaseUiTest(Screen.MainScreen.name) {
 
     // define all local Semantic nodes in testRegisterAndLogin here
     lateinit var tfName: SemanticsNodeInteraction
-    lateinit var tfNameError: SemanticsNodeInteraction
     lateinit var btnEdit: SemanticsNodeInteraction
     lateinit var btnExit: SemanticsNodeInteraction
     lateinit var characterCard: SemanticsNodeInteraction

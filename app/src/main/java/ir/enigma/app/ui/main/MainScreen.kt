@@ -90,7 +90,8 @@ fun MainScreen(
                     } else if (groups.isEmpty()) {
                         MVSpacer()
                         HintText(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth()
+                                .testTag("noGroups"),
                             text = "گروهی عضو نیستید. برای افزودن + را کلیک کنید",
                             textAlign = TextAlign.Center,
                         )
