@@ -57,11 +57,11 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                     groupId = it.id,
                     userID = me.id
                 )
-                Log.d("mainViewModel", "fetchGroupToAmountData: ${it.id} ${result.data}")
+
                 if (result.data != null)
                     groupToAmount[it.id]?.value = result.data
             }
-            Log.d("mainViewModel", "fetchGroupToAmountData: $groupToAmount")
+
         }
     }
 

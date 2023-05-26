@@ -26,13 +26,14 @@ import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.EMAIL_VERIFICATION
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.*
+import ir.enigma.app.util.SharedPrefManager
 
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
-
+    val sharedPrefManager = remember { SharedPrefManager(context) }
     val name = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val iconId = remember { mutableStateOf(0) }
@@ -121,7 +122,11 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
                     loading = authViewModel.state.value is ApiResult.Loading,
                     onClickGoogle = {},
                     onSubmit = { forLogin ->
-                        if (forLogin) authViewModel.login(context, email.value, password.value)
+                        if (forLogin) authViewModel.login(
+                            sharedPrefManager,
+                            email.value,
+                            password.value
+                        )
                         else authViewModel.register(
                             name = name.value,
                             email = email.value,

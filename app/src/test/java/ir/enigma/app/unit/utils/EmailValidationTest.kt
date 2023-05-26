@@ -5,7 +5,7 @@ import ir.enigma.app.ui.auth.isValidEmailAddress
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+
 class EmailValidationTest {
     @Test
     fun `test isValidEmail`() {

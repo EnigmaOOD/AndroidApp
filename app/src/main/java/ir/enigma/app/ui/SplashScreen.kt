@@ -28,6 +28,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
+    val context = LocalContext.current
+    val sharedPrefManager = remember { SharedPrefManager(context) }
     ApiScreen(
         backgroundColor = MaterialTheme.colors.background,
         apiResult = authViewModel.state
@@ -38,7 +40,6 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            val context = LocalContext.current
 
             val loadedToken =
                 remember { SharedPrefManager(context).getString(SharedPrefManager.KEY_TOKEN) }
@@ -58,7 +59,7 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
             LVSpacer()
             LVSpacer()
             LaunchedEffect(Unit) {
-                authViewModel.checkForToken(context = context)
+                authViewModel.checkForToken(sharedPrefManager)
             }
             if (loadedToken == null || authViewModel.state.value.message == UN_AUTHORIZE_ERROR) {
                 LaunchedEffect(key1 = Unit) {
@@ -84,7 +85,7 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
                 EasyButton(
                     text = "تلاش مجدد",
                     onClick = {
-                        authViewModel.checkForToken(context = context)
+                        authViewModel.checkForToken(sharedPrefManager)
                     }
                 )
 

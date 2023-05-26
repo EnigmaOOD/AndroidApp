@@ -1,7 +1,5 @@
 package ir.enigma.app.unit
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import io.mockk.coEvery
 import io.mockk.mockk
 import ir.enigma.app.data.ApiResult
@@ -10,10 +8,10 @@ import ir.enigma.app.model.User
 import ir.enigma.app.model.UserInfo
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.ui.auth.AuthViewModel
+import ir.enigma.app.util.SharedPrefManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -23,7 +21,8 @@ import org.junit.After
 open class BaseViewModelTest() {
 
     lateinit var userRepository: UserRepository
-    lateinit var context: Context
+
+    lateinit var sharedPrefManager: SharedPrefManager
 
     companion object {
 
@@ -42,12 +41,15 @@ open class BaseViewModelTest() {
 
     open fun setUp() {
         Dispatchers.setMain(dispatcher)
-        context = ApplicationProvider.getApplicationContext()
+        sharedPrefManager = mockk()
         this.userRepository = mockk()
     }
 
     // utils
     fun everyLoginSuccess() {
+        coEvery { sharedPrefManager.getString(any()) } returns "token"
+        coEvery { sharedPrefManager.getString(any() , any()) } returns "token"
+        coEvery { sharedPrefManager.putString(any() , any()) } returns Unit
         coEvery {
             userRepository.login(
                 any(),
@@ -57,6 +59,9 @@ open class BaseViewModelTest() {
     }
 
     fun everyLoginError() {
+        coEvery { sharedPrefManager.getString(any()) } returns "token"
+        coEvery { sharedPrefManager.getString(any() , any()) } returns "token"
+        coEvery { sharedPrefManager.putString(any() , any()) } returns Unit
         coEvery {
             userRepository.login(
                 any(),
@@ -73,14 +78,20 @@ open class BaseViewModelTest() {
     }
 
     fun everyRegisterError() {
+
         coEvery { userRepository.register(any()) } returns ApiResult.Error("email exist")
     }
 
     fun everyGetUserInfoSuccess() {
+        coEvery { sharedPrefManager.getString(any()) } returns "token"
+        coEvery { sharedPrefManager.getString(any() , any()) } returns "token"
+        coEvery { sharedPrefManager.putString(any() , any()) } returns Unit
         coEvery { userRepository.getUserInfo(any()) } returns ApiResult.Success(UserInfo(mockUser1))
     }
 
     fun everyGetUserInfoError() {
+        coEvery { sharedPrefManager.getString(any()) } returns "token"
+        coEvery { sharedPrefManager.getString(any() , any()) } returns "token"
         coEvery { userRepository.getUserInfo(any()) } returns ApiResult.Error("token expired")
     }
 }

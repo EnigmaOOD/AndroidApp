@@ -9,6 +9,9 @@ android {
     namespace 'ir.enigma.app'
     compileSdk 33
 
+
+
+
     defaultConfig {
         applicationId "ir.enigma.app"
         minSdk 23
@@ -58,6 +61,11 @@ android {
             }
         }
     }
+
+    useLibrary 'android.test.runner'
+
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
 }
 
 dependencies {
@@ -123,7 +131,7 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation "org.robolectric:robolectric:4.4.1"
+
     testImplementation 'androidx.test.ext:junit:1.1.5'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1'
     androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
@@ -147,5 +155,10 @@ dependencies {
 
     // For instrumented tests.
     androidTestImplementation "io.mockk:mockk-android:1.12.3"
+
+    androidTestImplementation "androidx.test:core:1.5.0"
+    testImplementation "androidx.test:core:1.5.0"
+
+    testImplementation 'junit:junit:4.12'
 
 }

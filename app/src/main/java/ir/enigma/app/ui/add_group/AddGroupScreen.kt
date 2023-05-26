@@ -56,7 +56,7 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
         LaunchedEffect(key1 = Unit) {
             navController.popBackStack()
         }
-        addGroupViewModel.reset()
+        addGroupViewModel.empty()
     }
 
 
