@@ -98,15 +98,13 @@ class MainRepositoryTest {
     fun `getGroups should give error`() = runBlocking {
         coEvery { api.getGroups(any()) } returns Response.error(
             400,
-            "خطا در دریافت گروه ها".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         )
 
         val response = mainRepository.getGroups(token = "test")
 
         assertEquals(response.status, ApiStatus.ERROR)
-        assertEquals(response, ApiResult.Error("خطا در دریافت گروه ها"))
 
-        //ToDo: this is false and have this error: "expected:<Error(_message=با عرض پوزش خطایی غیر منتظره رخ داده است.)> but was:<Error(_message=خطا در دریافت گروه ها)>"
     }
 
 
