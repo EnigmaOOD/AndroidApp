@@ -41,7 +41,7 @@ class GroupViewModelTest : BaseViewModelTest() {
     }
 
 
-    val fakePurchase1 = Purchase(
+    val mockPurchase1 = Purchase(
         title = "test",
         "2022-02-02",
         totalPrice = 2000.0,
@@ -60,7 +60,7 @@ class GroupViewModelTest : BaseViewModelTest() {
     )
 
 
-    val fakePurchase2 = Purchase(
+    val mockPurchase2 = Purchase(
         title = "test2",
         "2022-02-02",
         totalPrice = 2000.0,
@@ -103,7 +103,7 @@ class GroupViewModelTest : BaseViewModelTest() {
             mockGroup
         )
         coEvery { mainRepository.getGroupPurchases(any(), any(), any()) } returns ApiResult.Success(
-            flowOf(listOf(fakePurchase1, fakePurchase2))
+            flowOf(listOf(mockPurchase1, mockPurchase2))
         )
 
         // Act
@@ -120,7 +120,7 @@ class GroupViewModelTest : BaseViewModelTest() {
     fun `fetchPurchases should update purchase list when api call is successful`() {
         //Arrange
         login()
-        val mockPurchases = listOf(fakePurchase1, fakePurchase2)
+        val mockPurchases = listOf(mockPurchase1, mockPurchase2)
         coEvery {
             mainRepository.getGroupWithMembers(any(), any())
         } returns ApiResult.Success(mockGroup)
@@ -146,7 +146,7 @@ class GroupViewModelTest : BaseViewModelTest() {
     fun `fetchPurchases should call fetchGroupData when group is null`() {
         //Arrange
         login()
-        val mockPurchases = listOf(fakePurchase1, fakePurchase2)
+        val mockPurchases = listOf(mockPurchase1, mockPurchase2)
         coEvery {
             mainRepository.getGroupWithMembers(any(), any())
         } returns ApiResult.Success(mockGroup)
@@ -175,7 +175,7 @@ class GroupViewModelTest : BaseViewModelTest() {
         login()
         val mockPurchase = mockk<Purchase>()
         coEvery { mainRepository.getGroupPurchases(any(), any(), any()) } returns ApiResult.Success(
-            flowOf(listOf(fakePurchase1, fakePurchase2))
+            flowOf(listOf(mockPurchase1, mockPurchase2))
         )
         coEvery {
             mainRepository.createPurchase(
