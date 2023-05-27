@@ -23,7 +23,10 @@ import ir.enigma.app.repostitory.UserRepository.Companion.UN_AUTHORIZE_ERROR
 import ir.enigma.app.ui.auth.AuthViewModel
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.SpaceLarge
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
 import ir.enigma.app.util.SharedPrefManager
+import ir.enigma.app.util.StructureLayer
 import kotlinx.coroutines.delay
 
 @Composable
@@ -60,10 +63,26 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
             LVSpacer()
             LaunchedEffect(Unit) {
                 authViewModel.checkForToken(sharedPrefManager)
+                MyLog.log(
+                    StructureLayer.Screen,
+                    "Composable",
+                    "SplashScreen",
+                    type = LogType.Info,
+                    "SplashScreen check for token from authViewModel",
+                )
             }
             if (loadedToken == null || authViewModel.state.value.message == UN_AUTHORIZE_ERROR) {
+                MyLog.log(
+                    StructureLayer.Screen,
+                    "Composable",
+                    "SplashScreen",
+                    type = LogType.Info,
+                    "SplashScreen loadedToken == null || " +
+                            "authViewModel.state.value.message == UN_AUTHORIZE_ERROR  " +
+                            "navigate to AuthScreen",
+                )
                 LaunchedEffect(key1 = Unit) {
-                    delay(3000)
+                    delay(2000)
                     navController.navigate(Screen.AuthScreen.name) {
                         popUpTo(Screen.SplashScreen.name) {
                             inclusive = true
@@ -71,6 +90,13 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
                     }
                 }
             } else if (authViewModel.state.value is ApiResult.Loading) {
+                MyLog.log(
+                    StructureLayer.Screen,
+                    "Composable",
+                    "SplashScreen",
+                    type = LogType.Info,
+                    "SplashScreen Loading",
+                )
                 CircularProgressIndicator()
             } else if (authViewModel.state.value is ApiResult.Success) {
                 LaunchedEffect(key1 = Unit) {
@@ -80,7 +106,22 @@ fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
                         }
                     }
                 }
+                MyLog.log(
+                    StructureLayer.Screen,
+                    "Composable",
+                    "SplashScreen",
+                    type = LogType.Info,
+                    "SplashScreen Success load token and set me, navigate to main",
+                )
             } else if (authViewModel.state.value is ApiResult.Error) {
+
+                MyLog.log(
+                    StructureLayer.Screen,
+                    "Composable",
+                    "SplashScreen",
+                    type = LogType.Info,
+                    "SplashScreen Error: message: ${authViewModel.state.value.message}, show try again",
+                )
 
                 EasyButton(
                     text = "تلاش مجدد",

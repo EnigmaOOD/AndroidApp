@@ -16,6 +16,9 @@ import androidx.compose.ui.window.Dialog
 import ir.enigma.app.component.*
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.data.ApiStatus
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 
 @Composable
 fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (String) -> Unit) {
@@ -23,6 +26,15 @@ fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (Str
     val email = remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = { onDismiss() }) {
+
+        MyLog.log(
+            StructureLayer.Screen,
+            "Composable",
+            "AddMemberDialog",
+            type = LogType.Info,
+            "AddMemberDialog composed"
+        )
+
         Card(
             modifier = Modifier.testTag("addMemberDialog"),
             elevation = 8.dp
@@ -59,6 +71,13 @@ fun AddMemberDialog(onDismiss: () -> Unit, state: ApiResult<Any>, onAction: (Str
                     LoadingButton(
                         modifier = Modifier.fillMaxWidth().weight(1f).testTag("addMemberConfirm"),
                         onClick = {
+                            MyLog.log(
+                                StructureLayer.Screen,
+                                "Composable",
+                                "AddMemberDialog",
+                                type = LogType.Info,
+                                "AddMemberDialog confirm clicked with email: ${email.value}"
+                            )
                             onAction(email.value)
                         },
                         loading = state.status == ApiStatus.LOADING,

@@ -29,8 +29,7 @@ import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.group.component.CategoryIcon
 import ir.enigma.app.ui.theme.*
-import ir.enigma.app.util.toPrice
-import ir.enigma.app.util.zeroIfEmpty
+import ir.enigma.app.util.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import java.lang.Math.abs
@@ -97,6 +96,22 @@ fun NewPurchaseScreen(
                 }
             }
         }
+
+        MyLog.log(
+            StructureLayer.Screen,
+            "Composable",
+            "NewPurchaseScreen",
+            LogType.Info,
+            "errors: showError: ${showError.value} priceError: $priceError consumerError: $consumerError buyersError: $buyersError"
+        )
+
+        MyLog.log(
+            StructureLayer.Screen,
+            "Composable",
+            "NewPurchaseScreen",
+            LogType.Info,
+            "buyers: ${buyers.values} consumers: ${consumers.values}"
+        )
 
         if (groupViewModel.newPurchaseState.value is ApiResult.Success) {
             LaunchedEffect(Unit) {

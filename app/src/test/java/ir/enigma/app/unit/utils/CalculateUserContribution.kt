@@ -1,17 +1,26 @@
 package ir.enigma.app.unit.utils
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.coEvery
+import io.mockk.mockkObject
 import ir.enigma.app.model.Contribution
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.model.User
 import ir.enigma.app.ui.group.util.calculateUserContribution
+import ir.enigma.app.util.MyLog
 import junit.framework.TestCase.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 
 class CalculateUserContribution {
 
+    @Before
+    fun setUp() {
+        mockkObject(MyLog)
+        coEvery { MyLog.log(any(), any(), any(), any(), any()) } returns Unit
+    }
     // test calculateUserContribution method
     @Test
     fun `test calculateUserContribution`() {

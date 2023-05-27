@@ -25,7 +25,10 @@ import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.theme.SpaceThin
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.IconExtraLarge
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
 import ir.enigma.app.util.SharedPrefManager
+import ir.enigma.app.util.StructureLayer
 
 @Composable
 fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel) {
@@ -41,14 +44,29 @@ fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel
 
     val state = authViewModel.editUserState.value
 
+    MyLog.log(
+        StructureLayer.Screen,
+        "EditProfileScreen",
+        "EditProfileScreen",
+        LogType.Info,
+        "state = $state"
+    )
+
     if (state is ApiResult.Loading)
         Dialog(onDismissRequest = {}) {
             CircularProgressIndicator()
         }
 
     if (state is ApiResult.Success) {
+        MyLog.log(
+            StructureLayer.Screen,
+            "EditProfileScreen",
+            "EditProfileScreen",
+            LogType.Info,
+            "edit profile success. navigate back"
+        )
         LaunchedEffect(key1 = Unit) {
-            Log.d("Screen", "EditProfileScreen: navController.popBackStack()")
+
             navController.popBackStack()
             authViewModel.editFinish()
         }

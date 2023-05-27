@@ -75,10 +75,10 @@ fun PlusMinusButtons(displayNumber: MutableState<String>) {
             onClick = {
                 try {
                     displayNumber.value = minus(displayNumber.value.toDouble()).toString()
-                    Log.d("PlusMinus", "PlusMinusButtons: ")
+
                 }
                 catch (e:java.lang.NumberFormatException){
-                    Log.e("PlusMinus", "PlusMinusButtons: ", e)
+
                 }
             },
             modifier = Modifier.testTag("minus"),

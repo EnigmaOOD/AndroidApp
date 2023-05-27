@@ -16,6 +16,9 @@ import ir.enigma.app.ui.main.AddGroupScreen
 
 import ir.enigma.app.ui.main.MainScreen
 import ir.enigma.app.ui.main.MainViewModel
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 
 @Composable
 fun Navigation(
@@ -32,7 +35,14 @@ fun Navigation(
 
 
         composable(route = Screen.SplashScreen.name) {
-            SplashScreen(navController = navController , authViewModel)
+            SplashScreen(navController = navController, authViewModel)
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to SplashScreen",
+            )
         }
 
         composable(route = Screen.MainScreen.name) {
@@ -40,42 +50,97 @@ fun Navigation(
                 navController = navController,
                 mainViewModel
             )
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to MainScreen",
+            )
         }
 
         composable(route = Screen.AuthScreen.name) {
             AuthScreen(navController = navController, authViewModel)
+
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to AuthScreen",
+            )
         }
 
-        composable(route = Screen.AuthScreen.name) {
-            AuthScreen(navController = navController, authViewModel)
-        }
+
+
 
         composable(route = Screen.EditProfileScreen.name) {
             EditProfileScreen(navController = navController, authViewModel)
+
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to EditProfileScreen",
+            )
         }
 
         composable(route = Screen.GroupMembersScreen.name) {
             GroupMembersScreen(navController = navController, groupViewModel)
+
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to GroupMembersScreen",
+            )
         }
 
         composable(route = Screen.GroupScreen.name + "/{groupId}") { backStackEntry ->
+            val groupId = backStackEntry.arguments?.getString("groupId")!!.toInt()
             GroupScreen(
                 navController = navController,
                 groupViewModel,
-                backStackEntry.arguments?.getString("groupId")!!.toInt()
+                groupId
+            )
+
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to GroupScreen with groupId: $groupId",
             )
         }
 
         composable(route = Screen.AddGroupScreen.name) {
-            AddGroupScreen(navController = navController,addGroupViewModel)
+            AddGroupScreen(navController = navController, addGroupViewModel)
+
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to AddGroupScreen",
+            )
         }
 
         composable(route = Screen.NewPurchaseScreen.name + "/{amount}") {
             val amount = it.arguments?.getString("amount")!!
-            Log.d("Screen", "Navigation: $amount");
+
             NewPurchaseScreen(
                 navController = navController, groupViewModel,
                 amount.toDouble()
+            )
+
+            MyLog.log(
+                StructureLayer.Screen,
+                "Composable",
+                "Navigation",
+                type = LogType.Info,
+                "to NewPurchaseScreen with amount: $amount",
             )
         }
 

@@ -21,6 +21,9 @@ import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.add_group.AddGroupViewModel
 import ir.enigma.app.ui.theme.SpaceThin
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 
 @Composable
 fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupViewModel) {
@@ -47,12 +50,27 @@ fun AddGroupScreen(navController: NavController, addGroupViewModel: AddGroupView
     }
     val state = addGroupViewModel.state.value
 
-    if (state is ApiResult.Loading)
+    if (state is ApiResult.Loading) {
+        MyLog.log(
+            StructureLayer.Screen,
+            "Composable",
+            "AddGroupScreen",
+            LogType.Info,
+            "show Loading Dialog"
+        )
         Dialog(onDismissRequest = {}) {
             CircularProgressIndicator()
         }
+    }
 
     if (state is ApiResult.Success) {
+        MyLog.log(
+            StructureLayer.Screen,
+            "Composable",
+            "AddGroupScreen",
+            LogType.Info,
+            "add group success navigate back"
+        )
         LaunchedEffect(key1 = Unit) {
             navController.popBackStack()
         }

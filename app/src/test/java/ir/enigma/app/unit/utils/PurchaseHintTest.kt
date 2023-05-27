@@ -1,11 +1,14 @@
 package ir.enigma.app.unit.utils
 
+import io.mockk.coEvery
+import io.mockk.mockkObject
 import ir.enigma.app.model.Contribution
 import ir.enigma.app.model.Purchase
 import ir.enigma.app.model.User
 import ir.enigma.app.ui.auth.AuthViewModel
 
 import ir.enigma.app.ui.group.component.getPurchaseHint
+import ir.enigma.app.util.MyLog
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -22,6 +25,10 @@ class GetPurchaseHintTest {
 
     @Before
     fun setMe() {
+
+        mockkObject(MyLog)
+        coEvery { MyLog.log(any(), any(), any(), any(), any()) } returns Unit
+
         AuthViewModel.me = me
     }
 
@@ -80,7 +87,7 @@ class GetPurchaseHintTest {
     // Test case where there are two buyers (user is not one of them)
     @Test
     fun `test getPurchaseHint with two buyers not including user`() {
-        val buyer1 = Contribution(me , 10.0)
+        val buyer1 = Contribution(me, 10.0)
         val buyer2 = Contribution(bob, 5.0)
         val purchase = Purchase(
             "Test purchase 4",

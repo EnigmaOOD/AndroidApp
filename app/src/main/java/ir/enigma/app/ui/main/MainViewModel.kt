@@ -1,6 +1,5 @@
 package ir.enigma.app.ui.main
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -11,6 +10,9 @@ import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.ui.ApiViewModel
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.token
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +30,7 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
 
     fun fetchGroups() {
         viewModelScope.launch {
-            startLading()
+            startLoading()
             when (val result = mainRepository.getGroups(token = token)) {
                 is ApiResult.Success -> {
                     state.value = ApiResult.Success(Unit)
@@ -37,8 +39,23 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
 
                         fetchGroupToAmountData(groups)
                     }
+
+                    MyLog.log(
+                        StructureLayer.ViewModel,
+                        "MainViewModel",
+                        "fetchGroups",
+                        LogType.Info,
+                        "Groups Fetched: ${result.data}"
+                    )
                 }
                 else -> {
+                    MyLog.log(
+                        StructureLayer.ViewModel,
+                        "MainViewModel",
+                        "fetchGroups",
+                        LogType.Error,
+                        "Error in fetching groups: ${result.message}"
+                    )
                     state.value = ApiResult.Error(result.message ?: "خطا در دریافت گروه ها")
                 }
             }
@@ -62,6 +79,13 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                     groupToAmount[it.id]?.value = result.data
             }
 
+            MyLog.log(
+                StructureLayer.ViewModel,
+                "MainViewModel",
+                "fetchGroupToAmountData",
+                LogType.Info,
+                "fetchGroupToAmountData: $groupToAmount"
+            )
         }
     }
 

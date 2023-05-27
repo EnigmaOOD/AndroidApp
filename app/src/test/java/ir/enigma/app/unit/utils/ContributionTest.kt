@@ -2,10 +2,13 @@ package ir.enigma.app.unit.utils
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import io.mockk.coEvery
+import io.mockk.mockkObject
 import ir.enigma.app.component.MemberContribution
 import ir.enigma.app.model.Contribution
 import ir.enigma.app.model.User
 import ir.enigma.app.ui.group.getContributionList
+import ir.enigma.app.util.MyLog
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -26,6 +29,10 @@ class ContributionTest {
 
     @Before
     fun setup() {
+
+        mockkObject(MyLog)
+        coEvery { MyLog.log(any(), any(), any(), any(), any()) } returns Unit
+
         selectedMembers = SnapshotStateMap<Int, MemberContribution>()
         selectedMembers[1] = MemberContribution(john, mutableStateOf("1"), mutableStateOf("0"))
         selectedMembers[2] = MemberContribution(emily, mutableStateOf("2"), mutableStateOf("0"))
