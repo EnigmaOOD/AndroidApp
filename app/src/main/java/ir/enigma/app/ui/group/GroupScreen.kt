@@ -94,7 +94,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
     }
 
     ApiScreen(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().testTag("groupScreen"),
         backgroundColor = colors.background,
         apiResult = groupViewModel.state,
         topBar = {

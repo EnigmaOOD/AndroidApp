@@ -34,11 +34,12 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
                     state.value = ApiResult.Success(Unit)
                     result.data!!.distinctUntilChanged().collect { groups ->
                         _groupList.value = groups
+
                         fetchGroupToAmountData(groups)
                     }
                 }
                 else -> {
-                    state.value = ApiResult.Error(result.message?: "خطا در دریافت گروه ها")
+                    state.value = ApiResult.Error(result.message ?: "خطا در دریافت گروه ها")
                 }
             }
 
@@ -46,19 +47,21 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
     }
 
     fun fetchGroupToAmountData(groupList: List<Group>) {
-
+        groupList.forEach {
+            groupToAmount[it.id] = mutableStateOf(null)
+        }
         viewModelScope.launch {
             groupList.forEach {
-                groupToAmount[it.id] = mutableStateOf(null)
                 val result = mainRepository.getGroupToAmount(
                     token = token,
                     groupId = it.id,
                     userID = me.id
                 )
-                Log.d("mainViewModel", "${it.id} ${result.data}")
+
                 if (result.data != null)
                     groupToAmount[it.id]?.value = result.data
             }
+
         }
     }
 

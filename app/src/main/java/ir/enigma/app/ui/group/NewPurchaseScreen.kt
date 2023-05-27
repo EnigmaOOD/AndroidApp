@@ -70,7 +70,7 @@ fun NewPurchaseScreen(
     val consumerError = checkSumError(priceDouble, consumers, isRelatedConsumer.value)
     val buyersError = checkSumError(priceDouble, buyers, isRelatedBuyer.value)
     val _group = groupViewModel.state.value.data
-    if(_group != null) {
+    if (_group != null) {
         val group = groupViewModel.state.value.data!!
         val members = group.members!!
 
@@ -137,7 +137,7 @@ fun NewPurchaseScreen(
                 },
                 apiResult = groupViewModel.newPurchaseState,
             ) { it ->
-                Column (modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier.fillMaxSize()) {
 
 
                     Column(modifier = Modifier.verticalScroll(scrollState).weight(1f)) {
@@ -161,6 +161,7 @@ fun NewPurchaseScreen(
                                 Box(Modifier.fillMaxWidth().height(IntrinsicSize.Max)) {
                                     OutlinedTextField(
                                         modifier = Modifier.focusable(false)
+                                            .testTag("categoryTextField")
                                             .clickable(false, onClick = {})
                                             .fillMaxWidth(),
                                         enabled = amount == 0.0,
@@ -198,7 +199,6 @@ fun NewPurchaseScreen(
                                     enabled = amount == 0.0,
                                     hint = priceDouble?.toPrice(group.currency),
                                     showError = showError.value,
-
                                     onValueChange = {
 
                                         price.value = it.zeroIfEmpty()
@@ -244,6 +244,7 @@ fun NewPurchaseScreen(
                                 if (buyers.isEmpty()) {
                                     if (showError.value) {
                                         ErrorText(
+                                            modifier = Modifier.testTag("buyersError"),
                                             text = "لیست خریدارها نمی\u200Cتواند خالی باشد",
                                         )
                                     } else {
@@ -251,14 +252,15 @@ fun NewPurchaseScreen(
                                             text = "لیست خالی است",
                                         )
                                     }
-                                }
-                                else if (buyersError != null && showError.value) {
+                                } else if (buyersError != null && showError.value) {
                                     ErrorText(
+                                        modifier = Modifier.testTag("buyersError"),
                                         text = buyersError,
                                     )
                                 }
 
                                 AddOutlinedButton(
+                                    modifier = Modifier.testTag("changeBuyersButton"),
                                     enabled = amount == 0.0 || amount > 0,
                                     onClick = {
                                         buyersDialog.value = true
@@ -307,6 +309,7 @@ fun NewPurchaseScreen(
                                 if (consumers.isEmpty()) {
                                     if (showError.value) {
                                         ErrorText(
+                                            modifier = Modifier.testTag("consumersError"),
                                             text = "لیست مصرف کننده ها نمی\u200Cتواند خالی باشد",
                                         )
                                     } else {
@@ -314,13 +317,15 @@ fun NewPurchaseScreen(
                                             text = "لیست خالی می\u200Cباشد",
                                         )
                                     }
-                                }else if (consumerError != null && showError.value) {
+                                } else if (consumerError != null && showError.value) {
                                     ErrorText(
+                                        modifier = Modifier.testTag("consumersError"),
                                         text = consumerError,
                                     )
                                 }
 
                                 AddOutlinedButton(
+                                    modifier = Modifier.testTag("changeConsumersButton"),
                                     enabled = amount == 0.0 || amount < 0,
                                     text = "تغییر لیست",
                                     onClick = {
@@ -339,7 +344,7 @@ fun NewPurchaseScreen(
                     ) {
 
                         LoadingButton(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth().testTag("createPurchaseButton")
                                 .padding(horizontal = SpaceLarge, vertical = SpaceSmall),
                             actionText = "ثبت خرید",
                             loading = groupViewModel.newPurchaseState.value is ApiResult.Loading,
@@ -423,6 +428,7 @@ fun checkSumError(
 @Composable
 fun CategorySelectScreen(onBack: () -> Unit, onCategorySelected: (PurchaseCategory) -> Unit) {
     Scaffold(
+        modifier = Modifier.testTag("categorySelectScreen"),
         backgroundColor = MaterialTheme.colors.surface,
         topBar = {
             TopAppBar(contentPadding = PaddingValues(vertical = SpaceThin)) {
@@ -441,7 +447,7 @@ fun CategorySelectScreen(onBack: () -> Unit, onCategorySelected: (PurchaseCatego
                         .padding(horizontal = 20.dp, vertical = 10.dp)
                         .clickable {
                             onCategorySelected(category)
-                        },
+                        }.testTag("categoryItem"),
 
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -466,7 +472,7 @@ fun SelecetMembersDialog(
         Column(
             modifier = Modifier.fillMaxWidth().background(
                 color = MaterialTheme.colors.surface,
-            ).padding(horizontal = 20.dp, vertical = 10.dp)
+            ).padding(horizontal = 20.dp, vertical = 10.dp).testTag("selectMembersDialog")
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -486,18 +492,23 @@ fun SelecetMembersDialog(
                                 )
                             }
                         },
-                        modifier = Modifier.padding(horizontal = 10.dp)
+                        modifier = Modifier.testTag("selectAllButton")
+                            .padding(horizontal = 10.dp)
                     ) {
-                        Text(text = "انتخاب همه")
+                        Text(
+                            text = "انتخاب همه"
+                        )
                     }
                 } else {
                     OutlinedButton(
                         onClick = {
                             selectedMembers.clear()
                         },
-                        modifier = Modifier.padding(horizontal = 10.dp)
+                        modifier = Modifier.padding(horizontal = 10.dp).testTag("deleteAllButton")
                     ) {
-                        Text(text = "حذف همه")
+                        Text(
+                            text = "حذف همه"
+                        )
                     }
                 }
 
@@ -515,7 +526,7 @@ fun SelecetMembersDialog(
                             }
                         ).padding(vertical = 10.dp)
                             .fillMaxWidth()
-
+                            .testTag("memberItem")
                             .clickable {
                                 if (selectedMembers.containsKey(userId)) {
                                     selectedMembers.remove(userId)
@@ -580,8 +591,8 @@ fun getContributionList(
 }
 
 @Composable
-fun LoadingDialog(){
-    Dialog(onDismissRequest = {}){
+fun LoadingDialog() {
+    Dialog(onDismissRequest = {}) {
         CircularProgressIndicator()
     }
 }

@@ -30,6 +30,7 @@ import ir.enigma.app.util.SharedPrefManager
 @Composable
 fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
+    val sharedPrefManager = remember { SharedPrefManager(context) }
     val isShowDialogCharacter = remember { mutableStateOf(false) }
     val iconId = remember { mutableStateOf(me.iconId) }
     val name = remember { mutableStateOf(me.name) }
@@ -117,7 +118,7 @@ fun EditProfileScreen(navController: NavController, authViewModel: AuthViewModel
                         .testTag("exitButton"),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
                     onClick = {
-                        authViewModel.logout(context)
+                        authViewModel.logout(sharedPrefManager)
                         navController.navigate(Screen.AuthScreen.name) {
                             popUpTo(Screen.EditProfileScreen.name) {
                                 inclusive = true

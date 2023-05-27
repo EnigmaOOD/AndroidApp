@@ -46,7 +46,6 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
             if (result is ApiResult.Success && result.data?.members != null) {
                 meMember = result.data.members!!.find { it.user.id == me.id }
                 state.value = ApiResult.Success(result.data)
-                Log.d("GroupViewModel", "fetchGroupData: ${result.data?.members}")
                 fetchPurchases(groupId, filter)
             } else {
                 fetchGroupData(groupId)

@@ -21,8 +21,4 @@ class AddGroupViewModel @Inject constructor(private val mainRepository: MainRepo
         }
     }
 
-    fun reset(){
-        empty()
-    }
-
 }

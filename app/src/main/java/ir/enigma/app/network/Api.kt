@@ -68,13 +68,6 @@ interface Api {
         @Body purchase: CreatePurchaseRequest
     ): Response<Any>
 
-    @POST("/group/AmountofDebtandCredit/")
-    @FormUrlEncoded
-    suspend fun getGroupDebtAndCredit(
-        @Header("Authorization") token: String,
-        @Field ("groupID") groupId: Int,
-        @Field ("userID") userId: Int
-    ): Response<Double>
 
     @POST("/group/CreateGroup/")
     suspend fun createGroup(

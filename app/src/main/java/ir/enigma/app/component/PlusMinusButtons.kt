@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +35,7 @@ fun PlusMinusButtons(displayNumber: MutableState<String>) {
         horizontalArrangement = Arrangement.Center
     ) {
         EasyIconButton(
+            modifier = Modifier.testTag("plus"),
             onClick = { displayNumber.value = plus(displayNumber.value.toDouble()).toString() },
             iconId = R.drawable.ic_add_circle,
             tint = MaterialTheme.colors.onBackground,
@@ -41,7 +43,7 @@ fun PlusMinusButtons(displayNumber: MutableState<String>) {
         )
 
         BasicTextField(
-            modifier = Modifier
+            modifier = Modifier.testTag("related")
                 .border(
                     shape = MaterialTheme.shapes.medium,
                     color = MaterialTheme.colors.onBackgroundAlpha3,
@@ -79,6 +81,7 @@ fun PlusMinusButtons(displayNumber: MutableState<String>) {
                     Log.e("PlusMinus", "PlusMinusButtons: ", e)
                 }
             },
+            modifier = Modifier.testTag("minus"),
             iconId = R.drawable.ic_minus_cirlce,
             tint = MaterialTheme.colors.onBackground,
             size = IconSmall,

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ir.enigma.app.data.userAvatars
@@ -31,6 +32,7 @@ fun AvatarWithText(user: User, isMe: Boolean = false) {
             text = user.name,
             modifier = Modifier
                 .padding(start = 12.dp)
+                .testTag("memberName")
                 .align(alignment = Alignment.CenterVertically),
         )
     }

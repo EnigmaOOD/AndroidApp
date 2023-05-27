@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +44,7 @@ fun MemberContributionItem(
                         shape = RoundedCornerShape(3.dp),
                         color = MaterialTheme.colors.onBackgroundAlpha3,
                         width = BorderThin
-                    ),
+                    ).testTag("exact"),
                     value = memberContribution.exact.value,
                     onValueChange = { memberContribution.exact.value = it.zeroIfEmpty() },
                     textStyle = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center),

@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -79,7 +80,7 @@ fun SegmentedControlComponent(
                             .offset((-1 * index).dp, 0.dp)
                             .zIndex(if (selectedIndex.value == index) 1f else 0f)
                     }
-                },
+                }.testTag("SegmentedControlButton$index"),
                 onClick = {
                     selectedIndex.value = index
                     onItemSelection(selectedIndex.value)

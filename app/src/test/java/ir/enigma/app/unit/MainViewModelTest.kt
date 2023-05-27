@@ -18,7 +18,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
 class MainViewModelTest : BaseViewModelTest() {
 
     private lateinit var mainRepository: MainRepository
@@ -92,6 +91,6 @@ class MainViewModelTest : BaseViewModelTest() {
     private fun login() {
         everyLoginSuccess()
         everyGetUserInfoSuccess()
-        authViewModel.login(context, "test", "test")
+        authViewModel.login(sharedPrefManager, "test", "test")
     }
 }

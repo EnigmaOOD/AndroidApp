@@ -20,7 +20,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(AndroidJUnit4::class)
 class GroupViewModelTest : BaseViewModelTest() {
 
     private lateinit var groupViewModel: GroupViewModel
@@ -90,7 +89,7 @@ class GroupViewModelTest : BaseViewModelTest() {
     private fun login() {
         everyLoginSuccess()
         everyGetUserInfoSuccess()
-        authViewModel.login(context, "test", "test")
+        authViewModel.login(sharedPrefManager, "test", "test")
     }
 
     @Test
@@ -392,4 +391,43 @@ class GroupViewModelTest : BaseViewModelTest() {
         assertEquals(groupViewModel.newMemberState.value.message, "user not found")
     }
 
+
+
+    @Test
+    fun `newMemberReset should set newMemberState to empty`() {
+        //Arrange
+        groupViewModel.newMemberState.value = ApiResult.Success(Unit)
+
+        // Act
+        groupViewModel.newMemberReset()
+
+        // Assert
+        assertEquals(groupViewModel.newMemberState.value.status, ApiStatus.EMPTY)
+    }
+
+
+    @Test
+    fun `newPurchaseReset should set newPurchaseState to empty`() {
+        //Arrange
+        groupViewModel.newPurchaseState.value = ApiResult.Success(Unit)
+
+        // Act
+        groupViewModel.newPurchaseReset()
+
+        // Assert
+        assertEquals(groupViewModel.newPurchaseState.value.status, ApiStatus.EMPTY)
+    }
+
+
+    @Test
+    fun `leaveGroupReset should set leaveGroupState to empty`() {
+        //Arrange
+        groupViewModel.leaveGroupState.value = ApiResult.Success(Unit)
+
+        // Act
+        groupViewModel.leaveStateReset()
+
+        // Assert
+        assertEquals(groupViewModel.leaveGroupState.value.status, ApiStatus.EMPTY)
+    }
 }

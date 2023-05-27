@@ -30,10 +30,10 @@ class AuthViewModel @Inject constructor(
 
     var editUserState: MutableState<ApiResult<Any>> = mutableStateOf(ApiResult.Empty())
 
-    fun checkForToken(context: Context) {
+    fun checkForToken(sharedPrefManager: SharedPrefManager) {
         viewModelScope.launch {
             startLading()
-            val loadedToken = SharedPrefManager(context).getString(SharedPrefManager.KEY_TOKEN)
+            val loadedToken = sharedPrefManager.getString(SharedPrefManager.KEY_TOKEN)
             if (loadedToken != null) {
                 token = loadedToken
                 setMe()
@@ -49,7 +49,7 @@ class AuthViewModel @Inject constructor(
             val result = userRepository.getUserInfo(token)
             if (result.status == ApiStatus.SUCCESS) {
                 me = result.data!!.user
-                Log.d(TAG, "setMe: $me")
+
                 success(Token(token))
             } else
                 error(result.message!!)
@@ -57,7 +57,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun login(
-        context: Context,
+        sharedPrefManager: SharedPrefManager,
         email: String,
         password: String
     ) {
@@ -68,7 +68,7 @@ class AuthViewModel @Inject constructor(
 
             if (result.status == ApiStatus.SUCCESS) {
                 token = "Token " + result.data!!.token
-                saveToken(context, token)
+                saveToken(sharedPrefManager, token)
                 setMe()
             } else
                 error(result.message!!)
@@ -108,15 +108,15 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun saveToken(context: Context, token: String) {
+    private fun saveToken(sharedPrefManager: SharedPrefManager, token: String) {
         viewModelScope.launch {
-            SharedPrefManager(context).putString(SharedPrefManager.KEY_TOKEN, token)
+            sharedPrefManager.putString(SharedPrefManager.KEY_TOKEN, token)
         }
     }
 
-    fun logout(context: Context) {
+    fun logout(sharedPrefManager: SharedPrefManager) {
         empty()
-        SharedPrefManager(context).putString(SharedPrefManager.KEY_TOKEN, null)
+        sharedPrefManager.putString(SharedPrefManager.KEY_TOKEN, null)
     }
 
     fun editFinish() {
