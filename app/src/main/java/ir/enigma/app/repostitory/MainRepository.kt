@@ -1,6 +1,5 @@
 package ir.enigma.app.repostitory
 
-import android.util.Log
 import com.google.gson.Gson
 
 import ir.enigma.app.data.ApiResult
@@ -27,7 +26,6 @@ class MainRepository @Inject constructor(private val api: Api) {
         result.data?.members = handleException({ api.getGroupMembers(token, groupId) }) {
             null
         }.data
-        Log.d("MainRepository", "getGroupWithMembers: " + result.data?.members)
         return result
     }
 
@@ -96,7 +94,6 @@ class MainRepository @Inject constructor(private val api: Api) {
             buyers = purchase.buyers.map { ContributionRequest(it.user.id, it.price) },
             consumers = purchase.consumers.map { ContributionRequest(it.user.id, it.price) }
         )
-        Log.d("ExceptionHandler", "createPurchase: " + Gson().toJson(obj))
         return handleException({
             api.createPurchase(
                 token,
@@ -150,8 +147,6 @@ class MainRepository @Inject constructor(private val api: Api) {
     }
 
     suspend fun addUserToGroup(token: String, email: String, groupId: Int): ApiResult<Unit> {
-        // log all fields
-        Log.d("ExceptionHandler", "addUserToGroup: $email $groupId")
         return handleException({
             api.addUserToGroup(
                 token,
