@@ -1,15 +1,10 @@
 package ir.enigma.app.unit
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.ui.ApiViewModel
 
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
 class ApiViewModelTest {
 
@@ -23,7 +18,7 @@ class ApiViewModelTest {
     // ApiViewModel method tests
     @Test
     fun `startLading should set state to loading`() {                  // Test loading state
-        apiViewModel.startLading()                                      // Act
+        apiViewModel.startLoading()                                      // Act
         assert(apiViewModel.state.value is ApiResult.Loading)           // Assert
     }
 

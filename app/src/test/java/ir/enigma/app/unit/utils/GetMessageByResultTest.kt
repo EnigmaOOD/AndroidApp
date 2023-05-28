@@ -1,13 +1,23 @@
 package ir.enigma.app.unit.utils
 
+import io.mockk.coEvery
+import io.mockk.mockkObject
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.ui.MessageType
 import ir.enigma.app.ui.getMessageByResult
+import ir.enigma.app.util.MyLog
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 
 
 class GetMessageByResultTest {
+
+    @Before
+    fun setUp() {
+        mockkObject(MyLog)
+        coEvery { MyLog.log(any(), any(), any(), any(), any()) } returns Unit
+    }
 
     @Test
     fun `returns null if result is null`() {

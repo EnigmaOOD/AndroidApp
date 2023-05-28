@@ -23,6 +23,9 @@ import ir.enigma.app.model.GroupCategory
 import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.theme.*
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 
 @Composable
 fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewModel) {
@@ -49,6 +52,13 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
         }
     }
 
+    MyLog.log(
+        StructureLayer.Screen,
+        "Composable",
+        "GroupMembersScreen",
+        type = LogType.Info,
+        "GroupMembersScreen members: ${groupViewModel.state.value.data?.members}",
+    )
 
     ApiScreen(backgroundColor = MaterialTheme.colors.primary, apiResult = groupViewModel.state) {
         val group = groupViewModel.state.value.data
@@ -56,8 +66,6 @@ fun GroupMembersScreen(navController: NavController, groupViewModel: GroupViewMo
 
             val members = group.members!!
 
-
-            Log.d("Screen", "GroupMembersScreen: ${group.members}")
 
             Column(
                 modifier = Modifier.fillMaxSize(),

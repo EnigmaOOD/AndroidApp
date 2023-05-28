@@ -31,6 +31,9 @@ import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.main.component.ShimmerColumn
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.*
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 
 @Composable
 fun MainScreen(
@@ -42,8 +45,23 @@ fun MainScreen(
         color = MaterialTheme.colors.background
     )
     val groups = mainViewModel.groupList.collectAsState().value
-    LaunchedEffect(Unit) {
 
+    MyLog.log(
+        StructureLayer.Screen,
+        "Composable",
+        "MainScreen",
+        type = LogType.Info,
+        "groups: $groups",
+    )
+
+    LaunchedEffect(Unit) {
+        MyLog.log(
+            StructureLayer.Screen,
+            "Composable",
+            "MainScreen",
+            type = LogType.Info,
+            "fetchGroups from mainViewModel",
+        )
         mainViewModel.fetchGroups()
     }
     ApiScreen(
@@ -73,7 +91,7 @@ fun MainScreen(
                     Modifier
                         .fillMaxWidth().testTag("MainTopBar")
                         .padding(horizontal = SpaceLarge, vertical = SpaceMedium),
-                ){
+                ) {
                     navController.navigate(Screen.EditProfileScreen.name)
                 }
             }

@@ -19,6 +19,9 @@ import androidx.compose.ui.window.DialogProperties
 import ir.enigma.app.component.TextBody2
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.ui.theme.*
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 import kotlinx.coroutines.delay
 
 
@@ -88,6 +91,13 @@ fun <T : ApiResult<*>> ApiScreen(
     )
 
     if (message != null) {
+        MyLog.log(
+            StructureLayer.Screen,
+            "Composable",
+            "ApiScreen",
+            LogType.Info,
+            "Snackbar message: $message"
+        )
         LaunchedEffect(Unit) {
             scaffoldState.snackbarHostState.showSnackbar(
                 message.text,

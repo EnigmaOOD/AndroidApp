@@ -144,7 +144,7 @@ fun SegmentedControlComponent(
 fun previe() {
     RtlThemePreview {
         SegmentedControl() {
-            Log.d("TAG", "previe: ")
+
         }
     }
 }

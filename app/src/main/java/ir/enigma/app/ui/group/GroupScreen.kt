@@ -36,6 +36,9 @@ import ir.enigma.app.ui.main.component.ShimmerColumn
 import ir.enigma.app.ui.main.component.ShimmerItem
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.*
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 import ir.enigma.app.util.toPrice
 
 @Composable
@@ -59,6 +62,13 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
             lazyState.scrollToItem(0)
     }
 
+    MyLog.log(
+        StructureLayer.Screen,
+        "Composable",
+        "GroupScreen",
+        LogType.Info,
+        "groupId: $groupId, status: $status, purchases: ${purchases.size}, filter: ${selectedFilter.value}"
+    )
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
@@ -291,7 +301,7 @@ fun PurchaseFullDetailsDialog(purchase: Purchase, currency: String, onDismiss: (
 }
 
 fun navigateToNewPurchaseScreen(navController: NavController, amount: Double? = null) {
-    Log.d("Screen", "GroupScreen navigateToNewPurchaseScreen: $amount")
+
     if (amount != null)
         navController.navigate(Screen.NewPurchaseScreen.name + "/$amount")
     else

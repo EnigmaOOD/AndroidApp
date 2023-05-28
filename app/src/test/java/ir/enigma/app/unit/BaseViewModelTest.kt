@@ -2,12 +2,14 @@ package ir.enigma.app.unit
 
 import io.mockk.coEvery
 import io.mockk.mockk
+import io.mockk.mockkObject
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.model.Token
 import ir.enigma.app.model.User
 import ir.enigma.app.model.UserInfo
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.ui.auth.AuthViewModel
+import ir.enigma.app.util.MyLog
 import ir.enigma.app.util.SharedPrefManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,6 +42,8 @@ open class BaseViewModelTest() {
     }
 
     open fun setUp() {
+        mockkObject(MyLog)
+        coEvery { MyLog.log(any(), any(), any(), any(), any()) } returns Unit
         Dispatchers.setMain(dispatcher)
         sharedPrefManager = mockk()
         this.userRepository = mockk()

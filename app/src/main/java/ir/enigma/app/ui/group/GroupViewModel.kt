@@ -1,7 +1,6 @@
 package ir.enigma.app.ui.group
 
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +13,9 @@ import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.ui.ApiViewModel
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.me
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.token
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
+import ir.enigma.app.util.StructureLayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,13 +43,27 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
 
     fun fetchGroupData(groupId: Int, filter: Int = 0) {
         viewModelScope.launch {
-            startLading()
+            startLoading()
             val result = mainRepository.getGroupWithMembers(token = token, groupId = groupId)
             if (result is ApiResult.Success && result.data?.members != null) {
                 meMember = result.data.members!!.find { it.user.id == me.id }
                 state.value = ApiResult.Success(result.data)
                 fetchPurchases(groupId, filter)
+                MyLog.log(
+                    StructureLayer.ViewModel,
+                    "GroupViewModel",
+                    "fetchGroupData",
+                    LogType.Info,
+                    "Group Data Fetched group: ${state.value}  meMember: $meMember"
+                )
             } else {
+                MyLog.log(
+                    StructureLayer.ViewModel,
+                    "GroupViewModel",
+                    "fetchGroupData",
+                    LogType.Error,
+                    "Group Data Fetch Failed recall fetchGroupData"
+                )
                 fetchGroupData(groupId)
             }
 
@@ -60,6 +76,12 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
             val group = state.value.data
             if (group == null) {
                 fetchGroupData(groupId)
+                MyLog.log(
+                    StructureLayer.ViewModel,
+                    "GroupViewModel",
+                    "fetchPurchases",
+                    LogType.Error,
+                    "Group Data is Null recall fetchGroupData")
                 return@launch
             }
             when (val result =
@@ -69,8 +91,22 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
                     result.data!!.distinctUntilChanged().collect { purchases ->
                         _purchaseList.value = purchases
                     }
+                    MyLog.log(
+                        StructureLayer.ViewModel,
+                        "GroupViewModel",
+                        "fetchPurchases",
+                        LogType.Info,
+                        "Purchases Fetched purchases: ${result.data}"
+                    )
                 }
                 else -> {
+                    MyLog.log(
+                        StructureLayer.ViewModel,
+                        "GroupViewModel",
+                        "fetchPurchases",
+                        LogType.Error,
+                        "Purchases Fetch Failed recall fetchPurchases"
+                    )
                     fetchPurchases(groupId)
                 }
             }
@@ -87,8 +123,24 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
                 groupId = group!!.id,
                 purchase = purchase
             )
-            if (result.status == ApiStatus.SUCCESS)
+            if (result.status == ApiStatus.SUCCESS) {
                 fetchPurchases(state.value.data!!.id)
+                MyLog.log(
+                    StructureLayer.ViewModel,
+                    "GroupViewModel",
+                    "createPurchase",
+                    LogType.Info,
+                    "Purchase Created purchase: $purchase"
+                )
+            }else {
+                MyLog.log(
+                    StructureLayer.ViewModel,
+                    "GroupViewModel",
+                    "createPurchase",
+                    LogType.Error,
+                    "Purchase Create Failed error: ${result.message}"
+                )
+            }
             newPurchaseState.value = result
         }
     }
@@ -98,6 +150,13 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
             leaveGroupState.value = ApiResult.Loading()
             leaveGroupState.value =
                 mainRepository.leaveGroup(token = token, groupID = groupID)
+            MyLog.log(
+                StructureLayer.ViewModel,
+                "GroupViewModel",
+                "leaveGroup",
+                LogType.Info,
+                "Leave Group groupID: $groupID state: ${leaveGroupState.value}"
+            )
 
         }
     }
@@ -106,21 +165,57 @@ class GroupViewModel @Inject constructor(private val mainRepository: MainReposit
         viewModelScope.launch {
             newMemberState.value = ApiResult.Loading()
             val result = mainRepository.addUserToGroup(token, email, state.value.data!!.id)
-            if (result.status == ApiStatus.SUCCESS)
+            if (result.status == ApiStatus.SUCCESS) {
+                MyLog.log(
+                    StructureLayer.ViewModel,
+                    "GroupViewModel",
+                    "addMember",
+                    LogType.Info,
+                    "Member Added email: $email . recall fetchGroupData"
+                )
                 fetchGroupData(state.value.data!!.id)
+            }else
+                MyLog.log(
+                    StructureLayer.ViewModel,
+                    "GroupViewModel",
+                    "addMember",
+                    LogType.Error,
+                    "Member Add Failed email: $email error: ${result.message}"
+                )
             newMemberState.value = result
         }
     }
 
-    fun newMemberReset(){
+    fun newMemberReset() {
         newMemberState.value = ApiResult.Empty()
+        MyLog.log(
+            StructureLayer.ViewModel,
+            "GroupViewModel",
+            "newMemberReset",
+            LogType.Info,
+            "newMemberState Reset"
+        )
     }
 
-    fun newPurchaseReset(){
+    fun newPurchaseReset() {
         newPurchaseState.value = ApiResult.Empty()
+        MyLog.log(
+            StructureLayer.ViewModel,
+            "GroupViewModel",
+            "newPurchaseReset",
+            LogType.Info,
+            "newPurchaseState Reset"
+        )
     }
 
-    fun leaveStateReset(){
+    fun leaveStateReset() {
         leaveGroupState.value = ApiResult.Empty()
+        MyLog.log(
+            StructureLayer.ViewModel,
+            "GroupViewModel",
+            "leaveStateReset",
+            LogType.Info,
+            "leaveGroupState Reset"
+        )
     }
 }

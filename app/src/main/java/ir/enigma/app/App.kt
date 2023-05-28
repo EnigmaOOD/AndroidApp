@@ -7,7 +7,7 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class App : Application(){
     override fun onCreate() {
-        AndroidThreeTen.init(this);
+        AndroidThreeTen.init(this)
         super.onCreate()
     }
 }

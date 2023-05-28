@@ -26,7 +26,10 @@ import ir.enigma.app.ui.ApiScreen
 import ir.enigma.app.ui.auth.AuthViewModel.Companion.EMAIL_VERIFICATION
 import ir.enigma.app.ui.navigation.Screen
 import ir.enigma.app.ui.theme.*
+import ir.enigma.app.util.LogType
+import ir.enigma.app.util.MyLog
 import ir.enigma.app.util.SharedPrefManager
+import ir.enigma.app.util.StructureLayer
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -114,6 +117,14 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
                     }
                 }
 
+                MyLog.log(
+                    StructureLayer.Screen,
+                    "Composable",
+                    "AuthScreen",
+                    LogType.Info,
+                    "authViewModel state: ${authViewModel.state.value}"
+                )
+
                 AuthForm(
                     name = name,
                     email = email,
@@ -122,6 +133,13 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
                     loading = authViewModel.state.value is ApiResult.Loading,
                     onClickGoogle = {},
                     onSubmit = { forLogin ->
+                        MyLog.log(
+                            StructureLayer.Screen,
+                            "Composable",
+                            "AuthScreen",
+                            LogType.Info,
+                            "onSubmit for ${if (forLogin) "login" else "register"} , email: ${email.value} , name: ${name.value} , iconId: ${iconId.value} "
+                        )
                         if (forLogin) authViewModel.login(
                             sharedPrefManager,
                             email.value,
@@ -142,7 +160,7 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
         }
 
     }
-    Log.d("Screen", "AuthScreen: " + authViewModel.state)
+
 }
 
 
