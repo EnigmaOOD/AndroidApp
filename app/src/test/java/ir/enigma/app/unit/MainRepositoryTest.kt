@@ -1,21 +1,17 @@
 package ir.enigma.app.unit
 
-import okhttp3.ResponseBody
-import okhttp3.MediaType
 import io.mockk.coEvery
 import io.mockk.mockk
 import ir.enigma.app.data.ApiResult
 import ir.enigma.app.data.ApiStatus
 import ir.enigma.app.model.*
+import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.network.Api
 import ir.enigma.app.repostitory.MainRepository
-import ir.enigma.app.repostitory.MainRepository.Companion.NO_GROUP
 import ir.enigma.app.unit.BaseViewModelTest.Companion.mockUser1
 import ir.enigma.app.unit.BaseViewModelTest.Companion.mockUser2
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -242,26 +238,80 @@ class MainRepositoryTest {
 
     @Test
     fun `leaveGroup should has 401 error`() = runBlocking {
-        coEvery { api.leaveGroup(any(), any()) } returns Response.error(401, "تسویه حساب نشده است".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull()))
+        coEvery { api.leaveGroup(any(), any()) } returns Response.error(
+            401,
+            "تسویه حساب نشده است".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
 
         val response = mainRepository.leaveGroup("test", 0)
 
         assertEquals(response.status, ApiStatus.ERROR)
-        assertEquals(response.message,"تسویه حساب نشده است")
+        assertEquals(response.message, "تسویه حساب نشده است")
 
     }
 
 
-//    @Test
-//    fun `getGroupToAmount should give amount of user`() = runBlocking {
-//        coEvery { api.getGroupMembers(any(), any()) } returns Response.error(401, "تسویه حساب نشده است".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull()))
-//
-//        val response = mainRepository.leaveGroup("test", 0)
-//
-//        assertEquals(response.status, ApiStatus.ERROR)
-//        assertEquals(response.message,"تسویه حساب نشده است")
-//
-//    }
+    @Test
+    fun `getGroupToAmount should give amount of user`() = runBlocking {
+        coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
+            listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
+        )
+
+        val response = mainRepository.getGroupToAmount("test", 0, 1)
+
+        assertEquals(response.status, ApiStatus.SUCCESS)
+        assertEquals(response.data, 0.0)
+
+    }
+
+    @Test
+    fun `getGroupToAmount should give error`() = runBlocking {
+        coEvery { api.getGroupMembers(any(), any()) } returns Response.error(
+            400,
+            "".toResponseBody("".toMediaTypeOrNull())
+        )
+
+        val response = mainRepository.getGroupToAmount("test", 0, 1)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+
+    }
+
+
+    @Test
+    fun `createGroup should be successful`() = runBlocking {
+        coEvery { api.createGroup(any(), any()) } returns Response.success(null)
+
+        val response = mainRepository.createGroup("test", mockAddGroup)
+
+        assertEquals(response.status, ApiStatus.SUCCESS)
+
+    }
+
+    @Test
+    fun `createGroup should give error`() = runBlocking {
+        coEvery { api.createGroup(any(), any()) } returns Response.error(
+            404,
+            "ایمیل اعضا معتبر نمی باشد.".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = mainRepository.createGroup("test", mockAddGroup)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+        assertEquals(response.message, "ایمیل اعضا معتبر نمی باشد.")
+
+    }
+
+
+    @Test
+    fun `addUserToGroup should be successful`() = runBlocking {
+        coEvery { api.addUserToGroup(any(), any()) } returns Response.success(null)
+
+        val response = mainRepository.addUserToGroup("test", "test@test.com", 0)
+
+        assertEquals(response.status, ApiStatus.SUCCESS)
+
+    }
 
 
     companion object {
@@ -327,6 +377,14 @@ class MainRepositoryTest {
                 ),
             )
         )
+
+        val mockAddGroup =
+            AddGroupRequest(
+                name = "test",
+                picture_id = 0,
+                currency = "test",
+                emails = listOf("test1@a.com", "test2@a.com")
+            )
 
     }
 }
