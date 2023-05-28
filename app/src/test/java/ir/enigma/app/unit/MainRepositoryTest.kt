@@ -34,52 +34,65 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun `getGroupWithMembers should give correct group data`() = runBlocking {
+    fun `getGroupWithMembers should return correct group data when api result is success`() =
+        runBlocking {
 
-        coEvery { api.getAGroup(any(), any()) } returns Response.success(mockGroupWithoutMember)
-        coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
-            listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
-        )
+            //Arrange: mock api function success result
+            coEvery { api.getAGroup(any(), any()) } returns Response.success(mockGroupWithoutMember)
+            coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
+                listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
+            )
 
-        val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
+            //Act: call repository function
+            val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
 
-        assertEquals(response.status, ApiStatus.SUCCESS)
-        assertEquals(response.data?.members!![1].user, mockUser2)
-        assertEquals(response.data?.name, "test1")
+            //Assert: response should be success with correct data
+            assertEquals(response.status, ApiStatus.SUCCESS)
+            assertEquals(response.data?.members!![1].user, mockUser2)
+            assertEquals(response.data?.name, "test1")
 
-    }
-
-    @Test
-    fun `getGroupWithMembers should give error when api getAGroup return error`() = runBlocking {
-
-        coEvery { api.getAGroup(any(), any()) } returns Response.error(400 , "".toResponseBody())
-        coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
-            listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
-        )
-
-        val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
-
-        assertEquals(response.status, ApiStatus.ERROR)
-
-    }
+        }
 
     @Test
-    fun `getGroupWithMembers should give error when api getGroupMembers return error`() = runBlocking {
+    fun `getGroupWithMembers should return error when api getAGroup return 400 error`() =
+        runBlocking {
 
-        coEvery { api.getAGroup(any(), any()) } returns Response.error(400 , "".toResponseBody())
-        coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
-            listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
-        )
+            //Arrange: mock api function error result
+            coEvery { api.getAGroup(any(), any()) } returns Response.error(400, "".toResponseBody())
+            coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
+                listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
+            )
 
-        val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
+            //Act: call repository function
+            val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
 
-        assertEquals(response.status, ApiStatus.ERROR)
+            //Assert: response should be error
+            assertEquals(response.status, ApiStatus.ERROR)
 
-    }
+        }
 
     @Test
-    fun `getGroups should give correct list of groups data if is not null`() = runBlocking {
+    fun `getGroupWithMembers should return error when api getGroupMembers return 400 error`() =
+        runBlocking {
 
+            //Arrange: mock api function error result
+            coEvery { api.getAGroup(any(), any()) } returns Response.error(400, "".toResponseBody())
+            coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
+                listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
+            )
+
+            //Act: call repository function
+            val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
+
+            //Assert: response should be error
+            assertEquals(response.status, ApiStatus.ERROR)
+
+        }
+
+    @Test
+    fun `getGroups should return correct list of groups data when is not null`() = runBlocking {
+
+        //Arrange: mock api function success result
         coEvery { api.getGroups(any()) } returns Response.success(
             GroupList(
                 listOf(
@@ -89,8 +102,10 @@ class MainRepositoryTest {
             )
         )
 
+        //Act: call repository function
         val response = mainRepository.getGroups(token = "test")
 
+        //Assert: response should be success with correct data
         assertEquals(response.status, ApiStatus.SUCCESS)
         response.data!!.distinctUntilChanged().collect {
             assertEquals(listOf(mockGroup1, mockGroup2), it)
@@ -99,75 +114,102 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun `getGroups should give empty list of groups if not found any groups`() = runBlocking {
+    fun `getGroups should return empty list of groups when not found any groups`() = runBlocking {
 
-        coEvery { api.getGroups(any()) } returns Response.error(404 , "".toResponseBody())
+        //Arrange: mock api function success result
+        coEvery { api.getGroups(any()) } returns Response.success(GroupList(emptyList()))
 
+        //Act: call repository function
         val response = mainRepository.getGroups(token = "test")
 
+        //Assert: response should be success with correct data
         assertEquals(response.status, ApiStatus.SUCCESS)
         assertEquals(response.data!!.toList(), listOf(emptyList<Group>()))
 
     }
 
     @Test
-    fun `getGroups should give exception in other situation`() = runBlocking {
+    fun `getGroups should return exception in other situation`() = runBlocking {
+
+        //Arrange: mock api function throw exception result
         coEvery { api.getGroups(any()) } throws Exception("اتصال به اینترنت برقرار نیست")
 
+        //Act: call repository function
         val response = mainRepository.getGroups(token = "test")
 
+        //Assert: response should be error with correct message
         assertEquals(response.status, ApiStatus.ERROR)
         assertEquals(response, ApiResult.Error("اتصال به اینترنت برقرار نیست"))
+
     }
 
     @Test
-    fun `getGroups should give error when api result error`() = runBlocking{
-        coEvery { api.getGroups(any()) } returns Response.error(400 , "".toResponseBody())
+    fun `getGroups should return suitable error when api result 400 error`() = runBlocking {
 
+        //Arrange: mock api function error result
+        coEvery { api.getGroups(any()) } returns Response.error(400, "".toResponseBody())
+
+        //Act: call repository function
         val response = mainRepository.getGroups("test")
 
+        //Assert: response should be error with correct message
         assertEquals(response.status, ApiStatus.ERROR)
         assertEquals(response, ApiResult.Error("با عرض پوزش خطایی غیر منتظره رخ داده است."))
+
     }
 
 
     @Test
-    fun `getGroupPurchases should give correct purchases data based on oldest`() = runBlocking {
-        coEvery { api.getGroupPurchases(any(), any()) } returns Response.success(
-            listOf(
-                mockPurchase1,
-                mockPurchase2
-            )
-        )
-
-        val response = mainRepository.getGroupPurchases("test", 0, 0)
-
-        assertEquals(response.status, ApiStatus.SUCCESS)
-        response.data!!.distinctUntilChanged().collect {
-            assertEquals(listOf(mockPurchase1, mockPurchase2), it)
-        }
-    }
-
-    @Test
-    fun `getGroupPurchases should give correct purchases data based on newest`() = runBlocking {
-        coEvery { api.getGroupPurchases(any(), any()) } returns Response.success(
-            listOf(
-                mockPurchase1,
-                mockPurchase2
-            )
-        )
-
-        val response = mainRepository.getGroupPurchases("test", 0, 1)
-
-        assertEquals(response.status, ApiStatus.SUCCESS)
-        response.data!!.distinctUntilChanged().collect {
-            assertEquals(listOf(mockPurchase1, mockPurchase2), it)
-        }
-    }
-
-    @Test
-    fun `getGroupPurchases should give correct purchases data based on most expensive`() =
+    fun `getGroupPurchases should return correct purchases data based on oldest when api result is success`() =
         runBlocking {
+
+            //Arrange: mock api function success result
+            coEvery { api.getGroupPurchases(any(), any()) } returns Response.success(
+                listOf(
+                    mockPurchase1,
+                    mockPurchase2
+                )
+            )
+
+            //Act: call repository function
+            val response = mainRepository.getGroupPurchases("test", 0, 0)
+
+            //Assert: response should be success with correct data
+            assertEquals(response.status, ApiStatus.SUCCESS)
+            response.data!!.distinctUntilChanged().collect {
+                assertEquals(listOf(mockPurchase1, mockPurchase2), it)
+            }
+
+        }
+
+    @Test
+    fun `getGroupPurchases should return correct purchases data based on newest when api result is success`() =
+        runBlocking {
+
+            //Arrange: mock api function success result
+            coEvery { api.getGroupPurchases(any(), any()) } returns Response.success(
+                listOf(
+                    mockPurchase1,
+                    mockPurchase2
+                )
+            )
+
+            //Act: call repository function
+            val response = mainRepository.getGroupPurchases("test", 0, 1)
+
+            //Assert: response should be success with correct data
+            assertEquals(response.status, ApiStatus.SUCCESS)
+            response.data!!.distinctUntilChanged().collect {
+                assertEquals(listOf(mockPurchase1, mockPurchase2), it)
+            }
+
+        }
+
+    @Test
+    fun `getGroupPurchases should return correct purchases data based on most expensive when api result is success`() =
+        runBlocking {
+
+            //Arrange: mock api function success result
             coEvery { api.filterBaseDecrease(any(), any()) } returns Response.success(
                 listOf(
                     mockPurchase1,
@@ -175,34 +217,45 @@ class MainRepositoryTest {
                 )
             )
 
+            //Act: call repository function
             val response = mainRepository.getGroupPurchases("test", 0, 3)
 
+            //Assert: response should be success with correct data
             assertEquals(response.status, ApiStatus.SUCCESS)
             response.data!!.distinctUntilChanged().collect {
                 assertEquals(listOf(mockPurchase1, mockPurchase2), it)
             }
+
         }
 
     @Test
-    fun `getGroupPurchases should give correct purchases data based on cheapest`() = runBlocking {
-        coEvery { api.filterBaseDecrease(any(), any()) } returns Response.success(
-            listOf(
-                mockPurchase1,
-                mockPurchase2
-            )
-        )
-
-        val response = mainRepository.getGroupPurchases("test", 0, 4)
-
-        assertEquals(response.status, ApiStatus.SUCCESS)
-        response.data!!.distinctUntilChanged().collect {
-            assertEquals(listOf(mockPurchase1, mockPurchase2), it)
-        }
-    }
-
-    @Test
-    fun `getGroupPurchases should give correct purchases data based on your purchases`() =
+    fun `getGroupPurchases should return correct purchases data based on cheapest when api result is success`() =
         runBlocking {
+
+            //Arrange: mock api function success result
+            coEvery { api.filterBaseDecrease(any(), any()) } returns Response.success(
+                listOf(
+                    mockPurchase1,
+                    mockPurchase2
+                )
+            )
+
+            //Act: call repository function
+            val response = mainRepository.getGroupPurchases("test", 0, 4)
+
+            //Assert: response should be success with correct data
+            assertEquals(response.status, ApiStatus.SUCCESS)
+            response.data!!.distinctUntilChanged().collect {
+                assertEquals(listOf(mockPurchase1, mockPurchase2), it)
+            }
+
+        }
+
+    @Test
+    fun `getGroupPurchases should return correct purchases data based on your purchases when api result is success`() =
+        runBlocking {
+
+            //Arrange: mock api function success result
             coEvery { api.filterByMe(any(), any()) } returns Response.success(
                 Api.UserGroupBuysResponse(
                     listOf(
@@ -212,144 +265,186 @@ class MainRepositoryTest {
                 )
             )
 
+            //Act: call repository function
             val response = mainRepository.getGroupPurchases("test", 0, 2)
 
+            //Assert: response should be success with correct data
             assertEquals(response.status, ApiStatus.SUCCESS)
             response.data!!.distinctUntilChanged().collect {
                 assertEquals(listOf(mockPurchase1, mockPurchase2), it)
             }
+
         }
 
     @Test
-    fun `getGroupPurchases should give error`() = runBlocking {
+    fun `getGroupPurchases should return error when api result 400 error`() = runBlocking {
+
+        //Arrange: mock api function error result
         coEvery { api.getGroupPurchases(any(), any()) } returns Response.error(
             400,
-            "خطا در دریافت گروه ها".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+            "".toResponseBody()
         )
         coEvery { api.filterBaseDecrease(any(), any()) } returns Response.error(
             400,
-            "خطا در دریافت گروه ها".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+            "".toResponseBody()
         )
-        coEvery { api.filterByMe(any(), any()) } returns Response.error(
-            400,
-            "خطا در دریافت گروه ها".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
-        )
+        coEvery { api.filterByMe(any(), any()) } returns Response.error(400, "".toResponseBody())
 
+        //Act: call repository function
         val response = mainRepository.getGroupPurchases("test", 0)
 
+        //Assert: response should be error with correct massage
         assertEquals(response.status, ApiStatus.ERROR)
         assertEquals(response.message, "خطا در دریافت خرید ها")
+
     }
 
 
     @Test
     fun `createPurchase should be successful when api result is success`() = runBlocking {
+
+        //Arrange: mock api function success result
         coEvery { api.createPurchase(any(), any()) } returns Response.success(null)
 
+        //Act: call repository function
         val response = mainRepository.createPurchase("test", 0, mockPurchase1)
 
+        //Assert: response should be success
         assertEquals(response.status, ApiStatus.SUCCESS)
 
     }
 
     @Test
-    fun `createPurchase should be failed when api result is error`() = runBlocking {
+    fun `createPurchase should be failed when api result is 400 error`() = runBlocking {
 
+        //Arrange: mock api function error result
         coEvery { api.createPurchase(any(), any()) } returns Response.error(
             400,
             "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         )
 
+        //Act: call repository function
         val response = mainRepository.createPurchase("test", 0, mockPurchase1)
 
+        //Assert: response should be error
         assertEquals(response.status, ApiStatus.ERROR)
-        
+
     }
 
 
     @Test
-    fun `leaveGroup should be successful`() = runBlocking {
+    fun `leaveGroup should be successful when api result is success`() = runBlocking {
+
+        //Arrange: mock api function success result
         coEvery { api.leaveGroup(any(), any()) } returns Response.success(null)
 
+        //Act: call repository function
         val response = mainRepository.leaveGroup("test", 0)
 
+        //Assert: response should be success
         assertEquals(response.status, ApiStatus.SUCCESS)
 
     }
 
     @Test
-    fun `leaveGroup should failed when api result is error`() = runBlocking {
+    fun `leaveGroup should failed when api result is 400 error`() = runBlocking {
+
+        //Arrange: mock api function error result
         coEvery { api.leaveGroup(any(), any()) } returns Response.error(
             400,
             "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         )
 
+        //Act: call repository function
         val response = mainRepository.leaveGroup("test", 0)
 
+        //Assert: response should be error
         assertEquals(response.status, ApiStatus.ERROR)
+
     }
 
     @Test
-    fun `leaveGroup should failed and set not saddle up message when api result is 401 error`() = runBlocking {
-        coEvery { api.leaveGroup(any(), any()) } returns Response.error(
-            401,
-            "تسویه حساب نشده است".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
-        )
+    fun `leaveGroup should failed and set not saddle up message when api result is 401 error`() =
+        runBlocking {
 
-        val response = mainRepository.leaveGroup("test", 0)
+            //Arrange: mock api function error result
+            coEvery { api.leaveGroup(any(), any()) } returns Response.error(
+                401,
+                "تسویه حساب نشده است".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+            )
 
-        assertEquals(response.status, ApiStatus.ERROR)
-        assertEquals(response.message, "تسویه حساب نشده است")
+            //Act: call repository function
+            val response = mainRepository.leaveGroup("test", 0)
 
-    }
+            //Assert: response should be error and with correct massage
+            assertEquals(response.status, ApiStatus.ERROR)
+            assertEquals(response.message, "تسویه حساب نشده است")
+
+        }
 
 
     @Test
-    fun `getGroupToAmount should give amount of user`() = runBlocking {
+    fun `getGroupToAmount should return amount of user when api result is success`() = runBlocking {
+
+        //Arrange: mock api function success result
         coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
             listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
         )
 
+        //Act: call repository function
         val response = mainRepository.getGroupToAmount("test", 0, 1)
 
+        //Assert: response should be success with correct data
         assertEquals(response.status, ApiStatus.SUCCESS)
         assertEquals(response.data, 0.0)
 
     }
 
     @Test
-    fun `getGroupToAmount should give error`() = runBlocking {
+    fun `getGroupToAmount should return error when api result 400 error`() = runBlocking {
+
+        //Arrange: mock api function error result
         coEvery { api.getGroupMembers(any(), any()) } returns Response.error(
             400,
             "".toResponseBody("".toMediaTypeOrNull())
         )
 
+        //Act: call repository function
         val response = mainRepository.getGroupToAmount("test", 0, 1)
 
+        //Assert: response should be error
         assertEquals(response.status, ApiStatus.ERROR)
 
     }
 
 
     @Test
-    fun `createGroup should be successful`() = runBlocking {
+    fun `createGroup should be successful when api result is success`() = runBlocking {
+
+        //Arrange: mock api function success result
         coEvery { api.createGroup(any(), any()) } returns Response.success(null)
 
+        //Act: call repository function
         val response = mainRepository.createGroup("test", mockAddGroup)
 
+        //Assert: response should be success
         assertEquals(response.status, ApiStatus.SUCCESS)
 
     }
 
     @Test
-    fun `createGroup should give error`() = runBlocking {
+    fun `createGroup should return suitable error when api result 404 error`() = runBlocking {
+
+        //Arrange: mock api function error result
         coEvery { api.createGroup(any(), any()) } returns Response.error(
             404,
             "ایمیل اعضا معتبر نمی باشد.".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         )
 
+        //Act: call repository function
         val response = mainRepository.createGroup("test", mockAddGroup)
 
+        //Assert: response should be error with correct message
         assertEquals(response.status, ApiStatus.ERROR)
         assertEquals(response.message, "ایمیل اعضا معتبر نمی باشد.")
 
@@ -357,42 +452,53 @@ class MainRepositoryTest {
 
 
     @Test
-    fun `addUserToGroup should be successful`() = runBlocking {
+    fun `addUserToGroup should be successful when api result is success`() = runBlocking {
+
+        //Arrange: mock api function success result
         coEvery { api.addUserToGroup(any(), any()) } returns Response.success(null)
 
+        //Act: call repository function
         val response = mainRepository.addUserToGroup("test", "test@test.com", 0)
 
+        //Assert: response should be success
         assertEquals(response.status, ApiStatus.SUCCESS)
 
     }
 
     @Test
     fun `addUserToGroup should not valid email when api result is 404 error`() = runBlocking {
+
+        //Arrange: mock api function error result
         coEvery { api.addUserToGroup(any(), any()) } returns Response.error(
             404,
             "ایمیل اعضا معتبر نمی باشد.".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         )
 
-        val response = mainRepository.addUserToGroup("test", "test" , 0)
+        //Act: call repository function
+        val response = mainRepository.addUserToGroup("test", "test", 0)
 
+        //Assert: response should be error with correct massage
         assertEquals(response.status, ApiStatus.ERROR)
         assertEquals(response.message, "ایمیل اعضا معتبر نمی باشد.")
+
     }
 
     @Test
-    fun `addUserToGroup should give error when api result error`() = runBlocking {
+    fun `addUserToGroup should return error when api result 400 error`() = runBlocking {
+
+        //Arrange: mock api function error result
         coEvery { api.addUserToGroup(any(), any()) } returns Response.error(
             400,
             "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         )
 
+        //Act: call repository function
         val response = mainRepository.addUserToGroup("test", "test", 0)
 
+        //Assert: response should be error
         assertEquals(response.status, ApiStatus.ERROR)
 
     }
-
-
 
 
     companion object {
