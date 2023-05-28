@@ -34,7 +34,7 @@ class AddGroupViewModelTest : BaseViewModelTest() {
     fun `createGroup should set state to success when api result success`() {
         everyLoginSuccess()                                                         // Arrange
         everyGetUserInfoSuccess()
-        coEvery { mainRepository.createGroup(any() , any()) } returns ApiResult.Success(Unit)
+        coEvery { mainRepository.createGroup(any(), any()) } returns ApiResult.Success(Unit)
 
         authViewModel.login(super.sharedPrefManager, "test", "test")                    // Act
         addGroupViewModel.createGroup(
@@ -53,7 +53,12 @@ class AddGroupViewModelTest : BaseViewModelTest() {
     fun `createGroup should set state to error when api result error`() {
         everyLoginSuccess()                                                         // Arrange
         everyGetUserInfoSuccess()
-        coEvery { mainRepository.createGroup(any() , any()) } returns ApiResult.Error("user email not found")
+        coEvery {
+            mainRepository.createGroup(
+                any(),
+                any()
+            )
+        } returns ApiResult.Error("user email not found")
 
         authViewModel.login(sharedPrefManager, "test", "test")                    // Act
         addGroupViewModel.createGroup(
@@ -61,8 +66,10 @@ class AddGroupViewModelTest : BaseViewModelTest() {
                 "test",
                 picture_id = 2,
                 "currency",
-                emails = listOf("test")))
+                emails = listOf("test")
+            )
+        )
 
         assert(addGroupViewModel.state.value.status == ApiStatus.ERROR)              // Asserts
-        }
+    }
 }

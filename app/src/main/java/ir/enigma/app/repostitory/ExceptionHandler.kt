@@ -28,7 +28,6 @@ suspend fun <T> handleException(
     val result = try {
 
         val data = call()
-        Log.d("ExceptionHandler", "handleException: $data")
         if (data.errorBody() != null) {
             try {
                 val errorString = data.errorBody()!!.string()

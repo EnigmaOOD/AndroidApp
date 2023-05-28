@@ -30,6 +30,11 @@ open class BaseViewModelTest() {
 
         val mockUser1 = User(1, "test", "test", 2)
         val mockUser2 = User(2, "test2", "test2", 5)
+
+        fun mockLog(){
+            mockkObject(MyLog)
+            coEvery { MyLog.log(any(), any(), any(), any(), any()) } returns Unit
+        }
     }
 
 
@@ -42,8 +47,7 @@ open class BaseViewModelTest() {
     }
 
     open fun setUp() {
-        mockkObject(MyLog)
-        coEvery { MyLog.log(any(), any(), any(), any(), any()) } returns Unit
+        mockLog()
         Dispatchers.setMain(dispatcher)
         sharedPrefManager = mockk()
         this.userRepository = mockk()

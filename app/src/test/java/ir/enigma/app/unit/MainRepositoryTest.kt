@@ -9,6 +9,7 @@ import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.network.Api
 import ir.enigma.app.repostitory.MainRepository
 import ir.enigma.app.repostitory.MainRepository.Companion.NO_GROUP
+import ir.enigma.app.unit.BaseViewModelTest.Companion.mockLog
 import ir.enigma.app.unit.BaseViewModelTest.Companion.mockUser1
 import ir.enigma.app.unit.BaseViewModelTest.Companion.mockUser2
 import junit.framework.TestCase.assertEquals
@@ -27,6 +28,7 @@ class MainRepositoryTest {
 
     @Before
     fun setup() {
+        mockLog()
         api = mockk()
         mainRepository = MainRepository(api)
     }
@@ -236,7 +238,7 @@ class MainRepositoryTest {
         val response = mainRepository.getGroupPurchases("test", 0)
 
         assertEquals(response.status, ApiStatus.ERROR)
-        assertEquals(response.message, "خطا در دریافت گروه ها")
+        assertEquals(response.message, "خطا در دریافت خرید ها")
     }
 
 

@@ -9,6 +9,7 @@ import ir.enigma.app.network.Api
 import ir.enigma.app.repostitory.UserRepository
 import ir.enigma.app.repostitory.UserRepository.Companion.EMAIL_EXIST
 import ir.enigma.app.repostitory.UserRepository.Companion.UN_AUTHORIZE_ERROR
+import ir.enigma.app.unit.BaseViewModelTest.Companion.mockLog
 import ir.enigma.app.unit.BaseViewModelTest.Companion.mockUser1
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
@@ -25,6 +26,7 @@ class UserRepositoryTest {
 
     @Before
     fun setup() {
+        mockLog()
         api = mockk()
         userRepository = UserRepository(api)
     }
@@ -173,13 +175,13 @@ class UserRepositoryTest {
 
         coEvery { api.editProfile(any(), any(), any()) } returns Response.error(
             401,
-            "برای ادامه باید دوباره وارد شوید".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
         )
 
         val response = userRepository.editProfile("testToken", "test", 0)
 
         assertEquals(response.status, ApiStatus.ERROR)
-        assertEquals(response.message, "برای ادامه باید دوباره وارد شوید")
+        assertEquals(response.message, "با عرض پوزش خطایی غیر منتظره رخ داده است.")
 
     }
 
