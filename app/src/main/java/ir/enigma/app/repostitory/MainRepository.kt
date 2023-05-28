@@ -153,7 +153,10 @@ class MainRepository @Inject constructor(private val api: Api) {
                 AddUserToGroupRequest(groupId, listOf(email))
             )
         }) {
-            null
+            if (it == 404)
+                "ایمیل اعضا معتبر نمی باشد."
+            else
+                null
         }
     }
 

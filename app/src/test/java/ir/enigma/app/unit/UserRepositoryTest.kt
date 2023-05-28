@@ -56,6 +56,21 @@ class UserRepositoryTest {
 
     }
 
+    @Test
+    fun `login should return error when api error`() = runBlocking {
+
+        coEvery { api.login(any(), any()) } returns Response.error(
+            500,
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = userRepository.login(email = "test", password = "123")
+
+
+        assertEquals(response.status, ApiStatus.ERROR)
+        assertEquals(response.message, "با عرض پوزش خطایی در سرور رخ داده است. لطفا بعدا تلاش کنید")
+    }
+
 
     @Test
     fun `register should give user`() = runBlocking {
@@ -84,7 +99,20 @@ class UserRepositoryTest {
 
     }
 
+    @Test
+    fun `register should return error when api error`() = runBlocking {
 
+        coEvery { api.register(any()) } returns Response.error(
+            404,
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = userRepository.register(mockUser1)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+        assertEquals(response.message, "با عرض پوزش خطایی غیر منتظره رخ داده است.")
+
+    }
 
     @Test
     fun `getUserInfo should give user information`() = runBlocking {
@@ -113,6 +141,20 @@ class UserRepositoryTest {
 
     }
 
+    @Test
+    fun `getUserInfo should return error when api error`() = runBlocking {
+
+        coEvery { api.userInfo(any()) } returns Response.error(
+            404,
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = userRepository.getUserInfo("testToken")
+
+        assertEquals(response.status, ApiStatus.ERROR)
+        assertEquals(response.message, "با عرض پوزش خطایی غیر منتظره رخ داده است.")
+
+    }
 
 
     @Test
@@ -138,6 +180,21 @@ class UserRepositoryTest {
 
         assertEquals(response.status, ApiStatus.ERROR)
         assertEquals(response.message, "برای ادامه باید دوباره وارد شوید")
+
+    }
+
+    @Test
+    fun `editProfile should return error when api error`() = runBlocking {
+
+        coEvery { api.editProfile(any(), any(), any()) } returns Response.error(
+            404,
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = userRepository.editProfile("testToken", "test", 0)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+        assertEquals(response.message, "با عرض پوزش خطایی غیر منتظره رخ داده است.")
 
     }
 

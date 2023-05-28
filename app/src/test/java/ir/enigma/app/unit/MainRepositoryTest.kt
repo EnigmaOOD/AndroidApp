@@ -8,6 +8,7 @@ import ir.enigma.app.model.*
 import ir.enigma.app.network.AddGroupRequest
 import ir.enigma.app.network.Api
 import ir.enigma.app.repostitory.MainRepository
+import ir.enigma.app.repostitory.MainRepository.Companion.NO_GROUP
 import ir.enigma.app.unit.BaseViewModelTest.Companion.mockUser1
 import ir.enigma.app.unit.BaseViewModelTest.Companion.mockUser2
 import junit.framework.TestCase.assertEquals
@@ -46,6 +47,33 @@ class MainRepositoryTest {
 
     }
 
+    @Test
+    fun `getGroupWithMembers should give error when api getAGroup return error`() = runBlocking {
+
+        coEvery { api.getAGroup(any(), any()) } returns Response.error(400 , "".toResponseBody())
+        coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
+            listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
+        )
+
+        val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+
+    }
+
+    @Test
+    fun `getGroupWithMembers should give error when api getGroupMembers return error`() = runBlocking {
+
+        coEvery { api.getAGroup(any(), any()) } returns Response.error(400 , "".toResponseBody())
+        coEvery { api.getGroupMembers(any(), any()) } returns Response.success(
+            listOf(Member(mockUser1, 0.0), Member(mockUser2, 0.0))
+        )
+
+        val response = mainRepository.getGroupWithMembers(token = "test", groupId = 0)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+
+    }
 
     @Test
     fun `getGroups should give correct list of groups data if is not null`() = runBlocking {
@@ -71,7 +99,7 @@ class MainRepositoryTest {
     @Test
     fun `getGroups should give empty list of groups if not found any groups`() = runBlocking {
 
-        coEvery { api.getGroups(any()) } returns Response.success(GroupList(emptyList()))
+        coEvery { api.getGroups(any()) } returns Response.error(404 , "".toResponseBody())
 
         val response = mainRepository.getGroups(token = "test")
 
@@ -91,16 +119,13 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun `getGroups should give error`() = runBlocking {
-        coEvery { api.getGroups(any()) } returns Response.error(
-            400,
-            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
-        )
+    fun `getGroups should give error when api result error`() = runBlocking{
+        coEvery { api.getGroups(any()) } returns Response.error(400 , "".toResponseBody())
 
-        val response = mainRepository.getGroups(token = "test")
+        val response = mainRepository.getGroups("test")
 
         assertEquals(response.status, ApiStatus.ERROR)
-
+        assertEquals(response, ApiResult.Error("با عرض پوزش خطایی غیر منتظره رخ داده است."))
     }
 
 
@@ -216,13 +241,27 @@ class MainRepositoryTest {
 
 
     @Test
-    fun `createPurchase should be successful`() = runBlocking {
+    fun `createPurchase should be successful when api result is success`() = runBlocking {
         coEvery { api.createPurchase(any(), any()) } returns Response.success(null)
 
         val response = mainRepository.createPurchase("test", 0, mockPurchase1)
 
         assertEquals(response.status, ApiStatus.SUCCESS)
 
+    }
+
+    @Test
+    fun `createPurchase should be failed when api result is error`() = runBlocking {
+
+        coEvery { api.createPurchase(any(), any()) } returns Response.error(
+            400,
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = mainRepository.createPurchase("test", 0, mockPurchase1)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+        
     }
 
 
@@ -237,7 +276,19 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun `leaveGroup should has 401 error`() = runBlocking {
+    fun `leaveGroup should failed when api result is error`() = runBlocking {
+        coEvery { api.leaveGroup(any(), any()) } returns Response.error(
+            400,
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = mainRepository.leaveGroup("test", 0)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+    }
+
+    @Test
+    fun `leaveGroup should failed and set not saddle up message when api result is 401 error`() = runBlocking {
         coEvery { api.leaveGroup(any(), any()) } returns Response.error(
             401,
             "تسویه حساب نشده است".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
@@ -312,6 +363,34 @@ class MainRepositoryTest {
         assertEquals(response.status, ApiStatus.SUCCESS)
 
     }
+
+    @Test
+    fun `addUserToGroup should not valid email when api result is 404 error`() = runBlocking {
+        coEvery { api.addUserToGroup(any(), any()) } returns Response.error(
+            404,
+            "ایمیل اعضا معتبر نمی باشد.".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = mainRepository.addUserToGroup("test", "test" , 0)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+        assertEquals(response.message, "ایمیل اعضا معتبر نمی باشد.")
+    }
+
+    @Test
+    fun `addUserToGroup should give error when api result error`() = runBlocking {
+        coEvery { api.addUserToGroup(any(), any()) } returns Response.error(
+            400,
+            "".toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        )
+
+        val response = mainRepository.addUserToGroup("test", "test", 0)
+
+        assertEquals(response.status, ApiStatus.ERROR)
+
+    }
+
+
 
 
     companion object {
