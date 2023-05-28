@@ -48,9 +48,9 @@ fun AuthScreen(navController: NavController, authViewModel: AuthViewModel) {
     val scrollState = rememberScrollState()
 
     val state = authViewModel.state.value
-    if (state.status == ApiStatus.SUCCESS && state.message != EMAIL_VERIFICATION) {
+    if (state.data != null) {
         LaunchedEffect(key1 = Unit) {
-            //navigate to main that can not back to auth
+
             navController.navigate(Screen.MainScreen.name) {
                 popUpTo(Screen.AuthScreen.name) {
                     inclusive = true

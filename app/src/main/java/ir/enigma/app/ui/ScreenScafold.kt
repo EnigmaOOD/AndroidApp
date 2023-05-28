@@ -90,7 +90,7 @@ fun <T : ApiResult<*>> ApiScreen(
         content
     )
 
-    if (message != null) {
+    if (message != null && message.text.isNotEmpty()) {
         MyLog.log(
             StructureLayer.Screen,
             "Composable",

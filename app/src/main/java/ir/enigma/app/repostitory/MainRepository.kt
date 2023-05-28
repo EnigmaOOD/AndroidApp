@@ -149,6 +149,15 @@ class MainRepository @Inject constructor(private val api: Api) {
             buyers = purchase.buyers.map { ContributionRequest(it.user.id, it.price) },
             consumers = purchase.consumers.map { ContributionRequest(it.user.id, it.price) }
         )
+
+        MyLog.log(
+            structureLayer = StructureLayer.Repository,
+            className = "MainRepository",
+            methodName = "createPurchase",
+            type = LogType.Info,
+            message = " request for create purchase $obj",
+        )
+
         val result = handleException({
             api.createPurchase(
                 token,
@@ -160,7 +169,7 @@ class MainRepository @Inject constructor(private val api: Api) {
                 className = "MainRepository",
                 methodName = "createPurchase",
                 type = LogType.Error,
-                message = "Doesn't Handled create purchase error code: ${it}",
+                message = "Not Handled create purchase error code: $it",
             )
             null
         }

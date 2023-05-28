@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,10 +34,10 @@ import kotlinx.coroutines.delay
 fun SplashScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
     val sharedPrefManager = remember { SharedPrefManager(context) }
-    ApiScreen(
+    Scaffold(
         backgroundColor = MaterialTheme.colors.background,
-        apiResult = authViewModel.state
     ) {
+        it.calculateTopPadding()
         Column(
             modifier = Modifier.fillMaxSize().padding(SpaceLarge),
             verticalArrangement = Arrangement.Center,

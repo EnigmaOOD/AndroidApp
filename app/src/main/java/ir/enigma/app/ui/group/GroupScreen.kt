@@ -156,6 +156,7 @@ fun GroupScreen(navController: NavController, groupViewModel: GroupViewModel, gr
                 LazyColumn(
                     modifier = Modifier.fillMaxSize().weight(1f).testTag("purchaseLazyColumn"),
                     reverseLayout = reverse,
+                    verticalArrangement = Arrangement.Top,
                     state = lazyState
                 ) {
                     items(purchases) { thisPurchase ->
