@@ -376,17 +376,21 @@ fun NewPurchaseScreen(
                                         isRelatedConsumer.value
                                     )
 
+
                                 groupViewModel.createPurchase(
-                                    Purchase(
-                                        title = description.value,
-                                        totalPrice = priceDouble,
-                                        purchaseCategoryIndex = selectedCategory.ordinal,
-                                        buyers = buyersContribution,
-                                        consumers = consumersContribution,
-                                        date = LocalDate.now()
-                                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                                        sender = me
-                                    )
+                                    Purchase.Builder()
+                                        .title(description.value)
+                                        .date(
+                                            LocalDate.now()
+                                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                                        )
+                                        .totalPrice(priceDouble)
+                                        .sender(me)
+                                        .purchaseCategoryIndex(selectedCategory.ordinal)
+                                        .buyers(buyersContribution)
+                                        .consumers(consumersContribution)
+                                        .build()
+
                                 )
                             }
                         )

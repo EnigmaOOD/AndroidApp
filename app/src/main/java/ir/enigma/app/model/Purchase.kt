@@ -6,6 +6,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import kotlin.properties.Delegates
 
 
 data class Purchase(
@@ -31,7 +32,6 @@ data class Purchase(
                     purchaseCategoryIndex
         ]
 
-
     fun getPersianDate(): PersianDateImpl {
         val persianDateImpl = PersianDateImpl()
 
@@ -41,6 +41,26 @@ data class Purchase(
             ).atStartOfDay().atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
         )
         return persianDateImpl
+    }
+
+    // builder class
+    class Builder {
+        var title: String? = null
+        lateinit var date: String
+        var totalPrice by Delegates.notNull<Double>()
+        lateinit var sender: User
+        var purchaseCategoryIndex by Delegates.notNull<Int>()
+        var buyers: List<Contribution> = emptyList()
+        var consumers: List<Contribution> = emptyList()
+        fun title(title: String?) = apply { this.title = title }
+        fun date(date: String) = apply { this.date = date }
+        fun totalPrice(totalPrice: Double) = apply { this.totalPrice = totalPrice }
+        fun sender(sender: User) = apply { this.sender = sender }
+        fun purchaseCategoryIndex(purchaseCategoryIndex: Int) = apply { this.purchaseCategoryIndex = purchaseCategoryIndex }
+        fun buyers(buyers: List<Contribution>) = apply { this.buyers = buyers }
+        fun consumers(consumers: List<Contribution>) = apply { this.consumers = consumers }
+
+        fun build() = Purchase(title, date, totalPrice, sender, purchaseCategoryIndex, buyers, consumers)
     }
 }
 
