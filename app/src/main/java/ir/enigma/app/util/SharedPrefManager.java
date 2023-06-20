@@ -3,13 +3,16 @@ package ir.enigma.app.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.chrisney.enigma.EnigmaUtils;
 
 
 public class SharedPrefManager {
-    private static final String SHARED_PREF_NAME = "EnigmaSharedPref";
-    public static final String KEY_TOKEN = "token";
+    private static final String SHARED_PREF_NAME = EnigmaUtils.enigmatization(new byte[]{62, -52, 113, -50, -88, -77, -109, 9, 69, 13, -19, -27, -24, -53, 79, -87, 115, 76, -72, 105, 99, 84, 28, 79, 109, 2, 106, -99, -5, -54, 47, -84});
+    public static final String KEY_TOKEN = EnigmaUtils.enigmatization(new byte[]{118, -82, 47, -38, 56, -16, -64, -64, 89, 93, 103, -69, -91, -12, 19, -33});
 
     private final Context mCtx;
+
+    public static final String MBXCGQKXWR = "UMzveSQ0F6fdV";
 
     public SharedPrefManager(Context context) {
         mCtx = context;
@@ -21,6 +24,7 @@ public class SharedPrefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(name, item);
         editor.apply();
+        if (MBXCGQKXWR.isEmpty()) MBXCGQKXWR.getClass().toString();
 
     }
 
@@ -100,4 +104,3 @@ public class SharedPrefManager {
     }
 
 }
-

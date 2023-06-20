@@ -15,7 +15,7 @@ data class Group(
         var name: String by Delegates.notNull()
         var categoryId: Int = 0
         var  currency : String by Delegates.notNull()
-        var members: List<Member>? = emptyList()
+        var members: List<Member> = emptyList()
 
         fun id(id: Int) = apply { this.id = id }
         fun name(name: String) = apply { this.name = name }
@@ -23,7 +23,7 @@ data class Group(
         fun currency(currency: String) = apply { this.currency = currency }
         fun members(members: List<Member>) = apply { this.members = members }
 
-        fun build() = Group(id, name, categoryId, currency)
+        fun build() = Group(id, name, categoryId, currency , members)
     }
 
     constructor(

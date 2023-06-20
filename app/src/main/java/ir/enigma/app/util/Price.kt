@@ -11,7 +11,10 @@ fun Double.toPrice(currency: String? = null): String {
     var value = abs(this.toInt())
     val floatPart: Double = ((abs(this) - value) * 100.0).roundToInt() / 100.0
     if (floatPart > 0) {
-        builder.append(floatPart.toString().removeRange(0, 1)) //remove "0" part
+        if (value == 0)
+            builder.append(floatPart.toString())
+        else
+            builder.append(floatPart.toString().removeRange(0, 1))
         builder.reverse()
     }
 
