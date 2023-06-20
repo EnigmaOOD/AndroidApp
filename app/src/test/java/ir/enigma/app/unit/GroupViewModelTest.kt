@@ -29,14 +29,13 @@ class GroupViewModelTest : BaseViewModelTest() {
     companion object {
 
         val mockGroup =
-            Group(
-                1,
-                "test",
-                2,
-                "test",
-                listOf(Member(mockUser1, 2000.0), Member(mockUser2, 1000.0))
-            )
-
+            Group.Builder()
+                .id(1)
+                .name("test")
+                .categoryId(2)
+                .currency("test")
+                .members(listOf(Member(mockUser1, 2000.0), Member(mockUser2, 1000.0)))
+                .build()
     }
 
 

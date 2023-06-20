@@ -503,30 +503,30 @@ class MainRepositoryTest {
 
     companion object {
         val mockGroupWithoutMember =
-            Group(
-                1,
-                "test1",
-                2,
-                "test",
-            )
+            Group.Builder()
+                .id(1)
+                .name("test1")
+                .categoryId(2)
+                .currency("test")
+                .build()
 
         val mockGroup1 =
-            Group(
-                1,
-                "test1",
-                2,
-                "test",
-                listOf(Member(mockUser1, 2000.0), Member(mockUser2, 1000.0))
-            )
+            Group.Builder()
+                .id(1)
+                .name("test1")
+                .categoryId(2)
+                .currency("test")
+                .members(listOf(Member(mockUser1, 2000.0), Member(mockUser2, 1000.0)))
+                .build()
 
         val mockGroup2 =
-            Group(
-                2,
-                "test2",
-                2,
-                "test",
-                listOf(Member(mockUser1, 4000.0), Member(mockUser2, 3000.0))
-            )
+            Group.Builder()
+                .id(2)
+                .name("test2")
+                .categoryId(2)
+                .currency("test")
+                .members(listOf(Member(mockUser1, 4000.0), Member(mockUser2, 3000.0)))
+                .build()
 
         val mockPurchase1 = Purchase(
             title = "test",
