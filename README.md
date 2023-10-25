@@ -5,11 +5,11 @@
 
 ## تصاویر اپلیکیشن
 <div>
- <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695491987.png" width="30%"/>
- <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695491994.png" width="30%"/>
- <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695492267.png" width="30%"/>
- <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695492005.png width="30%"/>
- <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695492164.png" width="30%"/>
+ <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695491987.png" width="20%"/>
+ <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695491994.png" width="20%"/>
+ <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695492267.png" width="20%"/>
+ <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695492005.png" width="20%"/>
+ <img src="https://github.com/EnigmaOOD/AndroidApp/blob/master/ScreenShots/Screenshot_1695492164.png" width="20%"/>
 </div>
 
 
