@@ -43,6 +43,15 @@
 ## تست‌ها 
 ### تست رابط کاربری(UI Test)
 
+35 تست برای سناریوهای مختلف نوشته شد که نتیجه‌ی آن در تصویر زیر نمایش داده شده است:
+
+![android ui test](https://github.com/EnigmaOOD/AndroidApp/assets/60168299/239e6cb5-895c-490a-be0c-976b6c295f61)
+
 ### تست واحد(Unit Test)
+97 تست نوشته شد که نتایج و کاوریج آن‌ها در تصاویر زیر نمایش داده شده است:
+<img src="ScreenShots/unit test.png" />
+![android unit test coverage](https://github.com/EnigmaOOD/AndroidApp/assets/60168299/c22c6763-da4a-4a91-9374-6b6272a9092f)
 
-
+### جلوگیری از مهندسی معکوس و دیکامپایل از طریق مبهم سازی کد(Code Obfuscation)
+برای جلوگیری از مهندسی معکوس و دیکامپایل از ابزار Enigma استفاده شد. این ابزار کدها و رشته‌ها را در نسخه Release مبهم می‌کند. به این صورت که در تصویر مشاهده می‌کنید نام کلاس‌ها و توابع رمز شده است و توسط انسان قابل فهم نیست.
+![Code Obfuscation](https://github.com/EnigmaOOD/AndroidApp/assets/60168299/08343081-df58-45aa-afb5-34312695ef8c)
